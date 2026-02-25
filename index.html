@@ -168,7 +168,7 @@
 <button class="btn btn-warning" onclick="App.confirmMergeDuplicateSpecies()" title="Fusionne automatiquement les esp√®ces en double">
   <i class="fas fa-compress-arrows-alt"></i> Nettoyer et fusionner les doublons
 </button>
-
+<div id="toast"></div>
 <div id="modal-github" class="modal-overlay">
   <div class="modal-content">
     <div class="modal-header" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
@@ -2838,13 +2838,16 @@ const App = {
  * ==========================================
  */
 const UI = {
-  toast(msg) {
-    const t = document.getElementById('toast');
-    if (!t) { console.log('[Toast]', msg); return; }
-    t.innerText = msg;
-    t.classList.add('show');
-    setTimeout(() => t.classList.remove('show'), 3000);
-  },
+  toast: function(message) {
+  const el = document.getElementById('toast');
+  if (!el) {
+    console.error("…lÈment #toast manquant. Message :", message);
+    return;
+  }
+  el.innerText = message; // C'est ici que Áa plantait
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 3000);
+};
 
   openModal(modalId, id = '', parentId = '') {
     this.closeModals();
@@ -3285,59 +3288,48 @@ const GitHub = {
 
   // √âcrire data.json vers GitHub
   async push() {
-    const cfg = this.getConfig();
-    if (!cfg) {
-      UI.openModal('modal-github');
-      return;
-    }
-    this.updateSyncIcon('syncing');
-    try {
-      // Si pas de SHA connu, le r√©cup√©rer d'abord pour √©viter le 422
-      let sha = localStorage.getItem('gh_sha') || null;
-      if (!sha) {
-        await this.refreshSha(cfg);
-        sha = localStorage.getItem('gh_sha') || null;
-      }
+  const cfg = this.getConfig();
+  if (!cfg) return;
 
-      const content = btoa(unescape(encodeURIComponent(JSON.stringify(App.data, null, 2))));
-      const body = {
-        message: `Sync ${new Date().toLocaleString('fr-FR')}`,
-        content,
-        ...(sha ? { sha } : {})
-      };
-      const r = await fetch(
-        `https://api.github.com/repos/${cfg.username}/${cfg.repo}/contents/${this.DATA_FILE}`,
-        {
-          method: 'PUT',
-          headers: {
-            Authorization: `token ${cfg.token}`,
-            Accept: 'application/vnd.github.v3+json',
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(body)
-        }
-      );
-      if (!r.ok) {
-        const err = await r.json();
-        // Conflit SHA ‚Üí refetch et retry une fois
-        if (r.status === 409 || r.status === 422) {
-          await this.refreshSha(cfg);
-          return this.push();
-        }
-        throw new Error(err.message || `HTTP ${r.status}`);
-      }
-      const result = await r.json();
-      localStorage.setItem('gh_sha', result.content.sha);
-      this.updateSyncIcon('idle');
-      this._pendingPush = false;
-      UI.toast('‚òÅÔ∏è Sauvegard√© sur GitHub');
-    } catch (e) {
-      console.warn('[GitHub] Push √©chou√©:', e);
-      this._pendingPush = true;
-      this.updateSyncIcon(navigator.onLine ? 'error' : 'offline');
-      UI.toast('‚ö†Ô∏è Sync √©chou√©e ‚Äî donn√©es sauv√©es localement');
+  this.updateSyncIcon('syncing');
+  try {
+    let sha = localStorage.getItem('gh_sha');
+    const content = btoa(unescape(encodeURIComponent(JSON.stringify(App.data))));
+
+    const r = await fetch(`https://api.github.com/repos/${cfg.username}/${cfg.repo}/contents/data.json`, {
+      method: 'PUT',
+      headers: {
+        'Authorization': `token ${cfg.token}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        message: `Update data.json (via app) ${new Date().toLocaleString()}`,
+        content: content,
+        sha: sha
+      })
+    });
+
+    if (r.status === 409) {
+      // CONFLIT : On recharge le dernier SHA et on rÈessaie automatiquement
+      console.warn('[GitHub] Conflit 409 dÈtectÈ, resync du SHA...');
+      await this.refreshSha(cfg);
+      return this.push(); 
     }
-  },
+
+    if (!r.ok) throw new Error(`Erreur ${r.status}`);
+    
+    const res = await r.json();
+    localStorage.setItem('gh_sha', res.content.sha); // On garde le nouveau SHA
+    this.updateSyncIcon('idle');
+    UI.toast('? SauvegardÈ sur GitHub');
+
+  } catch (e) {
+    console.error('[GitHub] Push ÈchouÈ:', e);
+    this.updateSyncIcon('error');
+    // Maintenant que toast est rÈparÈ, ceci ne fera plus planter l'app
+    UI.toast('? Conflit GitHub : veuillez faire un "Pull" d\'abord');
+  }
+},
 
   // R√©cup√©rer le SHA actuel du fichier
   async refreshSha(cfg) {
