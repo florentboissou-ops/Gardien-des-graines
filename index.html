@@ -1,0 +1,3415 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
+  <meta name="theme-color" content="#2d6a4f" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Grainothèque" />
+  <title>Le Gardien des Graines</title>
+  <link rel="manifest" href="./manifest.json" />
+  <link rel="icon" type="image/png" sizes="192x192" href="./icon-192.png" />
+  <link rel="apple-touch-icon" href="./icon-192.png" />
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.29/jspdf.plugin.autotable.min.js"></script>
+  
+  <style>
+    /* --- VARIABLES & THEME --- */
+    :root {
+      --vert-principal: #2d6a4f;
+      --vert-fonce: #1b4332;
+      --vert-clair: #d8f3dc;
+      --vert-hover: #40916c;
+      --fond-creme: #f8fcf8;
+      --blanc-pur: #ffffff;
+      --rouge-alerte: #e63946;
+      --orange-warning: #f4a261;
+      --bleu-info: #457b9d;
+      
+      --texte-sombre: #1f2937;
+      --texte-gris: #6b7280;
+      --bordure-douce: #e5e7eb;
+      
+      --ombre-douce: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+      --ombre-flottante: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      --rayon-bordure: 16px;
+      --rayon-petit: 8px;
+      
+      --transition-rapide: 0.2s ease;
+    }
+
+    /* --- RESET & TYPOGRAPHIE --- */
+    * { box-sizing: border-box; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+    body { background: var(--fond-creme); color: var(--texte-sombre); padding-bottom: 100px; line-height: 1.5; }
+    
+    /* --- HEADER --- */
+    header { background: linear-gradient(135deg, var(--vert-fonce), var(--vert-principal)); color: var(--blanc-pur); padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 50; box-shadow: var(--ombre-douce); border-bottom-left-radius: 12px; border-bottom-right-radius: 12px; }
+    header h1 { font-size: 1.25rem; font-weight: 700; letter-spacing: 0.5px; }
+    .header-btn { background: rgba(255, 255, 255, 0.15); border: none; color: var(--blanc-pur); width: 36px; height: 36px; border-radius: 50%; font-size: 1.1rem; cursor: pointer; transition: var(--transition-rapide); display: flex; align-items: center; justify-content: center; }
+    .header-btn:hover { background: rgba(255, 255, 255, 0.25); transform: translateY(-2px); }
+
+    /* --- MAIN & CARDS --- */
+    main { max-width: 900px; margin: 20px auto; padding: 0 16px; }
+    .card { background: var(--blanc-pur); border-radius: var(--rayon-bordure); padding: 18px; margin-bottom: 16px; box-shadow: var(--ombre-douce); border-left: 6px solid var(--vert-principal); transition: transform 0.15s ease, box-shadow 0.15s ease; position: relative; overflow: hidden; }
+    .card:hover { transform: translateY(-2px); box-shadow: var(--ombre-flottante); }
+    .card:active { transform: scale(0.99); }
+    .card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; gap: 10px; }
+    .card-title { font-weight: 700; color: var(--vert-fonce); font-size: 1.1rem; }
+    .card-info { font-size: 0.9rem; color: var(--texte-gris); margin-bottom: 6px; display: flex; align-items: center; gap: 6px; }
+    
+    /* --- BADGES --- */
+    .badge { padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.3px; text-transform: uppercase; white-space: nowrap; }
+    .badge-danger { background: #fee2e2; color: var(--rouge-alerte); }
+    .badge-warning { background: #ffedd5; color: #c2410c; }
+    .badge-success { background: var(--vert-clair); color: var(--vert-fonce); }
+    .badge-secondary { background: var(--bordure-douce); color: var(--texte-sombre); }
+
+    /* --- BOUTONS --- */
+    .btn { padding: 10px 16px; border-radius: var(--rayon-petit); border: none; font-weight: 600; cursor: pointer; font-size: 0.95rem; display: inline-flex; align-items: center; justify-content: center; gap: 8px; transition: var(--transition-rapide); box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+    .btn:hover { filter: brightness(1.1); transform: translateY(-1px); box-shadow: var(--ombre-douce); }
+    .btn:active { transform: translateY(0); }
+    .btn-primary { background: var(--vert-principal); color: var(--blanc-pur); }
+    .btn-secondary { background: var(--bordure-douce); color: var(--texte-sombre); }
+    .btn-danger { background: #fee2e2; color: var(--rouge-alerte); }
+    .btn-warning { background: var(--orange-warning); color: #fff; margin: 16px auto; display: flex; max-width: 900px; width: calc(100% - 32px); }
+    .btn-sm { padding: 6px 12px; font-size: 0.85rem; }
+    .btn-float { position: fixed; bottom: 95px; right: 24px; width: 60px; height: 60px; border-radius: 50%; font-size: 1.5rem; box-shadow: var(--ombre-flottante); z-index: 40; }
+
+    /* --- NAVIGATION --- */
+    .nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); display: flex; justify-content: space-around; padding: 12px 0 16px 0; box-shadow: 0 -4px 20px rgba(0,0,0,0.06); z-index: 100; border-top-left-radius: 20px; border-top-right-radius: 20px; }
+    .nav-item { display: flex; flex-direction: column; align-items: center; font-size: 0.75rem; color: var(--texte-gris); background: none; border: none; cursor: pointer; width: 100%; transition: var(--transition-rapide); }
+    .nav-item i { font-size: 1.3rem; margin-bottom: 6px; transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+    .nav-item.active { color: var(--vert-principal); font-weight: 700; }
+    .nav-item.active i { transform: scale(1.2); }
+
+    /* --- MODALES --- */
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; z-index: 200; opacity: 0; visibility: hidden; transition: all 0.3s ease; padding: 16px; }
+    .modal-overlay.open { opacity: 1; visibility: visible; }
+    .modal-content { background: var(--blanc-pur); padding: 24px; border-radius: var(--rayon-bordure); width: 100%; max-width: 500px; max-height: 85vh; overflow-y: auto; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); transform: translateY(20px) scale(0.95); transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+    .modal-overlay.open .modal-content { transform: translateY(0) scale(1); }
+    .modal-header h3 { color: var(--vert-fonce); font-size: 1.3rem; margin: 0; }
+
+    /* --- FORMULAIRES --- */
+    .form-group { margin-bottom: 16px; }
+    .form-label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.95rem; color: var(--texte-sombre); }
+    .form-input, .form-select, .form-textarea { width: 100%; padding: 12px; border: 2px solid var(--bordure-douce); border-radius: var(--rayon-petit); font-size: 1rem; transition: border-color 0.2s, box-shadow 0.2s; background: #f9fafb; }
+    .form-input:focus, .form-select:focus, .form-textarea:focus { outline: none; border-color: var(--vert-principal); background: var(--blanc-pur); box-shadow: 0 0 0 3px rgba(45, 106, 79, 0.1); }
+    .form-textarea { min-height: 100px; resize: vertical; }
+
+    /* --- ACCORDEONS & GROUPES --- */
+    .supplier-group { margin-bottom: 24px; background: var(--blanc-pur); border-radius: var(--rayon-bordure); padding: 16px; box-shadow: var(--ombre-douce); }
+    .supplier-title { color: var(--vert-fonce); font-size: 1.15rem; font-weight: 800; padding-bottom: 12px; border-bottom: 2px solid var(--vert-clair); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; margin-bottom: 16px; }
+    .supplier-actions { display: flex; gap: 10px; align-items: center; }
+    .supplier-total { font-size: 0.85rem; background: var(--vert-clair); color: var(--vert-fonce); padding: 4px 10px; border-radius: 20px; font-weight: bold; }
+
+    /* --- DASHBOARD STATS --- */
+    .dashboard-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 16px; margin-bottom: 20px; }
+    .stat-box { background: var(--blanc-pur); border-radius: var(--rayon-bordure); padding: 20px 16px; box-shadow: var(--ombre-douce); text-align: center; border-bottom: 4px solid var(--vert-principal); transition: transform 0.2s; }
+    .stat-box:hover { transform: translateY(-3px); }
+    .stat-value { font-size: 1.8rem; font-weight: 800; color: var(--vert-fonce); margin: 8px 0 4px; }
+    
+    /* --- BARRE DE PROGRESSION --- */
+    .viz-container { margin-top: 14px; background: var(--bordure-douce); height: 12px; border-radius: 20px; overflow: hidden; display: flex; }
+    .viz-bar { height: 100%; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
+    .viz-bar-stock { background: var(--vert-principal); }
+    .viz-bar-warning { background: var(--orange-warning); }
+    .viz-bar-alert { background: var(--rouge-alerte); }
+
+    /* --- TABS --- */
+    .tab-group { display: flex; background: var(--bordure-douce); border-radius: 12px; padding: 4px; margin-bottom: 16px; }
+    .tab-btn { flex: 1; border: none; background: none; padding: 10px; border-radius: 8px; font-weight: 700; color: var(--texte-gris); cursor: pointer; transition: all 0.2s; }
+    .tab-btn.active { background: var(--blanc-pur); color: var(--vert-fonce); box-shadow: var(--ombre-douce); }
+
+    /* --- TOAST & ETATS --- */
+    #toast { position: fixed; top: 80px; left: 50%; transform: translateX(-50%) translateY(-20px); background: rgba(27, 67, 50, 0.95); backdrop-filter: blur(4px); color: var(--blanc-pur); padding: 12px 24px; border-radius: 30px; font-weight: 600; z-index: 300; opacity: 0; transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55); pointer-events: none; box-shadow: var(--ombre-flottante); }
+    #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+    
+    .view-section { display: none; animation: fadeIn 0.3s ease forwards; }
+    .view-section.active { display: block; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    
+    .empty-state { text-align: center; padding: 48px 20px; color: var(--texte-gris); background: var(--blanc-pur); border-radius: var(--rayon-bordure); border: 2px dashed var(--bordure-douce); }
+    .empty-state i { font-size: 3rem; margin-bottom: 16px; color: var(--vert-clair); }
+    
+    /* --- PLANNING PILLS --- */
+    .plan-pill { padding: 6px 12px; border-radius: 20px; border: 2px solid var(--bordure-douce); background: var(--blanc-pur); color: var(--texte-gris); font-size: 0.8rem; font-weight: 700; cursor: pointer; transition: var(--transition-rapide); }
+    .plan-pill:hover { border-color: var(--vert-principal); color: var(--vert-principal); }
+    .plan-pill.active { background: var(--vert-principal); color: #fff; border-color: var(--vert-principal); }
+
+    /* Personnalisation de la scrollbar */
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+  </style>
+</head>
+<body>
+
+<header>
+  <button class="header-btn" onclick="document.getElementById('file-import').click()" title="Importer JSON"><i class="fas fa-file-import"></i></button>
+  <input id="file-import" type="file" style="display:none" accept=".json" onchange="App.importData(this)">
+  
+  <h1 id="page-title">Accueil</h1>
+  
+  <div style="display:flex; gap:8px">
+    <button class="header-btn" id="github-sync-btn" onclick="GitHub.syncNow()" title="Sync GitHub" style="position:relative;">
+      <i class="fas fa-cloud" id="github-sync-icon"></i>
+      <span id="github-sync-dot" style="display:none; position:absolute; top:4px; right:4px; width:8px; height:8px; border-radius:50%; background:#f4a261;"></span>
+    </button>
+    <button class="header-btn" onclick="App.exportData()" title="Sauvegarde JSON"><i class="fas fa-save"></i></button>
+    <button class="header-btn" onclick="App.exportPDF()" title="Export PDF"><i class="fas fa-file-pdf"></i></button>
+  </div>
+</header>
+
+<button class="btn btn-warning" onclick="App.confirmMergeDuplicateSpecies()" title="Fusionne automatiquement les espèces en double">
+  <i class="fas fa-compress-arrows-alt"></i> Nettoyer et fusionner les doublons
+</button>
+
+<div id="modal-github" class="modal-overlay">
+  <div class="modal-content">
+    <div class="modal-header" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+      <h3><i class="fab fa-github"></i> Sync GitHub</h3>
+      <button class="btn btn-sm btn-secondary" style="border-radius:50%;width:32px;height:32px;padding:0;" onclick="UI.closeModals()"><i class="fas fa-times"></i></button>
+    </div>
+    <div style="background:#f0fdf4; border-radius:8px; padding:12px; margin-bottom:16px; font-size:0.85rem; color:var(--vert-fonce);">
+      <strong><i class="fas fa-info-circle"></i> Comment obtenir un token ?</strong><br>
+      GitHub → Settings → Developer settings → Personal access tokens → Tokens (classic) → Generate new token → coche <strong>repo</strong> → copie le token
+    </div>
+    <div class="form-group">
+      <label class="form-label">Nom d'utilisateur GitHub</label>
+      <input id="gh-username" class="form-input" placeholder="ex: monpseudo">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Nom du repository (privé)</label>
+      <input id="gh-repo" class="form-input" placeholder="ex: ma-grainotheque">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Personal Access Token</label>
+      <input id="gh-token" class="form-input" type="password" placeholder="ghp_xxxxxxxxxxxx">
+    </div>
+    <div id="gh-status" style="min-height:24px; font-size:0.85rem; margin-bottom:12px;"></div>
+    <div style="display:flex; gap:8px;">
+      <button class="btn btn-secondary" style="flex:1" onclick="GitHub.testConnection()"><i class="fas fa-plug"></i> Tester</button>
+      <button class="btn btn-primary" style="flex:1" onclick="GitHub.saveConfig()"><i class="fas fa-save"></i> Enregistrer</button>
+    </div>
+    <div style="margin-top:12px; display:flex; gap:8px;">
+      <button class="btn btn-secondary" style="flex:1" onclick="GitHub.pull()"><i class="fas fa-cloud-download-alt"></i> Charger depuis GitHub</button>
+      <button class="btn btn-primary" style="flex:1" onclick="GitHub.push()"><i class="fas fa-cloud-upload-alt"></i> Envoyer vers GitHub</button>
+    </div>
+  </div>
+</div>
+
+
+
+<main>
+  <div id="view-dashboard" class="view-section active">
+    <div class="card" style="background: linear-gradient(135deg, var(--vert-principal), var(--vert-hover)); color: var(--blanc-pur); border: none;">
+      <h2 style="margin-bottom:8px; font-size: 1.4rem;">Bonjour Jardinier ! 🌱</h2>
+      <p style="opacity: 0.9;">Voici l'état actuel de ta grainothèque.</p>
+    </div>
+
+    <div class="dashboard-stats">
+      <div class="stat-box" onclick="App.navigate('view-species')" style="cursor:pointer">
+        <i class="fas fa-leaf" style="font-size:1.5rem;color:var(--vert-principal)"></i>
+        <h3 class="stat-value" id="dash-species-count">0</h3>
+        <p class="card-info" style="justify-content:center">Espèces</p>
+      </div>
+      <div class="stat-box" onclick="App.navigate('view-stocks')" style="cursor:pointer">
+        <i class="fas fa-seedling" style="font-size:1.5rem;color:var(--vert-principal)"></i>
+        <h3 class="stat-value" id="dash-varieties-count">0</h3>
+        <p class="card-info" style="justify-content:center">Variétés</p>
+      </div>
+      <div class="stat-box" onclick="App.navigate('view-production')" style="cursor:pointer;grid-column:1/-1">
+        <i class="fas fa-calendar-alt" style="font-size:1.5rem;color:var(--vert-principal)"></i>
+        <h3 class="stat-value" id="dash-prod-count">0</h3>
+        <p class="card-info" style="justify-content:center">Productions prévues ou en cours</p>
+      </div>
+    </div>
+
+    <div class="card" style="border-left-color:var(--rouge-alerte); cursor:pointer" onclick="App.navigate('view-alerts')">
+      <div class="card-header">
+        <span class="card-title"><i class="fas fa-heartbeat"></i> Santé du Stock</span>
+        <span class="badge badge-danger" id="dash-alerts-count">0 Alertes</span>
+      </div>
+      <div id="viz-stock-health" style="margin-top:14px"></div>
+      <p class="card-info" style="margin-top:14px"><i class="fas fa-history"></i> Lot valide le plus ancien : <strong id="dash-oldest-stock">N/A</strong></p>
+    </div>
+  </div>
+
+  <div id="view-species" class="view-section">
+    <div id="species-list" style="padding-bottom: 140px;"></div>
+    <button class="btn btn-primary btn-float" onclick="UI.openModal('modal-species')"><i class="fas fa-plus"></i></button>
+  </div>
+
+  <div id="view-varieties" class="view-section" style="padding-bottom: 80px;">
+    <button class="btn btn-secondary btn-sm" onclick="App.navigate('view-species')" style="margin-bottom:16px"><i class="fas fa-arrow-left"></i> Retour aux espèces</button>
+    <h2 id="variety-page-title" style="margin-bottom:16px;color:var(--vert-fonce)">Variétés</h2>
+    <div id="varieties-list"></div>
+    <button class="btn btn-primary btn-float" onclick="UI.openVarietyModal()"><i class="fas fa-plus"></i></button>
+  </div>
+
+  <div id="view-stocks" class="view-section">
+
+    <!-- Stats stocks -->
+    <div id="stock-stats" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(110px,1fr)); gap:10px; margin-bottom:12px;"></div>
+
+    <div class="card" style="border-left:none; padding:12px; margin-bottom:8px;">
+      <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:10px;">
+        <input id="stock-search" class="form-input" placeholder="🔍 Variété, espèce, note..." oninput="App.debouncedRenderStocksList()" style="flex:2; min-width:150px;">
+        <select id="stock-filter-species" class="form-select" onchange="App.renderStocksList()" style="flex:1; min-width:140px;">
+          <option value="">Toutes les espèces</option>
+        </select>
+      </div>
+      <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:10px;">
+        <select id="stock-filter-origine" class="form-select" onchange="App.renderStocksList()" style="flex:1; min-width:140px;">
+          <option value="">Toutes origines</option>
+          <option value="produce">🌱 Autoproduction</option>
+          <option value="buy">🛒 Achat</option>
+          <option value="gift">🎁 Don / Échange</option>
+        </select>
+        <select id="stock-sort" class="form-select" onchange="App.renderStocksList()" style="flex:1; min-width:140px;">
+          <option value="exp-asc">📅 Exp. proche</option>
+          <option value="exp-desc">📅 Exp. lointaine</option>
+          <option value="qty-desc">⚖️ Plus grande Qté</option>
+          <option value="prod-desc">🆕 Plus récents</option>
+          <option value="var-asc">🔤 A → Z</option>
+        </select>
+      </div>
+      <!-- Pills état -->
+      <div style="display:flex; gap:6px; flex-wrap:wrap;" id="stock-state-pills">
+        <button class="plan-pill active" data-state="all" onclick="App.setStockStateFilter('all')">Tous</button>
+        <button class="plan-pill" data-state="valid" onclick="App.setStockStateFilter('valid')">✅ Valides</button>
+        <button class="plan-pill" data-state="expiring" onclick="App.setStockStateFilter('expiring')" style="">⚠️ Expire bientôt</button>
+        <button class="plan-pill" data-state="expired" onclick="App.setStockStateFilter('expired')">🔴 Expirés</button>
+      </div>
+    </div>
+
+    <div id="stocks-list" style="padding-bottom:20px;"></div>
+  </div>
+
+  <div id="view-production" class="view-section">
+
+    <!-- Statistiques production -->
+    <div id="prod-stats" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(110px,1fr)); gap:10px; margin-bottom:12px;"></div>
+
+    <!-- Filtres -->
+    <div class="card" style="border-left:none; padding:12px; margin-bottom:8px;">
+      <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:10px;">
+        <select id="prod-filter-species" class="form-select" onchange="App.renderProductionList()" style="flex:1; min-width:140px;">
+          <option value="">Toutes les espèces</option>
+        </select>
+        <select id="prod-filter-year" class="form-select" onchange="App.renderProductionList()" style="flex:1; min-width:120px;">
+          <option value="">Toutes les années</option>
+        </select>
+        <select id="prod-sort" class="form-select" onchange="App.renderProductionList()" style="flex:1; min-width:140px;">
+          <option value="year-desc">📅 Année récente</option>
+          <option value="year-asc">📅 Année ancienne</option>
+          <option value="species-asc">🌿 Espèce A-Z</option>
+          <option value="plants-desc">🌱 + de plants</option>
+          <option value="harvest-desc">🍅 + de récolte</option>
+        </select>
+      </div>
+      <!-- Pills statut -->
+      <div style="display:flex; gap:6px; flex-wrap:wrap;" id="prod-status-pills">
+        <button class="plan-pill active" data-status="" onclick="App.setProdStatusFilter('')">Tous</button>
+        <button class="plan-pill" data-status="planned" onclick="App.setProdStatusFilter('planned')">📝 Planifié</button>
+        <button class="plan-pill" data-status="in-progress" onclick="App.setProdStatusFilter('in-progress')">🌱 En cours</button>
+        <button class="plan-pill" data-status="completed" onclick="App.setProdStatusFilter('completed')">🍅 Récolté</button>
+      </div>
+    </div>
+
+    <div id="production-list" style="padding-bottom: 140px;"></div>
+    <button class="btn btn-primary btn-float" onclick="UI.openModal('modal-production')"><i class="fas fa-plus"></i></button>
+  </div>
+
+  <div id="view-planning" class="view-section">
+    <!-- Boutons d'action -->
+    <div class="card" style="display:flex; gap:12px; border-left: none; flex-wrap:wrap;">
+      <button class="btn btn-primary" style="flex:1" onclick="UI.openPlanningModal()"><i class="fas fa-plus"></i> Planning simple</button>
+      <button class="btn btn-secondary" style="flex:1" onclick="UI.openBatchPlanningModal()"><i class="fas fa-layer-group"></i> Planif. groupée</button>
+      <button class="btn btn-secondary" style="flex:1" id="plan-select-btn" onclick="App.togglePlanningSelectMode()"><i class="fas fa-check-square"></i> Sélectionner</button>
+      <button class="btn btn-secondary" style="flex:1" onclick="App.exportPlanningPDF()"><i class="fas fa-file-pdf"></i> Export PDF</button>
+    </div>
+
+    <!-- Statistiques planning -->
+    <div id="planning-stats" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(110px,1fr)); gap:10px; margin-bottom:12px;"></div>
+
+    <!-- Filtres -->
+    <div class="card" style="border-left:none; padding:12px; margin-bottom:8px;">
+      <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:10px;">
+        <select id="plan-filter-species" class="form-select" onchange="App.onPlanSpeciesFilterChange()" style="flex:1; min-width:140px;">
+          <option value="">Toutes les espèces</option>
+        </select>
+        <select id="plan-filter-variety" class="form-select" onchange="App.renderPlanningList()" style="flex:1; min-width:140px;">
+          <option value="">Toutes les variétés</option>
+        </select>
+        <select id="plan-sort" class="form-select" onchange="App.renderPlanningList()" style="flex:1; min-width:140px;">
+          <option value="date-asc">📅 Date croissante</option>
+          <option value="date-desc">📅 Date décroissante</option>
+          <option value="species-asc">🌿 Espèce A-Z</option>
+          <option value="plants-desc">🌱 + de plants</option>
+        </select>
+      </div>
+      <div style="display:flex; gap:6px; flex-wrap:wrap;" id="plan-status-pills">
+        <button class="plan-pill active" data-status="" onclick="App.setPlanStatusFilter('')">Tous</button>
+        <button class="plan-pill" data-status="planned" onclick="App.setPlanStatusFilter('planned')">📅 À faire</button>
+        <button class="plan-pill" data-status="sown" onclick="App.setPlanStatusFilter('sown')">🌱 Semé</button>
+        <button class="plan-pill" data-status="germinated" onclick="App.setPlanStatusFilter('germinated')">🌿 Levée</button>
+        <button class="plan-pill" data-status="transplanted" onclick="App.setPlanStatusFilter('transplanted')">🪴 Repiqué</button>
+        <button class="plan-pill" data-status="cancelled" onclick="App.setPlanStatusFilter('cancelled')">❌ Annulé</button>
+      </div>
+    </div>
+
+    <!-- Barre d'actions batch -->
+    <div id="planning-batch-bar" style="display:none; background:var(--vert-fonce); color:#fff; border-radius:var(--rayon-petit); padding:12px 16px; margin-bottom:12px; position:sticky; top:70px; z-index:30; box-shadow:var(--ombre-flottante);">
+      <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px;">
+        <span id="plan-batch-count" style="font-weight:700;"><i class="fas fa-check-square"></i> 0 sélectionné(s)</span>
+        <div style="display:flex; gap:6px; flex-wrap:wrap;">
+          <button class="btn btn-sm" style="background:rgba(255,255,255,0.15);color:#fff;" onclick="App.batchSelectAll()">Tout sél.</button>
+          <button class="btn btn-sm" style="background:#d8f3dc;color:var(--vert-fonce);" onclick="App.batchChangeStatus('planned')">📅 À faire</button>
+          <button class="btn btn-sm" style="background:#d8f3dc;color:var(--vert-fonce);" onclick="App.batchChangeStatus('sown')">🌱 Semé</button>
+          <button class="btn btn-sm" style="background:#d8f3dc;color:var(--vert-fonce);" onclick="App.batchChangeStatus('germinated')">🌿 Levée</button>
+          <button class="btn btn-sm" style="background:#d8f3dc;color:var(--vert-fonce);" onclick="App.batchChangeStatus('transplanted')">🪴 Repiqué</button>
+          <button class="btn btn-sm" style="background:#d8f3dc;color:var(--vert-fonce);" onclick="App.batchChangeStatus('cancelled')">❌ Annulé</button>
+          <button class="btn btn-sm btn-danger" onclick="App.batchDelete()"><i class="fas fa-trash"></i></button>
+        </div>
+      </div>
+    </div>
+
+    <div id="planning-list"></div>
+  </div>
+
+  <div id="view-wishlist" class="view-section">
+
+    <!-- Stats wishlist -->
+    <div id="wish-stats" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(110px,1fr)); gap:10px; margin-bottom:12px;"></div>
+
+    <div class="card" style="border-left:none; padding:12px; margin-bottom:8px;">
+      <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:10px;">
+        <input id="wish-search" class="form-input" placeholder="🔍 Espèce, variété..." oninput="App.renderWishlist()" style="flex:2; min-width:150px;">
+        <select id="wish-filter-species" class="form-select" onchange="App.renderWishlist()" style="flex:1; min-width:140px;">
+          <option value="">Toutes espèces</option>
+        </select>
+      </div>
+      <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:10px;">
+        <select id="wish-sort" class="form-select" onchange="App.renderWishlist()" style="flex:1; min-width:140px;">
+          <option value="supplier">🏪 Par fournisseur</option>
+          <option value="species">🌿 Par espèce</option>
+          <option value="price-asc">💶 Prix croissant</option>
+          <option value="price-desc">💶 Prix décroissant</option>
+        </select>
+      </div>
+      <!-- Pills statut -->
+      <div style="display:flex; gap:6px; flex-wrap:wrap;" id="wish-status-pills">
+        <button class="plan-pill active" data-wstatus="all" onclick="App.setWishStatusFilter('all')">Tous</button>
+        <button class="plan-pill" data-wstatus="pending" onclick="App.setWishStatusFilter('pending')">⏳ En attente</button>
+        <button class="plan-pill" data-wstatus="ordered" onclick="App.setWishStatusFilter('ordered')">✅ Commandé</button>
+      </div>
+    </div>
+
+    <div id="wishlist-list" style="padding-bottom: 140px;"></div>
+    <button class="btn btn-primary btn-float" onclick="UI.openModal('modal-wishlist')"><i class="fas fa-plus"></i></button>
+  </div>
+
+  <div id="view-alerts" class="view-section">
+
+    <!-- Stats alertes -->
+    <div id="alert-stats" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(110px,1fr)); gap:10px; margin-bottom:12px;"></div>
+
+    <div class="card" style="border-left:none; padding:12px; margin-bottom:8px;">
+      <!-- Onglets -->
+      <div class="tab-group" style="margin-bottom:10px;">
+        <button id="tab-produce" class="tab-btn active" onclick="App.switchAlertTab('produce')"><i class="fas fa-seedling"></i> Production</button>
+        <button id="tab-buy" class="tab-btn" onclick="App.switchAlertTab('buy')"><i class="fas fa-shopping-cart"></i> Achats</button>
+      </div>
+      <!-- Filtres -->
+      <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:10px;">
+        <input id="alert-search" class="form-input" placeholder="🔍 Rechercher..." oninput="UI.renderAlerts()" style="flex:1; min-width:150px;">
+        <select id="alert-filter-species" class="form-select" onchange="UI.renderAlerts()" style="flex:1; min-width:140px;">
+          <option value="">Toutes les espèces</option>
+        </select>
+      </div>
+      <!-- Pills urgence -->
+      <div style="display:flex; gap:6px; flex-wrap:wrap;" id="alert-urgency-pills">
+        <button class="plan-pill active" data-level="all" onclick="UI.setAlertLevelFilter('all')">Tous</button>
+        <button class="plan-pill" data-level="urgent" onclick="UI.setAlertLevelFilter('urgent')" style="--pill-active-bg:#fee2e2; --pill-active-color:#b91c1c;">🔴 Urgent</button>
+        <button class="plan-pill" data-level="warning" onclick="UI.setAlertLevelFilter('warning')" style="--pill-active-bg:#fff7ed; --pill-active-color:#c2410c;">🟠 À surveiller</button>
+      </div>
+    </div>
+
+    <div id="alerts-dynamic-list" style="padding-bottom:20px;"></div>
+  </div>
+</main>
+
+<nav class="nav-bar">
+  <button id="nav-dashboard" class="nav-item active" onclick="App.navigate('view-dashboard')"><i class="fas fa-home"></i><span>Accueil</span></button>
+  <button id="nav-species" class="nav-item" onclick="App.navigate('view-species')"><i class="fas fa-leaf"></i><span>Espèces</span></button>
+  <button id="nav-stocks" class="nav-item" onclick="App.navigate('view-stocks')"><i class="fas fa-boxes"></i><span>Stocks</span></button>
+  <button id="nav-production" class="nav-item" onclick="App.navigate('view-production')"><i class="fas fa-seedling"></i><span>Prod.</span></button>
+  <button id="nav-wishlist" class="nav-item" onclick="App.navigate('view-wishlist')"><i class="fas fa-heart"></i><span>Souhaits</span></button>
+  <button id="nav-alerts" class="nav-item" onclick="App.navigate('view-alerts')"><i class="fas fa-bell"></i><span>Alertes</span></button>
+  <button id="nav-planning" class="nav-item" onclick="App.navigate('view-planning')"><i class="fas fa-calendar-check"></i><span>Planning</span></button>
+</nav>
+
+<div id="modal-species" class="modal-overlay">
+  <div class="modal-content">
+    <div class="modal-header" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+      <h3>Gérer l'espèce</h3>
+      <button class="btn btn-sm btn-secondary" style="border-radius:50%; width:32px; height:32px; padding:0;" onclick="UI.closeModals()"><i class="fas fa-times"></i></button>
+    </div>
+    <input type="hidden" id="species-id">
+    <div class="form-group">
+      <label class="form-label">Nom de l'espèce</label>
+      <input id="species-name" class="form-input" placeholder="Ex: Tomate, Laitue...">
+    </div>
+    <button class="btn btn-primary" style="width:100%" onclick="App.handleSpeciesSubmit()"><i class="fas fa-check"></i> Valider</button>
+  </div>
+</div>
+
+<div id="modal-variety" class="modal-overlay">
+  <div class="modal-content">
+    <div class="modal-header" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+      <h3>Gérer la variété</h3>
+      <button class="btn btn-sm btn-secondary" style="border-radius:50%; width:32px; height:32px; padding:0;" onclick="UI.closeModals()"><i class="fas fa-times"></i></button>
+    </div>
+    <input type="hidden" id="var-id">
+    <input type="hidden" id="var-spId">
+    <div class="form-group"><label class="form-label">Nom de la variété</label><input id="var-name" class="form-input" placeholder="Ex: Cœur de Bœuf"></div>
+    <div class="form-group"><label class="form-label">Cycle de renouvellement (années)</label><input id="var-cycle" class="form-input" type="number" value="3"></div>
+    <div class="form-group"><label class="form-label">Seuil de stock minimum (Quantité)</label><input id="var-minStockQty" class="form-input" type="number" value="5" step="1"></div>
+    <div class="form-group"><label class="form-label">Mode de renouvellement</label>
+      <select id="var-mode" class="form-select"><option value="produce">Production maison</option><option value="buy">Achat</option></select>
+    </div>
+    <div class="form-group">
+      <label style="display:flex;align-items:center;gap:10px; cursor:pointer; padding: 10px; background: var(--bordure-douce); border-radius: var(--rayon-petit);">
+        <input id="var-disableTracking" type="checkbox" style="width:20px;height:20px; accent-color: var(--vert-principal);">
+        <span style="font-size:0.9rem; font-weight:600;">Désactiver les alertes pour cette variété</span>
+      </label>
+    </div>
+    <div class="form-group"><label class="form-label">Notes de production</label><textarea id="var-notes" class="form-textarea" placeholder="Ex: Semer en poquet, craint le gel..."></textarea></div>
+    <button class="btn btn-primary" style="width:100%" onclick="App.handleVarietySubmit()"><i class="fas fa-check"></i> Enregistrer</button>
+  </div>
+</div>
+
+<div id="modal-stock" class="modal-overlay">
+  <div class="modal-content">
+    <div class="modal-header" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+      <h3>Gérer le Lot (Stock)</h3>
+      <button class="btn btn-sm btn-secondary" style="border-radius:50%; width:32px; height:32px; padding:0;" onclick="UI.closeModals()"><i class="fas fa-times"></i></button>
+    </div>
+    <input type="hidden" id="stock-id"><input type="hidden" id="stock-varId">
+    <div style="display:flex; gap:10px;">
+      <div class="form-group" style="flex:2"><label class="form-label">Quantité</label><input id="stock-qty" class="form-input" type="number" step="0.1"></div>
+      <div class="form-group" style="flex:1"><label class="form-label">Unité</label>
+        <select id="stock-unit" class="form-select"><option value="gr">gr</option><option value="graines">unités</option><option value="sachets">sachets</option></select>
+      </div>
+    </div>
+    <div style="display:flex; gap:10px;">
+      <div class="form-group" style="flex:1"><label class="form-label">Année Prod.</label><input id="stock-prod" class="form-input" type="number" value=""></div>
+      <div class="form-group" style="flex:1"><label class="form-label">Année Exp.</label><input id="stock-exp" class="form-input" type="number" value=""></div>
+    </div>
+    <div class="form-group"><label class="form-label">Notes</label><input id="stock-notes" class="form-input" placeholder="Emplacement, observations..."></div>
+    <div style="display:flex; gap:10px;">
+      <div class="form-group" style="flex:1">
+        <label class="form-label">Origine</label>
+        <select id="stock-origine" class="form-select" onchange="UI.onStockOrigineChange()">
+          <option value="produce">🌱 Autoproduction</option>
+          <option value="buy">🛒 Achat</option>
+          <option value="gift">🎁 Don / Échange</option>
+        </select>
+      </div>
+      <div class="form-group" style="flex:2" id="stock-fournisseur-group">
+        <label class="form-label">Fournisseur</label>
+        <input id="stock-fournisseur" class="form-input" placeholder="Ex: Kokopelli, Germinance...">
+      </div>
+    </div>
+    <button class="btn btn-primary" style="width:100%" onclick="App.handleStockSubmit()"><i class="fas fa-check"></i> Ajouter au stock</button>
+  </div>
+</div>
+
+<div id="modal-reduce" class="modal-overlay">
+  <div class="modal-content">
+    <div class="modal-header" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+      <h3>Utiliser des graines</h3>
+      <button class="btn btn-sm btn-secondary" style="border-radius:50%; width:32px; height:32px; padding:0;" onclick="UI.closeModals()"><i class="fas fa-times"></i></button>
+    </div>
+    <input type="hidden" id="reduce-id">
+    <p id="reduce-info" style="margin-bottom:16px;font-style:italic; padding:10px; background:var(--vert-clair); border-radius:var(--rayon-petit); color:var(--vert-fonce);"></p>
+    <div class="form-group"><label class="form-label">Quantité à retirer</label><input id="reduce-qty" class="form-input" type="number" step="0.1" placeholder="Ex: 2.5"></div>
+    <button class="btn btn-danger" style="width:100%" onclick="App.handleReduceSubmit()"><i class="fas fa-minus-circle"></i> Retirer du stock</button>
+  </div>
+</div>
+
+<div id="modal-wishlist" class="modal-overlay">
+  <div class="modal-content">
+    <div class="modal-header" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+      <h3>Souhait d'achat</h3>
+      <button class="btn btn-sm btn-secondary" style="border-radius:50%; width:32px; height:32px; padding:0;" onclick="UI.closeModals()"><i class="fas fa-times"></i></button>
+    </div>
+    <input type="hidden" id="wish-id">
+    <!-- Lien vers variété existante -->
+    <div class="form-group" style="background:#f0fdf4; padding:12px; border-radius:var(--rayon-petit); border:1px solid var(--vert-clair); margin-bottom:8px;">
+      <label class="form-label" style="color:var(--vert-fonce);"><i class="fas fa-link"></i> Lier à une variété existante (optionnel)</label>
+      <select id="wish-varId" class="form-select" onchange="UI.onWishVarietyLink()">
+        <option value="">— Nouvelle variété —</option>
+      </select>
+    </div>
+    <div class="form-group"><label class="form-label">Espèce</label><input id="wish-species" class="form-input" placeholder="Ex: Piment"></div>
+    <div class="form-group"><label class="form-label">Variété</label><input id="wish-variety" class="form-input" placeholder="Ex: Espelette"></div>
+    <div class="form-group"><label class="form-label">Fournisseur (Optionnel)</label><input id="wish-supplier" list="supplier-suggestions" class="form-input" placeholder="Ex: Kokopelli"><datalist id="supplier-suggestions"></datalist></div>
+    <div class="form-group"><label class="form-label">Prix estimé</label><input id="wish-price" class="form-input" placeholder="Ex: 3.50€"></div>
+    <button class="btn btn-primary" style="width:100%" onclick="App.handleWishSubmit()"><i class="fas fa-check"></i> Ajouter à la liste</button>
+  </div>
+</div>
+
+<div id="modal-production" class="modal-overlay">
+  <div class="modal-content">
+    <div class="modal-header" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+      <h3>Suivi de Production</h3>
+      <button class="btn btn-sm btn-secondary" style="border-radius:50%; width:32px; height:32px; padding:0;" onclick="UI.closeModals()"><i class="fas fa-times"></i></button>
+    </div>
+    <input type="hidden" id="prod-id"><input type="hidden" id="prod-varId">
+    <div style="display:flex; gap:10px;">
+      <div class="form-group" style="flex:1"><label class="form-label">Année</label><input id="prod-year" class="form-input" type="number" value=""></div>
+      <div class="form-group" style="flex:1"><label class="form-label">Nb de plants</label><input id="prod-plants" class="form-input" type="number" placeholder="Ex: 10"></div>
+    </div>
+    <div class="form-group"><label class="form-label">Statut</label>
+      <select id="prod-status" class="form-select"><option value="planned">Planifié 📝</option><option value="in-progress">En cours (Semé) 🌱</option><option value="completed">Récolté 🍅</option></select>
+    </div>
+    <div class="form-group" style="padding:12px; background:var(--bordure-douce); border-radius:var(--rayon-petit);">
+      <label class="form-label"><i class="fas fa-box-open"></i> Quantité Récoltée (Si terminé)</label>
+      <div style="display:flex;gap:10px">
+        <input id="prod-harvest-qty" class="form-input" type="number" placeholder="0" step="0.1" style="flex:2">
+        <select id="prod-harvest-unit" class="form-select" style="flex:1"><option value="gr">gr</option><option value="graines">unités</option><option value="sachets">sachets</option></select>
+      </div>
+      <small style="color:var(--texte-gris); display:block; margin-top:6px;">L'ajout au stock se fera automatiquement à la validation si le statut est "Récolté".</small>
+    </div>
+    <button class="btn btn-primary" style="width:100%" onclick="App.handleProdSubmit()"><i class="fas fa-check"></i> Enregistrer la production</button>
+  </div>
+</div>
+
+<div id="modal-planning" class="modal-overlay">
+  <div class="modal-content">
+    <div class="modal-header" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+      <h3>Planification Semis</h3>
+      <button class="btn btn-sm btn-secondary" style="border-radius:50%; width:32px; height:32px; padding:0;" onclick="UI.closeModals()"><i class="fas fa-times"></i></button>
+    </div>
+    <input type="hidden" id="plan-id">
+    
+    <div style="display:flex; gap:10px;">
+      <div class="form-group" style="flex:1">
+        <label class="form-label">Espèce</label>
+        <select id="plan-species" class="form-select" onchange="UI.updatePlanVarietyOptions()"><option value="">-- Choisir --</option></select>
+      </div>
+      <div class="form-group" style="flex:1">
+        <label class="form-label">Variété</label>
+        <select id="plan-variety" class="form-select"><option value="">-- Choisir --</option></select>
+      </div>
+    </div>
+    
+    <div class="form-group">
+      <label class="form-label">Date de semis prévue</label>
+      <input id="plan-sowing-date" class="form-input" type="date">
+    </div>
+    
+    <div class="form-group" style="background:#f0f9ff; padding:12px; border-radius:var(--rayon-petit); border: 1px solid #bae6fd;">
+      <label class="form-label" style="color:#0369a1;"><i class="fas fa-calculator"></i> Calculateur de graines</label>
+      <select id="plan-conversion-species" class="form-select" style="margin-bottom:10px;"></select>
+      <div style="display:flex; gap:10px; align-items:center">
+        <div style="flex:1">
+          <small style="color:#0369a1; font-weight:600;">Graines (Nb)</small>
+          <input id="plan-seeds-qty" class="form-input" type="number" step="1" min="1" placeholder="Ex: 12" oninput="App.syncConversionField(this, 'seeds')">
+        </div>
+        <i class="fas fa-exchange-alt" style="color:#0284c7; margin-top:15px;"></i>
+        <div style="flex:1">
+          <small style="color:#0369a1; font-weight:600;">Poids éq. (gr)</small>
+          <input id="plan-weight-qty" class="form-input" type="number" step="0.01" placeholder="Ex: 0.5" oninput="App.syncConversionField(this, 'weight')">
+        </div>
+      </div>
+    </div>
+    
+    <div style="display:flex; gap:10px;">
+      <div class="form-group" style="flex:1">
+        <label class="form-label">Pertes attendues (%)</label>
+        <input id="plan-loss-rate" class="form-input" type="number" step="1" min="0" max="100" value="20">
+      </div>
+      <div class="form-group" style="flex:1">
+        <label class="form-label">Repiquage estimé</label>
+        <input id="plan-transplant-date" class="form-input" type="date">
+      </div>
+    </div>
+    
+    <div class="form-group">
+      <label class="form-label">Notes de suivi</label>
+      <textarea id="plan-comments" class="form-textarea" placeholder="Taux de germination, emplacement..."></textarea>
+    </div>
+    
+    <div class="form-group">
+      <label class="form-label">Statut</label>
+      <select id="plan-status" class="form-select">
+        <option value="planned">📅 À faire</option>
+        <option value="sown">🌱 Semé (Déduit du stock !)</option>
+        <option value="germinated">🌿 Levée</option>
+        <option value="transplanted">🪴 Repiqué</option>
+        <option value="cancelled">❌ Annulé</option>
+      </select>
+    </div>
+    
+    <button class="btn btn-primary" style="width:100%" onclick="App.handlePlanningSubmit()"><i class="fas fa-check"></i> Valider le planning</button>
+  </div>
+</div>
+
+<div id="modal-batch-planning" class="modal-overlay">
+  <div class="modal-content">
+    <div class="modal-header" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+      <h3>Planification Groupée</h3>
+      <button class="btn btn-sm btn-secondary" style="border-radius:50%; width:32px; height:32px; padding:0;" onclick="UI.closeModals()"><i class="fas fa-times"></i></button>
+    </div>
+    
+    <div class="form-group">
+      <label class="form-label">Espèce concernée</label>
+      <select id="batch-species" class="form-select" onchange="UI.updateBatchVarietyList()">
+        <option value="">-- Choisir --</option>
+      </select>
+    </div>
+    
+    <div class="form-group">
+      <label class="form-label">Variétés à semer ensemble</label>
+      <div id="batch-variety-list" style="max-height:180px; overflow-y:auto; border:2px solid var(--bordure-douce); border-radius:var(--rayon-petit); padding:10px; background:#f9fafb;">
+        <p style="color:var(--texte-gris);font-style:italic; text-align:center;">Sélectionnez d'abord une espèce</p>
+      </div>
+    </div>
+    
+    <div class="form-group">
+      <label class="form-label">Date de semis commune</label>
+      <input id="batch-sowing-date" class="form-input" type="date">
+    </div>
+    
+    <div class="form-group" style="background:#f0f9ff; padding:12px; border-radius:var(--rayon-petit); border: 1px solid #bae6fd;">
+      <label class="form-label" style="color:#0369a1;"><i class="fas fa-calculator"></i> Taux de conversion commun</label>
+      <select id="batch-conversion-species" class="form-select" onchange="App.syncConversionField(document.getElementById('batch-seeds-qty'), 'seeds')" style="margin-bottom:10px;"></select>
+      <div style="display:flex; gap:10px; align-items:center">
+        <div style="flex:1">
+          <small style="color:#0369a1; font-weight:600;">Nb Graines / variété</small>
+          <input id="batch-seeds-qty" class="form-input" type="number" step="1" min="1" oninput="App.syncConversionField(this, 'seeds')">
+        </div>
+        <i class="fas fa-exchange-alt" style="color:#0284c7; margin-top:15px;"></i>
+        <div style="flex:1">
+          <small style="color:#0369a1; font-weight:600;">Poids éq. (gr)</small>
+          <input id="batch-weight-qty" class="form-input" type="number" step="0.01" oninput="App.syncConversionField(this, 'weight')">
+        </div>
+      </div>
+    </div>
+    
+    <div style="display:flex; gap:10px;">
+      <div class="form-group" style="flex:1">
+        <label class="form-label">Pertes (%)</label>
+        <input id="batch-loss-rate" class="form-input" type="number" step="1" min="0" max="100" value="20">
+      </div>
+      <div class="form-group" style="flex:1">
+        <label class="form-label">Repiquage estimé</label>
+        <input id="batch-transplant-date" class="form-input" type="date">
+      </div>
+    </div>
+    
+    <button class="btn btn-primary" style="width:100%" onclick="App.handleBatchPlanningSubmit()"><i class="fas fa-magic"></i> Créer les planifications en masse</button>
+  </div>
+</div>
+<script>
+/**
+ * ==========================================
+ * LE GARDIEN DES GRAINES - MOTEUR PRINCIPAL
+ * ==========================================
+ */
+const App = {
+  // --- 1. ÉTAT ET DONNÉES ---
+  data: { 
+    species: [], 
+    varieties: [], 
+    stocks: [], 
+    wishlist: [], 
+    productions: [], 
+    plannings: [] 
+  },
+  runtimeAlerts: { produce: [], buy: [] },
+  currentAlertTab: 'produce',
+  currentSpeciesId: null,
+  DEFAULT_MIN_STOCK_QTY: 5,
+
+  // Constantes de conversion (Graines -> Grammes)
+  SEED_CONVERSION_RATES: {
+    choux_et_cruciferes: { name: 'Choux et Crucifères (Chou, Navet, Rutabaga)', seedsPerGram: 250 },
+    laitues_et_feuilles: { name: 'Laitues et Feuilles (Laitue, Mâche, Roquette)', seedsPerGram: 900 },
+    tomates_et_solanacees: { name: 'Tomates, Poivrons, Aubergines', seedsPerGram: 300 },
+    cucurbitacees_lourdes: { name: 'Courges, Potirons, Concombres', seedsPerGram: 6 },
+    melons: { name: 'Melons (Cucumis melo)', seedsPerGram: 30 },
+    pasteques: { name: 'Pastèques (Citrullus lanatus)', seedsPerGram: 10 },
+    blettes_betteraves: { name: 'Blettes, Betteraves, Épinards', seedsPerGram: 50 },
+    racines_fines: { name: 'Racines Fines (Carotte, Céleri)', seedsPerGram: 700 },
+    racines_moyennes: { name: 'Racines Moyennes (Radis, Navet)', seedsPerGram: 120 },
+    legumineuses: { name: 'Légumineuses (Haricots, Pois, Fèves)', seedsPerGram: 2 },
+    fines_herbes: { name: 'Fines Herbes (Persil, Aneth, Basilic)', seedsPerGram: 500 },
+    par_defaut: { name: 'Non listé (Valeur manuelle recommandée)', seedsPerGram: 100 }
+  },
+
+  // --- 2. UTILITAIRES & SAUVEGARDE ---
+  generateId() { 
+    return Date.now().toString(36) + Math.random().toString(36).slice(2,8); 
+  },
+
+  saveAll() {
+    localStorage.setItem('seedGuardianData', JSON.stringify(this.data));
+  },
+
+  // Render uniquement les vues actives après une action
+  renderAfterSave(views = []) {
+    // Toujours mettre à jour le dashboard si visible
+    if (document.getElementById('view-dashboard').classList.contains('active')) {
+      this.renderDashboard();
+    }
+    // Vues demandées explicitement
+    views.forEach(v => {
+      if (typeof v === 'function') v();
+    });
+  },
+
+  loadAll() {
+    const stored = localStorage.getItem('seedGuardianData');
+    if (stored) {
+      try { 
+        this.data = JSON.parse(stored);
+        // Migration : ajouter origine/fournisseur aux lots existants
+        this.data.stocks.forEach(s => {
+          if (!s.origine) {
+            // Deviner l'origine depuis les notes si possible
+            const n = (s.notes || '').toLowerCase();
+            if (n.includes('achat') || n.includes('acheté') || n.includes('chez ')) {
+              s.origine = 'buy';
+              // Extraire le fournisseur si mentionné "chez X"
+              const m = s.notes.match(/chez ([^,\.\(]+)/i);
+              s.fournisseur = m ? m[1].trim() : '';
+            } else if (n.includes('don') || n.includes('échange') || n.includes('cadeau')) {
+              s.origine = 'gift';
+              s.fournisseur = '';
+            } else {
+              // Par défaut : autoproduction (cohérent avec le mode de renouvellement)
+              const v = this.data.varieties.find(x => x.id === s.varId);
+              s.origine = (v && v.renewalMode === 'buy') ? 'buy' : 'produce';
+              s.fournisseur = '';
+            }
+          }
+        });
+      } catch(e) { 
+        console.warn('Erreur lors de la lecture du LocalStorage', e); 
+      }
+    }
+  },
+
+  // --- 3. EXPORTS & IMPORTS ---
+  exportData() {
+    const dataStr = JSON.stringify(this.data, null, 2);
+    const uri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
+    const a = document.createElement('a'); 
+    a.href = uri; 
+    a.download = `graines_backup_${new Date().toISOString().slice(0,10)}.json`; 
+    a.click();
+    UI.toast('Sauvegarde téléchargée avec succès !');
+  },
+  
+  exportPDF() {
+    if (!window.jspdf) {
+      alert("Erreur : Les librairies PDF ne sont pas chargées. Vérifiez votre connexion internet.");
+      return;
+    }
+
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+
+    let reportData = this.data.stocks.map(s => {
+      const v = this.data.varieties.find(x => x.id === s.varId);
+      const sp = v ? this.data.species.find(x => x.id === v.spId) : null;
+      return {
+        speciesName: sp ? sp.name : 'Inconnu',
+        varietyName: v ? v.name : 'Inconnu',
+        qty: s.qty,
+        unit: s.unit,
+        prod: s.prod,
+        exp: s.exp,
+        notes: s.notes || ''
+      };
+    });
+
+    reportData.sort((a, b) => {
+      const spDiff = a.speciesName.localeCompare(b.speciesName, 'fr');
+      if (spDiff !== 0) return spDiff;
+      const varDiff = a.varietyName.localeCompare(b.varietyName, 'fr');
+      if (varDiff !== 0) return varDiff;
+      return a.exp - b.exp;
+    });
+
+    const tableBody = reportData.map(item => [
+      item.speciesName,
+      item.varietyName,
+      `${item.qty} ${item.unit}`,
+      item.prod,
+      item.exp,
+      item.notes
+    ]);
+
+    doc.setFontSize(18);
+    doc.setTextColor(45, 106, 79); 
+    doc.text("État du Stock - Le Gardien des Graines", 14, 22);
+    
+    doc.setFontSize(10);
+    doc.setTextColor(100);
+    doc.text(`Généré le : ${new Date().toLocaleDateString('fr-FR')}`, 14, 28);
+
+    doc.autoTable({
+      startY: 35,
+      head: [['Espèce', 'Variété', 'Qté', 'Prod.', 'Exp.', 'Notes']],
+      body: tableBody,
+      theme: 'grid',
+      headStyles: { fillColor: [45, 106, 79], textColor: 255, fontStyle: 'bold' },
+      styles: { fontSize: 9, cellPadding: 3 },
+      columnStyles: {
+        0: { fontStyle: 'bold', textColor: [27, 67, 50] }, 
+        5: { fontStyle: 'italic', textColor: 80 } 
+      }
+    });
+
+    doc.save(`Stock_Graines_${new Date().toISOString().slice(0,10)}.pdf`);
+    UI.toast("PDF généré avec succès !");
+  },
+
+  exportPlanningPDF() {
+    if (!window.jspdf) {
+      alert("Erreur : Les librairies PDF ne sont pas chargées. Vérifiez votre connexion internet.");
+      return;
+    }
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+
+    // Récupérer les filtres actifs
+    const filterStatus = this.planningStatusFilter;
+    const filterSpId = document.getElementById('plan-filter-species') ? document.getElementById('plan-filter-species').value : '';
+    const filterVarId = document.getElementById('plan-filter-variety') ? document.getElementById('plan-filter-variety').value : '';
+    const sortVal = document.getElementById('plan-sort') ? document.getElementById('plan-sort').value : 'date-asc';
+
+    let list = this.data.plannings.map(p => {
+      const v = this.data.varieties.find(x => x.id === p.varId);
+      const sp = v ? this.data.species.find(s => s.id === v.spId) : null;
+      return { ...p, _v: v, _sp: sp };
+    });
+    if (filterStatus) list = list.filter(p => p.status === filterStatus);
+    if (filterSpId) list = list.filter(p => p._v && p._v.spId === filterSpId);
+    if (filterVarId) list = list.filter(p => p.varId === filterVarId);
+    list.sort((a, b) => {
+      if (sortVal === 'date-asc') return new Date(a.sowingDate) - new Date(b.sowingDate);
+      if (sortVal === 'date-desc') return new Date(b.sowingDate) - new Date(a.sowingDate);
+      if (sortVal === 'species-asc') return (a._sp?.name || '').localeCompare(b._sp?.name || '');
+      if (sortVal === 'plants-desc') return (b.expectedPlants || 0) - (a.expectedPlants || 0);
+      return 0;
+    });
+
+    const statusLabels = { planned: 'À faire', sown: 'Semé', germinated: 'Levée', transplanted: 'Repiqué', cancelled: 'Annulé' };
+    const today = new Date(); today.setHours(0,0,0,0);
+
+    const filterLabel = [
+      filterStatus ? `Statut : ${statusLabels[filterStatus]}` : '',
+      filterSpId ? `Espèce : ${this.data.species.find(s => s.id === filterSpId)?.name || ''}` : '',
+      filterVarId ? `Variété : ${this.data.varieties.find(v => v.id === filterVarId)?.name || ''}` : '',
+    ].filter(Boolean).join(' | ') || 'Tous les plannings';
+
+    doc.setFontSize(18);
+    doc.setTextColor(45, 106, 79);
+    doc.text("Planning de Semis - Le Gardien des Graines", 14, 22);
+    doc.setFontSize(9);
+    doc.setTextColor(100);
+    doc.text(`Généré le : ${new Date().toLocaleDateString('fr-FR')} | Filtre : ${filterLabel}`, 14, 28);
+
+    const tableBody = list.map(p => {
+      const isLate = p.status === 'planned' && new Date(p.sowingDate) < today;
+      return [
+        new Date(p.sowingDate).toLocaleDateString('fr-FR'),
+        p._sp ? p._sp.name : '?',
+        p._v ? p._v.name : '?',
+        p.seedsQty ? `${p.seedsQty} gr.` : (p.weightQty ? `${p.weightQty} gr` : '?'),
+        `${p.expectedPlants || 0}`,
+        p.transplantDate ? new Date(p.transplantDate).toLocaleDateString('fr-FR') : '-',
+        (statusLabels[p.status] || p.status) + (isLate ? ' ⚠' : ''),
+        p.comments || ''
+      ];
+    });
+
+    doc.autoTable({
+      startY: 34,
+      head: [['Date semis', 'Espèce', 'Variété', 'Qté', 'Plants', 'Repiquage', 'Statut', 'Notes']],
+      body: tableBody,
+      theme: 'grid',
+      headStyles: { fillColor: [45, 106, 79], textColor: 255, fontStyle: 'bold', fontSize: 8 },
+      styles: { fontSize: 8, cellPadding: 2 },
+      columnStyles: {
+        0: { cellWidth: 20 },
+        1: { fontStyle: 'bold', textColor: [27, 67, 50], cellWidth: 25 },
+        2: { cellWidth: 30 },
+        3: { cellWidth: 15, halign: 'center' },
+        4: { cellWidth: 15, halign: 'center' },
+        5: { cellWidth: 20 },
+        6: { cellWidth: 18 },
+        7: { fontStyle: 'italic', textColor: 80 }
+      },
+      didParseCell(data) {
+        if (data.section === 'body' && data.column.index === 6 && data.cell.raw.includes('⚠')) {
+          data.cell.styles.textColor = [230, 57, 70];
+          data.cell.styles.fontStyle = 'bold';
+        }
+      }
+    });
+
+    doc.save(`Planning_Semis_${new Date().toISOString().slice(0,10)}.pdf`);
+    UI.toast("PDF du planning exporté !");
+  },
+  
+  importData(input) {
+    const file = input.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = e => {
+      try { 
+        this.data = JSON.parse(e.target.result); 
+        this.saveAll(); 
+        UI.toast('Données importées avec succès !'); 
+        this.renderAll(); 
+      } catch(err) { 
+        alert('Erreur lors de la lecture du fichier JSON.'); 
+      }
+    };
+    reader.readAsText(file);
+  },
+
+  // --- 4. NAVIGATION ---
+  navigate(viewId) {
+    document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+    
+    document.getElementById(viewId).classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    
+    const navId = viewId.replace('view-', 'nav-'); 
+    const navEl = document.getElementById(navId); 
+    if (navEl) navEl.classList.add('active');
+    
+    const titles = {
+      'view-dashboard': 'Accueil',
+      'view-species': 'Mes Espèces',
+      'view-stocks': 'Tous les Stocks',
+      'view-production': 'Productions',
+      'view-wishlist': 'Ma Wishlist',
+      'view-alerts': 'Alertes',
+      'view-planning': 'Planning Semis'
+    };
+    if (titles[viewId]) document.getElementById('page-title').innerText = titles[viewId];
+    
+    if (viewId === 'view-dashboard') this.renderDashboard();
+    if (viewId === 'view-alerts') { this.computeAlerts(); UI.renderAlerts(); }
+  },
+
+  switchAlertTab(tab) {
+    this.currentAlertTab = tab;
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('tab-' + tab).classList.add('active');
+    UI.renderAlerts();
+  },
+
+  // --- 5. LOGIQUE MÉTIER & CALCULS ---
+  getTargetPlanningYear() {
+    const now = new Date();
+    // Si on est en octobre ou plus tard, on planifie pour l'année suivante
+    return now.getMonth() >= 9 ? now.getFullYear() + 1 : now.getFullYear();
+  },
+
+  initConversionSelect() {
+    const select = document.getElementById('plan-conversion-species');
+    if (!select) return; 
+    select.innerHTML = ''; 
+    for (const [key, data] of Object.entries(this.SEED_CONVERSION_RATES)) {
+      const option = document.createElement('option');
+      option.value = key;
+      option.textContent = `${data.name} (~${data.seedsPerGram} graines/gr)`;
+      select.appendChild(option);
+    }
+  },
+
+  syncConversionField(inputElement, type) {
+    const isBatch = inputElement.id.startsWith('batch');
+    const seedsId = isBatch ? 'batch-seeds-qty' : 'plan-seeds-qty';
+    const weightId = isBatch ? 'batch-weight-qty' : 'plan-weight-qty';
+    const selectId = isBatch ? 'batch-conversion-species' : 'plan-conversion-species';
+
+    const select = document.getElementById(selectId);
+    const seedsInput = document.getElementById(seedsId);
+    const weightInput = document.getElementById(weightId);
+    
+    const rateKey = select ? select.value : 'par_defaut';
+    const rate = this.SEED_CONVERSION_RATES[rateKey].seedsPerGram;
+    
+    if (!seedsInput || !weightInput || !rate) return; 
+
+    const otherInput = (type === 'seeds') ? weightInput : seedsInput;
+    const originalOnInput = otherInput.oninput;
+    otherInput.oninput = null; // Désactive temporairement l'événement pour éviter une boucle infinie
+    
+    if (type === 'seeds') {
+        const seeds = parseFloat(inputElement.value) || 0;
+        const calculatedWeight = seeds / rate;
+        weightInput.value = calculatedWeight > 0 ? calculatedWeight.toFixed(2) : '';
+    } else if (type === 'weight') {
+        const weight = parseFloat(inputElement.value) || 0;
+        const calculatedSeeds = weight * rate;
+        seedsInput.value = calculatedSeeds > 0 ? Math.round(calculatedSeeds) : '';
+    }
+    otherInput.oninput = originalOnInput;
+  },
+
+  getValidStockInfo(varId) {
+    const currentYear = new Date().getFullYear();
+    const vStocks = this.data.stocks.filter(s => s.varId === varId);
+
+    let totalValidQty = 0;
+    let soonExpiringQty = 0;   
+    let minExpYear = null;     
+    let hasExpiringSoon = false;
+    let oldestValidProdYear = null;
+
+    vStocks.forEach(s => {
+        const qty = parseFloat(s.qty) || 0;
+        const expYear = parseInt(s.exp);
+        const prodYear = parseInt(s.prod) || null;
+
+        if (!isNaN(expYear) && expYear >= currentYear && qty > 0) {
+            totalValidQty += qty;
+            if (expYear === currentYear) {
+                hasExpiringSoon = true;
+                soonExpiringQty += qty;
+            }
+            if (minExpYear === null || expYear < minExpYear) {
+                minExpYear = expYear;
+            }
+            if (prodYear !== null) {
+                if (oldestValidProdYear === null || prodYear < oldestValidProdYear) {
+                    oldestValidProdYear = prodYear;
+                }
+            }
+        }
+    });
+
+    return { totalValidQty, soonExpiringQty, minExpYear, hasExpiringSoon, oldestValidProdYear, hasValidStock: totalValidQty > 0 };
+  },
+
+  checkAutoPlanning() {
+    const targetYear = this.getTargetPlanningYear();
+    const currentYear = new Date().getFullYear();
+    let plannedCount = 0;
+
+    this.data.varieties.forEach(v => {
+        if (v.disableTracking === true || v.renewalMode !== 'produce') return;
+
+        const existingFutureProd = this.data.productions.find(p => p.varId === v.id && parseInt(p.year) >= targetYear && parseInt(p.year) <= targetYear + 1);
+        if (existingFutureProd) return;
+
+        const stockInfo = this.getValidStockInfo(v.id);
+        const minQty = parseFloat(v.minStockQty) || this.DEFAULT_MIN_STOCK_QTY;
+
+        let needsProduction = false;
+        const hasSufficientSingleLotAfterTarget = this.data.stocks.some(s => s.varId === v.id && parseFloat(s.qty) >= minQty && parseInt(s.exp) > targetYear);
+        
+        if (hasSufficientSingleLotAfterTarget) {
+            needsProduction = false;
+        } else if (!stockInfo.hasValidStock) {
+            needsProduction = true;
+        } else if (stockInfo.totalValidQty < minQty) {
+            needsProduction = true;
+        } else {
+            if (stockInfo.oldestValidProdYear !== null) {
+                const yearsOld = currentYear - stockInfo.oldestValidProdYear;
+                const cycle = parseInt(v.renewalCycle) || 3;
+                if (yearsOld >= cycle - 1) {
+                    needsProduction = true;
+                }
+            }
+        }
+
+        if (needsProduction) {
+            this.data.productions.push({
+                id: this.generateId(),
+                varId: v.id,
+                year: targetYear,
+                plants: null,
+                status: 'planned',
+                harvestQty: 0,
+                harvestUnit: 'gr',
+                stockAdded: false
+            });
+            plannedCount++;
+        }
+    });
+
+    if (plannedCount > 0) {
+        const yearMsg = targetYear > new Date().getFullYear() ? ` pour ${targetYear}` : '';
+        UI.toast(`${plannedCount} production(s) planifiée(s)${yearMsg}.`);
+    }
+  },
+
+  computeAlerts() {
+    const currentYear = new Date().getFullYear();
+    const alertsProduce = [];
+    const alertsBuy = [];
+
+    this.data.varieties.forEach(v => {
+      if (v.disableTracking === true) return;
+
+      const spName = this.data.species.find(s => s.id === v.spId)?.name || "?";
+      const minQty = parseFloat(v.minStockQty) || this.DEFAULT_MIN_STOCK_QTY;
+      const stockInfo = this.getValidStockInfo(v.id);
+
+      let status = "ok", reason = "";
+
+      if (!stockInfo.hasValidStock) {
+        status = "urgent"; reason = "Aucun stock valide !";
+      } else if (stockInfo.totalValidQty < minQty) {
+        status = "urgent"; reason = `Stock faible : ${stockInfo.totalValidQty.toFixed(1)} < ${minQty}`;
+      } else {
+        const qtyAfterSoonExpiry = stockInfo.totalValidQty - (stockInfo.soonExpiringQty || 0);
+        if (stockInfo.soonExpiringQty > 0 && qtyAfterSoonExpiry < minQty) {
+          status = "warning"; reason = "Perte de lots cette année : risque de pénurie";
+        }
+      }
+
+      if (status === "ok" && v.renewalMode === 'produce') {
+        const lastProds = this.data.productions.filter(p => p.varId === v.id && p.status === 'completed').sort((a,b) => b.year - a.year);
+        const lastProdYear = lastProds.length > 0 ? parseInt(lastProds[0].year) : 0;
+        const cycle = parseInt(v.renewalCycle) || 3;
+        if (lastProdYear > 0 && (currentYear - lastProdYear) >= cycle) {
+          status = "warning"; reason = `Dernière prod: ${lastProdYear} (Cycle ${cycle} ans dépassé)`;
+        }
+      }
+
+      if (status !== "ok") {
+        const alertObj = { variety: v, speciesName: spName, reason, level: status };
+        if (v.renewalMode === 'produce') {
+          alertsProduce.push(alertObj); 
+        } else {
+          alertsBuy.push(alertObj);
+          if (status === 'urgent') {
+            const alreadyInWishlist = this.data.wishlist.some(w => w.species === spName && w.variety === v.name && !w.ordered);
+            if (!alreadyInWishlist) {
+              this.data.wishlist.push({ id: this.generateId(), species: spName, variety: v.name, supplier: 'AUTO (Stock Critique)', price: '?', ordered: false });
+              this.saveAll();
+              this.renderWishlist();
+              UI.toast(`⚠️ ${spName} - ${v.name} ajouté à la Wishlist (stock critique)`);
+            }
+          }
+        }
+      }
+    });
+
+    this.runtimeAlerts = { produce: alertsProduce, buy: alertsBuy };
+    const total = alertsProduce.length + alertsBuy.length;
+    document.getElementById('dash-alerts-count').innerText = `${total} Alertes`;
+
+    // Stats
+    const statsEl = document.getElementById('alert-stats');
+    if (statsEl) {
+      const urgentP = alertsProduce.filter(a => a.level === 'urgent').length;
+      const warnP = alertsProduce.filter(a => a.level === 'warning').length;
+      const urgentB = alertsBuy.filter(a => a.level === 'urgent').length;
+      const warnB = alertsBuy.filter(a => a.level === 'warning').length;
+      statsEl.innerHTML = `
+        <div class="stat-box" style="border-bottom-color:var(--rouge-alerte); padding:12px 8px; cursor:pointer;" onclick="App.switchAlertTab('produce'); UI.setAlertLevelFilter('urgent')">
+          <i class="fas fa-exclamation-circle" style="font-size:1.2rem;color:var(--rouge-alerte)"></i>
+          <div class="stat-value" style="font-size:1.4rem;">${urgentP}</div>
+          <p class="card-info" style="justify-content:center; font-size:0.75rem;">Prod. urgent</p>
+        </div>
+        <div class="stat-box" style="border-bottom-color:var(--orange-warning); padding:12px 8px; cursor:pointer;" onclick="App.switchAlertTab('produce'); UI.setAlertLevelFilter('warning')">
+          <i class="fas fa-exclamation-triangle" style="font-size:1.2rem;color:var(--orange-warning)"></i>
+          <div class="stat-value" style="font-size:1.4rem;">${warnP}</div>
+          <p class="card-info" style="justify-content:center; font-size:0.75rem;">Prod. surveiller</p>
+        </div>
+        <div class="stat-box" style="border-bottom-color:var(--rouge-alerte); padding:12px 8px; cursor:pointer;" onclick="App.switchAlertTab('buy'); UI.setAlertLevelFilter('urgent')">
+          <i class="fas fa-shopping-cart" style="font-size:1.2rem;color:var(--rouge-alerte)"></i>
+          <div class="stat-value" style="font-size:1.4rem;">${urgentB}</div>
+          <p class="card-info" style="justify-content:center; font-size:0.75rem;">Achats urgent</p>
+        </div>
+        <div class="stat-box" style="border-bottom-color:var(--orange-warning); padding:12px 8px; cursor:pointer;" onclick="App.switchAlertTab('buy'); UI.setAlertLevelFilter('warning')">
+          <i class="fas fa-shopping-cart" style="font-size:1.2rem;color:var(--orange-warning)"></i>
+          <div class="stat-value" style="font-size:1.4rem;">${warnB}</div>
+          <p class="card-info" style="justify-content:center; font-size:0.75rem;">Achats surveiller</p>
+        </div>
+      `;
+    }
+
+    if (document.getElementById('view-alerts').classList.contains('active')) UI.renderAlerts();
+  },
+
+  deductSeedsFromStock(varId, seedsNeeded, weightEquivalent) {
+    let weightPerSeed = 0; 
+    
+    if (seedsNeeded > 0 && weightEquivalent > 0) {
+        weightPerSeed = weightEquivalent / seedsNeeded; 
+    }
+
+    const hasWeightStocks = this.data.stocks.some(s => s.varId === varId && s.unit === 'gr');
+    if (hasWeightStocks && weightPerSeed === 0 && seedsNeeded > 0) {
+        UI.toast("⚠️ Conversion manquante : Vous avez du stock en grammes. Veuillez saisir le 'Poids équivalent' pour déduire.");
+    }
+
+    let stocks = this.data.stocks
+      .filter(s => s.varId === varId && (s.unit === 'graines' || s.unit === 'gr'))
+      .sort((a,b) => parseInt(a.prod) - parseInt(b.prod));
+
+    let seedsToDeduct = seedsNeeded;
+    let log = [];
+
+    for (let s of stocks) {
+      if (seedsToDeduct <= 0) break;
+
+      let availableInSeeds = 0; 
+      let takeWeight = 0; 
+      
+      if (s.unit === 'graines') {
+          availableInSeeds = s.qty;
+      } else if (s.unit === 'gr') {
+          if (weightPerSeed === 0) continue; 
+          availableInSeeds = s.qty / weightPerSeed; 
+      } else {
+          continue;
+      }
+
+      let takeSeeds = Math.min(seedsToDeduct, availableInSeeds);
+      
+      if (s.unit === 'graines') {
+          s.qty -= takeSeeds;
+      } else if (s.unit === 'gr') {
+          takeWeight = takeSeeds * weightPerSeed; 
+          s.qty -= takeWeight;
+          s.qty = Math.round(s.qty * 1000) / 1000;
+      }
+
+      seedsToDeduct -= takeSeeds;
+      
+      let deductedAmount = s.unit === 'graines' ? takeSeeds : takeWeight;
+      if (deductedAmount > 0) {
+        log.push(`-${Math.round(deductedAmount * 100) / 100} ${s.unit.startsWith('g') ? 'gr' : 'grn'} (Lot ${s.prod})`);
+      }
+
+      if (s.qty <= 0.001) {
+          this.data.stocks = this.data.stocks.filter(x => x.id !== s.id);
+      }
+    }
+
+    if (seedsToDeduct > 0.5) { 
+       const totalDeducted = seedsNeeded - seedsToDeduct;
+       UI.toast(`⚠️ Stock insuffisant ou lot en grammes non déductible. Seules ${Math.round(totalDeducted)} graines déduites. Manque ${Math.round(seedsToDeduct)} graines.`);
+    } else {
+       UI.toast(`✅ Stock déduit ! (${log.join(', ')})`);
+    }
+
+    this.saveAll();
+    this.renderStocksList();
+    if(this.currentSpeciesId) this.renderVarieties(this.currentSpeciesId);
+  },
+
+  // --- 6. GESTION DES DONNÉES (CRUD) ---
+  
+  // Espèces
+  addSpecies(name) { 
+    this.data.species.push({ id: this.generateId(), name }); 
+  },
+  deleteSpecies(id) {
+    if(!confirm("Supprimer l'espèce ? Cela supprimera toutes les variétés, stocks et productions associés.")) return;
+    const toDelete = this.data.varieties.filter(v => v.spId === id);
+    toDelete.forEach(v => this.deleteVariety(v.id, true));
+    this.data.species = this.data.species.filter(s => s.id !== id);
+    this.saveAll(); 
+    this.navigate('view-species'); 
+    UI.toast("Espèce supprimée avec succès.");
+  },
+  handleSpeciesSubmit() {
+    const id = document.getElementById('species-id').value;
+    const name = document.getElementById('species-name').value.trim();
+    if(!name) return alert('Le nom de l\'espèce est requis.');
+    if (id) { 
+      const s = this.data.species.find(x => x.id === id); 
+      if(s) s.name = name; 
+    } else {
+      this.addSpecies(name);
+    }
+    this.saveAll(); 
+    UI.closeModals(); 
+    this.renderSpeciesList();
+  },
+
+  // Variétés
+  deleteVariety(id, skipConfirm = false) {
+    if(!skipConfirm && !confirm("Supprimer cette variété et tous ses stocks associés ?")) return;
+    this.data.stocks = this.data.stocks.filter(s => s.varId !== id);
+    this.data.productions = this.data.productions.filter(p => p.varId !== id);
+    this.data.plannings = this.data.plannings.filter(p => p.varId !== id);
+    this.data.varieties = this.data.varieties.filter(v => v.id !== id);
+    if(!skipConfirm) { 
+      this.saveAll(); 
+      UI.toast('Variété supprimée.'); 
+      if (this.currentSpeciesId) this.renderVarieties(this.currentSpeciesId);
+    }
+  },
+  handleVarietySubmit() {
+    const id = document.getElementById('var-id').value;
+    const spId = document.getElementById('var-spId').value;
+    const name = document.getElementById('var-name').value.trim();
+    const cycle = parseInt(document.getElementById('var-cycle').value) || 3;
+    const mode = document.getElementById('var-mode').value;
+    const notes = document.getElementById('var-notes').value;
+    const minQty = parseFloat(document.getElementById('var-minStockQty').value) || this.DEFAULT_MIN_STOCK_QTY;
+    const disableTracking = document.getElementById('var-disableTracking').checked;
+    
+    if(!name) return alert('Le nom de la variété est requis.');
+    
+    if (id) {
+      const v = this.data.varieties.find(x => x.id === id);
+      if(v) { 
+        v.name = name; v.renewalCycle = cycle; v.renewalMode = mode; 
+        v.notes = notes; v.minStockQty = minQty; v.disableTracking = disableTracking; 
+      }
+    } else {
+      this.data.varieties.push({ id: this.generateId(), spId, name, renewalCycle: cycle, renewalMode: mode, notes, minStockQty: minQty, disableTracking });
+    }
+    this.saveAll(); 
+    if(this.currentSpeciesId) this.renderVarieties(this.currentSpeciesId); 
+    UI.closeModals();
+    this.checkAutoPlanning();
+    this.computeAlerts();
+  },
+
+  // Stocks
+  addStock(varId, qty, unit, prod, exp, notes, origine = 'produce', fournisseur = '') {
+    const variety = this.data.varieties.find(v => v.id === varId);
+    const cycle = variety && variety.renewalCycle ? parseInt(variety.renewalCycle) : 3;
+    const prodYear = parseInt(prod);
+    const expYear = (exp !== undefined && exp !== null) ? parseInt(exp) : (prodYear + cycle);
+
+    this.data.stocks.push({
+        id: this.generateId(),
+        varId: varId,
+        qty: parseFloat(qty),
+        unit: unit,
+        prod: prodYear,
+        exp: expYear,
+        notes: notes,
+        origine: origine,
+        fournisseur: fournisseur
+    });
+  },
+  deleteStock(id) {
+    if(!confirm("Supprimer ce lot de stock ?")) return;
+    this.data.stocks = this.data.stocks.filter(s => s.id !== id); 
+    this.saveAll(); 
+    this.computeAlerts(); 
+    UI.toast("Lot supprimé !");
+    if(this.currentSpeciesId) this.renderVarieties(this.currentSpeciesId);
+  },
+  handleStockSubmit() {
+    const id = document.getElementById('stock-id').value;
+    const varId = document.getElementById('stock-varId').value;
+    const qty = parseFloat(document.getElementById('stock-qty').value);
+    const unit = document.getElementById('stock-unit').value;
+    const prod = parseInt(document.getElementById('stock-prod').value);
+    const exp = parseInt(document.getElementById('stock-exp').value);
+    const notes = document.getElementById('stock-notes').value;
+    const origine = document.getElementById('stock-origine').value;
+    const fournisseur = document.getElementById('stock-fournisseur').value.trim();
+    
+    if(!qty || qty <= 0) return alert('Quantité requise et valide.');
+    if(!prod || isNaN(prod) || prod < 2000 || prod > 2100) return alert('Année de production invalide.');
+    if(!exp  || isNaN(exp)  || exp  < 2000 || exp  > 2100) return alert('Année d\'expiration invalide.');
+    if(exp < prod) return alert('L\'année d\'expiration ne peut pas être antérieure à la production.');
+    if (id) {
+      const s = this.data.stocks.find(x => x.id === id);
+      if(s) { s.qty = qty; s.unit = unit; s.prod = prod; s.exp = exp; s.notes = notes; s.origine = origine; s.fournisseur = fournisseur; }
+    } else {
+      this.addStock(varId, qty, unit, prod, exp, notes, origine, fournisseur);
+    }
+    this.saveAll(); 
+    this.computeAlerts(); 
+    this.checkAutoPlanning();
+    if(this.currentSpeciesId) this.renderVarieties(this.currentSpeciesId); 
+    UI.closeModals();
+  },
+  handleReduceSubmit() {
+    const id = document.getElementById('reduce-id').value;
+    const reduceQty = parseFloat(document.getElementById('reduce-qty').value);
+    const s = this.data.stocks.find(x => x.id === id);
+    
+    if(!s || !reduceQty || reduceQty <= 0) return alert('Quantité invalide.');
+    if(s.qty < reduceQty) return alert(`La quantité à retirer (${reduceQty}) est supérieure au stock restant (${s.qty}).`);
+    
+    s.qty -= reduceQty;
+    if (s.qty <= 0) { 
+      this.data.stocks = this.data.stocks.filter(x => x.id !== id); 
+      UI.toast(`Lot consommé. ${reduceQty} ${s.unit} retirés.`); 
+    } else {
+      UI.toast(`${reduceQty} ${s.unit} retirés du stock.`);
+    }
+    
+    this.saveAll(); 
+    this.computeAlerts(); 
+    UI.closeModals(); 
+    if(this.currentSpeciesId) this.renderVarieties(this.currentSpeciesId); 
+    if(document.getElementById('view-stocks').classList.contains('active')) this.renderStocksList();
+  },
+
+  // Wishlist
+  addWish(species, variety, supplier, price) { 
+    this.data.wishlist.push({ id: this.generateId(), species, variety, supplier, price, ordered: false }); 
+  },
+  deleteWish(id) { 
+    this.data.wishlist = this.data.wishlist.filter(w => w.id !== id); 
+    this.saveAll(); 
+    UI.toast("Souhait supprimé."); 
+    this.renderWishlist();
+  },
+  toggleWishOrdered(id) { 
+    const w = this.data.wishlist.find(x => x.id === id); 
+    if(w) w.ordered = !w.ordered; 
+    this.saveAll(); 
+    this.renderWishlist();
+  },
+  handleWishSubmit() {
+    const id = document.getElementById('wish-id').value;
+    const varId = document.getElementById('wish-varId').value;
+    const species = document.getElementById('wish-species').value.trim();
+    const variety = document.getElementById('wish-variety').value.trim();
+    const supplier = document.getElementById('wish-supplier').value;
+    const price = document.getElementById('wish-price').value;
+    
+    if(!species || !variety) return alert('Espèce et Variété requises.');
+    
+    if (id) {
+      const w = App.data.wishlist.find(x => x.id === id); 
+      if(w) { w.species = species; w.variety = variety; w.supplier = supplier; w.price = price; w.varId = varId || null; }
+    } else {
+      App.data.wishlist.push({ id: App.generateId(), species, variety, supplier, price, ordered: false, varId: varId || null });
+    }
+    App.saveAll(); 
+    UI.closeModals(); 
+    App.renderWishlist();
+  },
+  buyAndTransferWishlistGroup(supplierName) {
+    if(!confirm(`Confirmez-vous l'achat de tous les articles chez "${supplierName}" et leur transfert direct au Stock ?`)) return;
+    const itemsToProcess = this.data.wishlist.filter(w => (w.supplier || 'Fournisseur Inconnu') === supplierName && !w.ordered);
+    
+    if(itemsToProcess.length === 0) { 
+      UI.toast(`Aucun article non-commandé à transférer pour ${supplierName}.`); 
+      return; 
+    }
+    
+    const currentYear = new Date().getFullYear(); 
+    let createdCount = 0;
+    
+    itemsToProcess.forEach(w => {
+      let speciesNameInput = w.species.trim(); 
+      let varietyNameInput = w.variety.trim();
+      
+      // Utiliser le lien direct si disponible
+      let variety = w.varId ? this.data.varieties.find(v => v.id === w.varId) : null;
+      // Sinon recherche par nom
+      if (!variety) variety = this.data.varieties.find(v => v.name.toLowerCase() === varietyNameInput.toLowerCase());
+      let species = variety ? this.data.species.find(s => s.id === variety.spId) 
+                            : this.data.species.find(s => s.name.toLowerCase() === speciesNameInput.toLowerCase());
+      
+      if(!species) { 
+        species = { id: this.generateId(), name: speciesNameInput }; 
+        this.data.species.push(species); 
+      }
+      if(!variety) { 
+        variety = { 
+          id: this.generateId(), 
+          spId: species.id, 
+          name: varietyNameInput, 
+          renewalCycle: 3, 
+          renewalMode: 'buy', 
+          notes: `Importé de Wishlist, prix: ${w.price||'?'}`, 
+          minStockQty: this.DEFAULT_MIN_STOCK_QTY, 
+          disableTracking: false 
+        }; 
+        this.data.varieties.push(variety); 
+        createdCount++; 
+      } else {
+        variety.renewalMode = 'buy';
+      }
+      
+      this.data.stocks.push({ 
+        id: this.generateId(), 
+        varId: variety.id, 
+        qty: 1, 
+        unit: 'sachets', 
+        prod: currentYear, 
+        exp: currentYear + 3, 
+        notes: `Achat ${currentYear} chez ${w.supplier || '?'}`,
+        origine: 'buy',
+        fournisseur: w.supplier || ''
+      });
+    });
+    
+    const processedIds = itemsToProcess.map(w => w.id);
+    this.data.wishlist = this.data.wishlist.filter(w => !processedIds.includes(w.id));
+    this.saveAll(); 
+    this.computeAlerts(); 
+    UI.toast(`${itemsToProcess.length} articles transférés (${createdCount} nouvelles variétés) !`);
+    this.renderWishlist();
+  },
+
+  // Productions
+  deleteProd(id) { 
+    if(!confirm("Supprimer ce suivi de production ?")) return; 
+    this.data.productions = this.data.productions.filter(p => p.id !== id); 
+    this.saveAll(); 
+    UI.toast("Suivi supprimé !"); 
+    this.renderProductionList();
+  },
+  handleProdSubmit() {
+    const id = document.getElementById('prod-id').value;
+    const varId = document.getElementById('prod-varId').value;
+    const year = parseInt(document.getElementById('prod-year').value);
+    const plants = document.getElementById('prod-plants').value.trim() === '' ? null : parseInt(document.getElementById('prod-plants').value);
+    const status = document.getElementById('prod-status').value;
+    const harvestQty = parseFloat(document.getElementById('prod-harvest-qty').value) || 0;
+    const harvestUnit = document.getElementById('prod-harvest-unit').value;
+
+    if(!year) return alert('Année requise');
+
+    if (id) {
+      const p = this.data.productions.find(x => x.id === id);
+      if(p) {
+        if (status === 'completed' && !p.stockAdded && harvestQty > 0) {
+          if (confirm(`Ajouter ${harvestQty} ${harvestUnit} au stock maintenant ?`)) {
+            this.addStock(p.varId, harvestQty, harvestUnit, year, year + 3, `Récolte ${year} (${p.plants || '?'} plants)`, 'produce', '');
+            p.stockAdded = true; 
+            UI.toast("Stock mis à jour depuis la récolte !");
+          }
+        }
+        p.year = year; p.plants = plants; p.status = status; p.harvestQty = harvestQty; p.harvestUnit = harvestUnit;
+      }
+    } else {
+      const newProd = { id: this.generateId(), varId, year, plants, status, harvestQty, harvestUnit, stockAdded: false };
+      if (status === 'completed' && harvestQty > 0) { 
+        this.addStock(varId, harvestQty, harvestUnit, year, year + 3, `Récolte ${year}`); 
+        newProd.stockAdded = true; 
+      }
+      this.data.productions.push(newProd);
+    }
+
+    this.saveAll(); 
+    this.computeAlerts(); 
+    if(this.currentSpeciesId) this.renderVarieties(this.currentSpeciesId); 
+    UI.closeModals();
+    this.renderProductionList();
+  },
+
+  // Plannings
+  deletePlanning(id) {
+    if(!confirm("Supprimer cette planification ?")) return;
+    this.data.plannings = this.data.plannings.filter(p => p.id !== id);
+    this.saveAll();
+    this.renderPlanningList();
+    UI.toast("Planification supprimée !");
+  },
+  handlePlanningSubmit() {
+      const id = document.getElementById('plan-id').value;
+      const varId = document.getElementById('plan-variety').value;
+      const sowingDate = document.getElementById('plan-sowing-date').value;
+      
+      const seedsQty = parseInt(document.getElementById('plan-seeds-qty').value) || 0;
+      const weightQty = parseFloat(document.getElementById('plan-weight-qty').value.replace(',', '.')) || 0;
+
+      const lossRate = parseInt(document.getElementById('plan-loss-rate').value) || 0;
+      const transplantDate = document.getElementById('plan-transplant-date').value;
+      const comments = document.getElementById('plan-comments').value;
+      const status = document.getElementById('plan-status').value;
+
+      if(!varId || !sowingDate || (seedsQty <= 0 && weightQty <= 0)) {
+          return UI.toast('Erreur: Variété, date et quantité requises');
+      }
+
+      // Alerte doublon : variété déjà "À faire"
+      if (!id) {
+          const existingPlanned = this.data.plannings.find(p => p.varId === varId && p.status === 'planned');
+          if (existingPlanned) {
+              const v = this.data.varieties.find(x => x.id === varId);
+              const dateExist = new Date(existingPlanned.sowingDate).toLocaleDateString('fr-FR');
+              if (!confirm(`⚠️ "${v ? v.name : 'Cette variété'}" a déjà un planning "À faire" prévu le ${dateExist}.\n\nVoulez-vous quand même créer un nouveau planning ?`)) return;
+          }
+      }
+
+      const expectedPlants = seedsQty > 0 ? Math.round(seedsQty * (1 - lossRate/100)) : 0;
+
+      if (id) {
+          const p = this.data.plannings.find(x => x.id === id);
+          if(p) {
+              const oldStatus = p.status;
+              
+              p.varId = varId; 
+              p.sowingDate = sowingDate; 
+              p.seedsQty = seedsQty;
+              p.weightQty = weightQty; 
+              p.lossRate = lossRate; 
+              p.expectedPlants = expectedPlants;
+              p.transplantDate = transplantDate; 
+              p.comments = comments; 
+              p.status = status;
+
+              if(oldStatus === 'planned' && status === 'sown' && !p.stockDeducted) {
+                  this.deductSeedsFromStock(varId, seedsQty, weightQty); 
+                  p.stockDeducted = true;
+              }
+              if(status === 'planned') p.stockDeducted = false;
+          }
+      } else {
+          const newPlan = {
+              id: this.generateId(), varId, sowingDate, seedsQty, weightQty, 
+              lossRate, expectedPlants, transplantDate, comments, status, stockDeducted: false
+          };
+
+          if(status === 'sown') {
+              this.deductSeedsFromStock(varId, seedsQty, weightQty); 
+              newPlan.stockDeducted = true;
+          }
+          this.data.plannings.push(newPlan);
+      }
+
+      this.saveAll(); 
+      this.renderPlanningList(); 
+      UI.closeModals();
+  },
+  handleBatchPlanningSubmit() {
+      const sowingDateEl = document.getElementById('batch-sowing-date');
+      const seedsQtyEl = document.getElementById('batch-seeds-qty');
+      const weightQtyEl = document.getElementById('batch-weight-qty');
+      const lossRateEl = document.getElementById('batch-loss-rate');
+      const transplantDateEl = document.getElementById('batch-transplant-date');
+      
+      const sowingDate = sowingDateEl ? sowingDateEl.value : '';
+      const seedsQty = seedsQtyEl ? (parseInt(seedsQtyEl.value) || 0) : 0;
+      const lossRate = lossRateEl ? (parseInt(lossRateEl.value) || 0) : 0;
+      const transplantDate = transplantDateEl ? transplantDateEl.value : '';
+      
+      let weightQty = 0;
+      if (weightQtyEl && weightQtyEl.value) {
+          weightQty = parseFloat(weightQtyEl.value.replace(',', '.')) || 0;
+      }
+
+      if(!sowingDate || (seedsQty <= 0 && weightQty <= 0)) {
+          return UI.toast('Date et quantité requises.');
+      }
+
+      const checkboxes = document.querySelectorAll('.batch-variety-checkbox:checked');
+      if(checkboxes.length === 0) return UI.toast('Sélectionnez au moins une variété.');
+
+      // Vérifier les doublons "À faire"
+      const duplicates = [];
+      checkboxes.forEach(cb => {
+          const varId = cb.value;
+          const existing = this.data.plannings.find(p => p.varId === varId && p.status === 'planned');
+          if (existing) {
+              const v = this.data.varieties.find(x => x.id === varId);
+              duplicates.push(v ? v.name : varId);
+          }
+      });
+      if (duplicates.length > 0) {
+          if (!confirm(`⚠️ ${duplicates.length} variété(s) ont déjà un planning "À faire" :\n${duplicates.join(', ')}\n\nVoulez-vous quand même créer ces planifications ?`)) return;
+      }
+
+      const expectedPlants = seedsQty > 0 ? Math.round(seedsQty * (1 - lossRate/100)) : 0;
+      let created = 0;
+
+      checkboxes.forEach(cb => {
+          const varId = cb.value;
+          this.data.plannings.push({
+              id: this.generateId(), varId, sowingDate, seedsQty, weightQty, 
+              lossRate, expectedPlants, transplantDate, comments: '', status: 'planned', stockDeducted: false
+          });
+          created++;
+      });
+
+      this.saveAll(); 
+      this.renderPlanningList(); 
+      UI.closeModals();
+      UI.toast(`${created} planifications créées en masse !`);
+  },
+
+  // --- 7. OUTILS AVANCÉS ---
+  confirmMergeDuplicateSpecies() {
+    const msg =
+      "Cette action va :\n" +
+      "• Fusionner les espèces ayant le même nom (insensible à la casse)\n" +
+      "• Réaffecter les variétés automatiquement\n" +
+      "• Nettoyer la wishlist\n\n" +
+      "Une sauvegarde automatique sera faite.\n\n" +
+      "Continuer ?";
+
+    if (!confirm(msg)) return;
+    this.mergeDuplicateSpecies({ ignoreDiacritics: true });
+  },
+
+  mergeDuplicateSpecies(opts = {}) {
+    const { ignoreDiacritics = false } = opts;
+
+    const normalize = (name) => {
+      if (!name) return '';
+      let s = name.trim().replace(/\s+/g, ' ').toLowerCase();
+      if (ignoreDiacritics) {
+        s = s.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+      }
+      try {
+        s = s.replace(/[^\p{L}\p{N} ]/gu, '');
+      } catch(e) {
+        s = s.replace(/[^A-Za-z0-9 \-']/g, '');
+      }
+      return s;
+    };
+
+    try {
+  // Purge des anciens backups (garde seulement les 3 derniers)
+  const backupKeys = Object.keys(localStorage)
+    .filter(k => k.startsWith('seedGuardianData_backup_'))
+    .sort();
+  while (backupKeys.length >= 3) {
+    localStorage.removeItem(backupKeys.shift());
+  }
+  localStorage.setItem('seedGuardianData_backup_' + new Date().toISOString(), JSON.stringify(this.data));
+} catch(e){ /* noop */ }
+
+    const groups = {};
+    this.data.species.forEach(sp => {
+      const key = normalize(sp.name);
+      if (!groups[key]) groups[key] = [];
+      groups[key].push(sp);
+    });
+
+    let mergedCount = 0;
+
+    for (const key in groups) {
+      const group = groups[key];
+      if (group.length < 2) continue; 
+
+      const indices = group.map(s => this.data.species.findIndex(x => x.id === s.id));
+      const minIdx = Math.min(...indices);
+      const primary = this.data.species[minIdx];
+      const primaryId = primary.id;
+      const primaryName = primary.name;
+
+      group.forEach(sp => {
+        if (sp.id === primaryId) return;
+
+        const dupId = sp.id;
+        this.data.varieties.forEach(v => { if (v.spId === dupId) v.spId = primaryId; });
+        this.data.wishlist.forEach(w => {
+          if (w.species && normalize(w.species) === key) {
+            w.species = primaryName;
+          }
+        });
+        this.data.species = this.data.species.filter(s => s.id !== dupId);
+        mergedCount++;
+      });
+    }
+
+    if (mergedCount > 0) {
+      this.saveAll();
+      UI.toast(`${mergedCount} espèce(s) fusionnée(s) avec succès.`);
+    } else {
+      UI.toast('Aucun doublon d\'espèce détecté.');
+    }
+    this.renderAll();
+  },
+
+  renderAll() {
+    this.renderDashboard();
+    this.renderSpeciesList();
+    this.renderStocksList();
+    this.renderProductionList();
+    this.renderWishlist();
+    this.renderPlanningList();
+    this.renderPlanningStats();
+  },
+
+  renderDashboard() {
+    const currentYear = new Date().getFullYear();
+    document.getElementById('dash-species-count').innerText = this.data.species.length;
+    document.getElementById('dash-varieties-count').innerText = this.data.varieties.length;
+    document.getElementById('dash-prod-count').innerText = this.data.productions.filter(p => p.status !== 'completed').length;
+    
+    this.computeAlerts();
+
+    // Stats de santé (Barre de progression)
+    const totalVarieties = this.data.varieties.length || 1;
+    const alertCount = this.runtimeAlerts.produce.length + this.runtimeAlerts.buy.length;
+    const urgentCount = [...this.runtimeAlerts.produce, ...this.runtimeAlerts.buy].filter(a => a.level === 'urgent').length;
+    
+    const healthyCount = Math.max(0, totalVarieties - alertCount);
+    const warningCount = alertCount - urgentCount;
+
+    const healthyPct = (healthyCount / totalVarieties) * 100;
+    const warningPct = (warningCount / totalVarieties) * 100;
+    const urgentPct = (urgentCount / totalVarieties) * 100;
+
+    document.getElementById('viz-stock-health').innerHTML = `
+      <div class="viz-container">
+        <div class="viz-bar viz-bar-stock" style="width: ${healthyPct}%" title="Sain"></div>
+        <div class="viz-bar viz-bar-warning" style="width: ${warningPct}%" title="À surveiller"></div>
+        <div class="viz-bar viz-bar-alert" style="width: ${urgentPct}%" title="Urgent"></div>
+      </div>
+      <div style="display:flex; justify-content: space-between; font-size: 0.75rem; margin-top: 5px; color: var(--texte-gris)">
+        <span>${Math.round(healthyPct)}% Optimal</span>
+        <span>${alertCount} alertes au total</span>
+      </div>
+    `;
+
+    // Plus vieux lot
+    const validStocks = this.data.stocks.filter(s => s.prod && parseInt(s.exp) >= currentYear);
+    if (validStocks.length > 0) {
+      const oldest = validStocks.reduce((min, s) => s.prod < min ? s.prod : min, validStocks[0].prod);
+      document.getElementById('dash-oldest-stock').innerText = oldest;
+    } else {
+      document.getElementById('dash-oldest-stock').innerText = "Aucun";
+    }
+  },
+
+  renderSpeciesList() {
+    const container = document.getElementById('species-list');
+    if (this.data.species.length === 0) {
+      container.innerHTML = `<div class="empty-state"><i class="fas fa-seedling"></i><p>Aucune espèce enregistrée.<br>Commencez par en ajouter une !</p></div>`;
+      return;
+    }
+
+    container.innerHTML = this.data.species
+      .sort((a, b) => a.name.localeCompare(b.name))
+      .map(s => {
+        const varCount = this.data.varieties.filter(v => v.spId === s.id).length;
+        return `
+          <div class="card" onclick="App.renderVarieties('${s.id}')" style="cursor:pointer">
+            <div class="card-header">
+              <span class="card-title">${s.name}</span>
+              <span class="badge badge-secondary">${varCount} variétés</span>
+            </div>
+            <div style="display:flex; gap:10px; margin-top:10px">
+               <button class="btn btn-sm btn-secondary" onclick="event.stopPropagation(); UI.openModal('modal-species', '${s.id}')"><i class="fas fa-edit"></i> Modifier</button>
+            </div>
+          </div>
+        `;
+      }).join('');
+  },
+
+  renderVarieties(speciesId) {
+    this.currentSpeciesId = speciesId;
+    const species = this.data.species.find(s => s.id === speciesId);
+    document.getElementById('variety-page-title').innerText = species ? `Variétés : ${species.name}` : 'Variétés';
+    this.navigate('view-varieties');
+
+    const container = document.getElementById('varieties-list');
+    const filtered = this.data.varieties.filter(v => v.spId === speciesId).sort((a,b) => a.name.localeCompare(b.name));
+
+    if (filtered.length === 0) {
+      container.innerHTML = `<div class="empty-state"><p>Aucune variété pour cette espèce.</p><button class="btn btn-primary" style="margin-top:10px" onclick="UI.openVarietyModal()"><i class="fas fa-plus"></i> Ajouter une variété</button></div>`;
+    } else {
+      container.innerHTML = filtered.map(v => {
+        const stockInfo = this.getValidStockInfo(v.id);
+        const stockItems = this.data.stocks.filter(s => s.varId === v.id).sort((a,b) => a.prod - b.prod);
+        const hasPlanning = this.data.plannings.some(p => p.varId === v.id && p.status === 'planned');
+        const hasProd = this.data.productions && this.data.productions.some(p => p.varId === v.id && p.status !== 'completed');
+        
+        return `
+          <div class="card" style="border-left-color: ${stockInfo.hasValidStock ? 'var(--vert-principal)' : 'var(--rouge-alerte)'}">
+            <div class="card-header">
+              <span class="card-title">${v.name}</span>
+              <div style="display:flex; gap:4px; flex-wrap:wrap; justify-content:flex-end;">
+                <span class="badge ${v.renewalMode === 'produce' ? 'badge-success' : 'badge-secondary'}">${v.renewalMode === 'produce' ? 'Maison' : 'Achat'}</span>
+                ${hasPlanning ? '<span class="badge" style="background:#dbeafe;color:#1d4ed8;" title="Planning À faire en cours">📅 Planifié</span>' : ''}
+                ${hasProd ? '<span class="badge" style="background:#fef9c3;color:#92400e;" title="Production en cours">🌱 En prod.</span>' : ''}
+              </div>
+            </div>
+            <div class="card-info"><i class="fas fa-redo"></i> Cycle : ${v.renewalCycle} ans | Min : ${v.minStockQty}</div>
+            
+            <div style="margin: 12px 0; border-top: 1px solid var(--bordure-douce); padding-top: 12px;">
+              ${stockItems.length > 0 ? stockItems.map(s => {
+                const origineLabel = s.origine === 'buy' ? `🛒 ${s.fournisseur || 'Achat'}` 
+                                   : s.origine === 'gift' ? `🎁 Don/Échange${s.fournisseur ? ' · ' + s.fournisseur : ''}`
+                                   : '🌱 Autoproduction';
+                const origineColor = s.origine === 'buy' ? '#1d4ed8' : s.origine === 'gift' ? '#7c3aed' : 'var(--vert-fonce)';
+                return `
+                <div style="margin-bottom:8px; font-size:0.9rem; background:#f9fafb; padding:8px 10px; border-radius:8px;">
+                  <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <span><strong>${s.qty} ${s.unit}</strong> (Lot ${s.prod}) ${parseInt(s.exp) < new Date().getFullYear() ? '⚠️' : ''}</span>
+                    <div style="display:flex; gap:5px">
+                      <button class="btn btn-sm btn-secondary" onclick="UI.openReduceModal('${s.id}')" title="Utiliser"><i class="fas fa-minus"></i></button>
+                      <button class="btn btn-sm btn-secondary" onclick="UI.openModal('modal-stock', '${s.id}', '${v.id}')"><i class="fas fa-edit"></i></button>
+                      <button class="btn btn-sm btn-danger" onclick="App.deleteStock('${s.id}')"><i class="fas fa-trash"></i></button>
+                    </div>
+                  </div>
+                  <div style="font-size:0.8rem; color:${origineColor}; margin-top:4px;">${origineLabel}${s.notes ? ` · <span style="color:var(--texte-gris); font-style:italic;">${s.notes}</span>` : ''}</div>
+                </div>`;
+              }).join('') : '<p style="font-size:0.85rem; color:var(--rouge-alerte); font-weight:600;"><i class="fas fa-exclamation-triangle"></i> Aucun stock disponible</p>'}
+            </div>
+
+            <div style="display:flex; gap:8px; flex-wrap:wrap">
+              <button class="btn btn-sm btn-primary" onclick="UI.openModal('modal-stock', '', '${v.id}')"><i class="fas fa-plus"></i> Stock</button>
+              <button class="btn btn-sm btn-secondary" onclick="UI.openModal('modal-production', '', '${v.id}')"><i class="fas fa-seedling"></i> Prod</button>
+              <button class="btn btn-sm btn-secondary" onclick="UI.openModal('modal-variety', '${v.id}')"><i class="fas fa-cog"></i></button>
+              <button class="btn btn-sm btn-danger" onclick="App.deleteVariety('${v.id}')"><i class="fas fa-trash"></i></button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+    
+    // Bouton de suppression de l'espèce en bas
+    container.innerHTML += `<div style="margin-top:40px; text-align:center"><button class="btn btn-danger btn-sm" onclick="App.deleteSpecies('${speciesId}')"><i class="fas fa-exclamation-triangle"></i> Supprimer toute l'espèce "${species?.name}"</button></div>`;
+  },
+
+  stockStateFilter: 'all',
+
+  setStockStateFilter(state) {
+    this.stockStateFilter = state;
+    document.querySelectorAll('#stock-state-pills .plan-pill').forEach(p => {
+      p.classList.toggle('active', p.dataset.state === state);
+    });
+    this.renderStocksList();
+  },
+
+  wishStatusFilter: 'all',
+
+  setWishStatusFilter(status) {
+    this.wishStatusFilter = status;
+    document.querySelectorAll('#wish-status-pills .plan-pill').forEach(p => {
+      p.classList.toggle('active', p.dataset.wstatus === status);
+    });
+    this.renderWishlist();
+  },
+
+  debouncedRenderStocksList() {
+    clearTimeout(this.searchTimeout);
+    this.searchTimeout = setTimeout(() => this.renderStocksList(), 300);
+  },
+
+  renderStocksList() {
+    const container = document.getElementById('stocks-list');
+    const searchTerm = document.getElementById('stock-search').value.toLowerCase();
+    const filterSpecies = document.getElementById('stock-filter-species').value;
+    const filterOrigine = document.getElementById('stock-filter-origine')?.value || '';
+    const sortVal = document.getElementById('stock-sort').value;
+    const stateFilter = this.stockStateFilter || 'all';
+    const currentYear = new Date().getFullYear();
+
+    // Mise à jour du filtre espèce
+    const select = document.getElementById('stock-filter-species');
+    const currentVal = select.value;
+    select.innerHTML = '<option value="">Toutes les espèces</option>';
+    this.data.species.sort((a,b) => a.name.localeCompare(b.name)).forEach(s => {
+      select.innerHTML += `<option value="${s.id}" ${currentVal === s.id ? 'selected' : ''}>${s.name}</option>`;
+    });
+
+    let list = this.data.stocks.map(s => {
+      const v = this.data.varieties.find(x => x.id === s.varId);
+      const sp = v ? this.data.species.find(x => x.id === v.spId) : null;
+      const expired = parseInt(s.exp) < currentYear;
+      const expiringSoon = !expired && parseInt(s.exp) === currentYear;
+      return { ...s, varietyName: v ? v.name : '?', speciesName: sp ? sp.name : '?', speciesId: sp ? sp.id : '', spId: sp ? sp.id : '', expired, expiringSoon };
+    });
+
+    // --- Stats (calculées sur tous les lots avant filtres) ---
+    const statsEl = document.getElementById('stock-stats');
+    if (statsEl) {
+      const totalLots = this.data.stocks.length;
+      const expiredLots = list.filter(s => s.expired).length;
+      const expiringSoonLots = list.filter(s => s.expiringSoon).length;
+      const validLots = totalLots - expiredLots;
+      const byOrigine = { produce: 0, buy: 0, gift: 0, unknown: 0 };
+      this.data.stocks.forEach(s => {
+        const o = s.origine || 'unknown';
+        if (byOrigine[o] !== undefined) byOrigine[o]++; else byOrigine.unknown++;
+      });
+
+      statsEl.innerHTML = `
+        <div class="stat-box" style="border-bottom-color:var(--vert-principal); padding:12px 8px; cursor:pointer;" onclick="App.setStockStateFilter('all')">
+          <i class="fas fa-boxes" style="font-size:1.2rem;color:var(--vert-principal)"></i>
+          <div class="stat-value" style="font-size:1.4rem;">${totalLots}</div>
+          <p class="card-info" style="justify-content:center; font-size:0.75rem;">Lots total</p>
+        </div>
+        <div class="stat-box" style="border-bottom-color:#22c55e; padding:12px 8px; cursor:pointer;" onclick="App.setStockStateFilter('valid')">
+          <i class="fas fa-check-circle" style="font-size:1.2rem;color:#22c55e"></i>
+          <div class="stat-value" style="font-size:1.4rem;">${validLots}</div>
+          <p class="card-info" style="justify-content:center; font-size:0.75rem;">Valides</p>
+        </div>
+        <div class="stat-box" style="border-bottom-color:var(--orange-warning); padding:12px 8px; cursor:pointer;" onclick="App.setStockStateFilter('expiring')">
+          <i class="fas fa-hourglass-half" style="font-size:1.2rem;color:var(--orange-warning)"></i>
+          <div class="stat-value" style="font-size:1.4rem;">${expiringSoonLots}</div>
+          <p class="card-info" style="justify-content:center; font-size:0.75rem;">Expire ${currentYear}</p>
+        </div>
+        <div class="stat-box" style="border-bottom-color:var(--rouge-alerte); padding:12px 8px; cursor:pointer;" onclick="App.setStockStateFilter('expired')">
+          <i class="fas fa-times-circle" style="font-size:1.2rem;color:var(--rouge-alerte)"></i>
+          <div class="stat-value" style="font-size:1.4rem;">${expiredLots}</div>
+          <p class="card-info" style="justify-content:center; font-size:0.75rem;">Expirés</p>
+        </div>
+        ${byOrigine.produce > 0 ? `<div class="stat-box" style="border-bottom-color:var(--vert-fonce); padding:12px 8px;">
+          <i class="fas fa-seedling" style="font-size:1.2rem;color:var(--vert-fonce)"></i>
+          <div class="stat-value" style="font-size:1.4rem;">${byOrigine.produce}</div>
+          <p class="card-info" style="justify-content:center; font-size:0.75rem;">Autoprod.</p>
+        </div>` : ''}
+        ${byOrigine.buy > 0 ? `<div class="stat-box" style="border-bottom-color:#1d4ed8; padding:12px 8px;">
+          <i class="fas fa-shopping-cart" style="font-size:1.2rem;color:#1d4ed8"></i>
+          <div class="stat-value" style="font-size:1.4rem;">${byOrigine.buy}</div>
+          <p class="card-info" style="justify-content:center; font-size:0.75rem;">Achats</p>
+        </div>` : ''}
+        ${byOrigine.gift > 0 ? `<div class="stat-box" style="border-bottom-color:#7c3aed; padding:12px 8px;">
+          <i class="fas fa-gift" style="font-size:1.2rem;color:#7c3aed"></i>
+          <div class="stat-value" style="font-size:1.4rem;">${byOrigine.gift}</div>
+          <p class="card-info" style="justify-content:center; font-size:0.75rem;">Dons</p>
+        </div>` : ''}
+      `;
+    }
+
+    // --- Filtres ---
+    if (searchTerm) list = list.filter(item =>
+      item.varietyName.toLowerCase().includes(searchTerm) ||
+      item.speciesName.toLowerCase().includes(searchTerm) ||
+      (item.notes && item.notes.toLowerCase().includes(searchTerm)) ||
+      (item.fournisseur && item.fournisseur.toLowerCase().includes(searchTerm))
+    );
+    if (filterSpecies) list = list.filter(item => item.speciesId === filterSpecies);
+    if (filterOrigine) list = list.filter(item => (item.origine || 'produce') === filterOrigine);
+    if (stateFilter === 'valid') list = list.filter(item => !item.expired && !item.expiringSoon);
+    if (stateFilter === 'expiring') list = list.filter(item => item.expiringSoon);
+    if (stateFilter === 'expired') list = list.filter(item => item.expired);
+
+    list.sort((a, b) => {
+      if (sortVal === 'exp-asc') return a.exp - b.exp;
+      if (sortVal === 'exp-desc') return b.exp - a.exp;
+      if (sortVal === 'qty-desc') return b.qty - a.qty;
+      if (sortVal === 'prod-desc') return b.prod - a.prod;
+      if (sortVal === 'var-asc') return a.varietyName.localeCompare(b.varietyName);
+      return 0;
+    });
+
+    if (list.length === 0) {
+      container.innerHTML = `<div class="empty-state"><i class="fas fa-search"></i><p>Aucun lot trouvé.</p></div>`;
+      return;
+    }
+
+    container.innerHTML = list.map(item => {
+      const borderColor = item.expired ? 'var(--rouge-alerte)' : item.expiringSoon ? 'var(--orange-warning)' : this._speciesColor(item.spId);
+      const origineLabel = item.origine === 'buy' ? `🛒 ${item.fournisseur || 'Achat'}`
+                         : item.origine === 'gift' ? `🎁 Don${item.fournisseur ? ' · ' + item.fournisseur : ''}`
+                         : '🌱 Autoproduction';
+      const origineColor = item.origine === 'buy' ? '#1d4ed8' : item.origine === 'gift' ? '#7c3aed' : 'var(--vert-fonce)';
+      const stateBadge = item.expired
+        ? `<span class="badge badge-danger">Expiré</span>`
+        : item.expiringSoon
+        ? `<span class="badge badge-warning">Expire ${currentYear}</span>`
+        : `<span class="badge badge-success">${item.qty} ${item.unit}</span>`;
+
+      return `
+        <div class="card" style="border-left-color:${borderColor}">
+          <div class="card-header">
+            <div>
+              <div style="font-size:0.75rem; color:${this._speciesColor(item.spId)}; font-weight:700; text-transform:uppercase">${item.speciesName}</div>
+              <div class="card-title">${item.varietyName}</div>
+            </div>
+            ${stateBadge}
+          </div>
+          <div class="card-info">
+            <i class="fas fa-calendar-alt"></i> Prod: ${item.prod} &nbsp;|&nbsp; <i class="fas fa-hourglass-end"></i> Exp: <strong>${item.exp}</strong>
+          </div>
+          <div style="font-size:0.8rem; color:${origineColor}; margin:4px 0 2px;">${origineLabel}</div>
+          ${item.notes ? `<div class="card-info" style="font-style:italic; font-size:0.8rem;"><i class="fas fa-tag"></i> ${item.notes}</div>` : ''}
+          <div style="display:flex; gap:8px; margin-top:10px; flex-wrap:wrap;">
+            <button class="btn btn-sm btn-secondary" onclick="UI.openReduceModal('${item.id}')"><i class="fas fa-minus"></i> Utiliser</button>
+            <button class="btn btn-sm btn-secondary" onclick="UI.openModal('modal-stock', '${item.id}', '${item.varId}')"><i class="fas fa-edit"></i></button>
+            <button class="btn btn-sm btn-danger" onclick="App.deleteStock('${item.id}')"><i class="fas fa-trash"></i></button>
+            <button class="btn btn-sm" style="background:#f0fdf4;color:var(--vert-fonce);border:1px solid var(--vert-clair); margin-left:auto;" onclick="App.renderVarieties('${item.spId}')"><i class="fas fa-leaf"></i> Fiche</button>
+          </div>
+        </div>
+      `;
+    }).join('');
+  },
+
+  prodStatusFilter: '',
+
+  filterProdBySpecies(spId) {
+    const spSel = document.getElementById('prod-filter-species');
+    if (!spSel) return;
+    // Si déjà filtré sur cette espèce, on réinitialise
+    if (spSel.value === spId) {
+      spSel.value = '';
+    } else {
+      spSel.value = spId;
+    }
+    this.renderProductionList();
+    document.getElementById('production-list').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  },
+
+  setProdStatusFilter(status) {
+    this.prodStatusFilter = status;
+    document.querySelectorAll('#prod-status-pills .plan-pill').forEach(p => {
+      p.classList.toggle('active', p.dataset.status === status);
+    });
+    this.renderProductionList();
+  },
+
+  renderProductionStats(productions) {
+    const container = document.getElementById('prod-stats');
+    if (!container) return;
+    const total = productions.length;
+    const planned = productions.filter(p => p.status === 'planned').length;
+    const inProgress = productions.filter(p => p.status === 'in-progress').length;
+    const completed = productions.filter(p => p.status === 'completed').length;
+    const totalPlants = productions.reduce((s, p) => s + (parseInt(p.plants) || 0), 0);
+    const totalHarvest = productions.filter(p => p.harvestQty > 0 && p.harvestUnit === 'gr').reduce((s, p) => s + (parseFloat(p.harvestQty) || 0), 0);
+
+    // Plants par espèce
+    const speciesMap = {};
+    productions.forEach(p => {
+      const v = this.data.varieties.find(x => x.id === p.varId);
+      const sp = v ? this.data.species.find(s => s.id === v.spId) : null;
+      const key = sp ? sp.id : 'inconnu';
+      const name = sp ? sp.name : 'Inconnu';
+      if (!speciesMap[key]) speciesMap[key] = { name, id: key, plants: 0, count: 0, harvest: 0 };
+      speciesMap[key].plants += (parseInt(p.plants) || 0);
+      speciesMap[key].count++;
+      if (p.harvestQty > 0 && p.harvestUnit === 'gr') speciesMap[key].harvest += parseFloat(p.harvestQty) || 0;
+    });
+    const speciesList = Object.values(speciesMap).sort((a,b) => b.plants - a.plants);
+
+    const plantsRows = speciesList.map(sp => `
+      <div onclick="App.filterProdBySpecies('${sp.id}')" style="display:flex; justify-content:space-between; align-items:center; padding:8px 4px; border-bottom:1px solid var(--bordure-douce); cursor:pointer; border-radius:6px; transition:background 0.15s;" onmouseover="this.style.background='#f0faf4'" onmouseout="this.style.background='transparent'">
+        <span style="display:flex; align-items:center; gap:8px;">
+          <span style="width:10px; height:10px; border-radius:50%; background:${this._speciesColor(sp.id)}; display:inline-block; flex-shrink:0;"></span>
+          <span style="font-weight:600; font-size:0.9rem;">${sp.name}</span>
+          <span style="font-size:0.8rem; color:var(--texte-gris);">(${sp.count} prod.)</span>
+        </span>
+        <div style="display:flex; gap:12px; align-items:center;">
+          <span style="font-weight:800; color:var(--vert-fonce);">${sp.plants} plants</span>
+          ${sp.harvest > 0 ? `<span style="font-size:0.8rem; color:var(--texte-gris);">🍅 ${Math.round(sp.harvest)} gr</span>` : ''}
+          <i class="fas fa-filter" style="font-size:0.75rem; color:var(--texte-gris);"></i>
+        </div>
+      </div>
+    `).join('');
+
+    container.innerHTML = `
+      <div style="grid-column:1/-1; display:grid; grid-template-columns: repeat(auto-fit, minmax(110px,1fr)); gap:10px; margin-bottom:10px;">
+        <div class="stat-box" style="border-bottom-color:var(--bleu-info); padding:12px 8px; cursor:pointer;" onclick="App.setProdStatusFilter('')">
+          <i class="fas fa-clipboard-list" style="font-size:1.2rem;color:var(--bleu-info)"></i>
+          <div class="stat-value" style="font-size:1.4rem;">${total}</div>
+          <p class="card-info" style="justify-content:center; font-size:0.75rem;">Total</p>
+        </div>
+        <div class="stat-box" style="border-bottom-color:var(--texte-gris); padding:12px 8px; cursor:pointer;" onclick="App.setProdStatusFilter('planned')">
+          <i class="fas fa-edit" style="font-size:1.2rem;color:var(--texte-gris)"></i>
+          <div class="stat-value" style="font-size:1.4rem;">${planned}</div>
+          <p class="card-info" style="justify-content:center; font-size:0.75rem;">Planifiés</p>
+        </div>
+        <div class="stat-box" style="border-bottom-color:var(--orange-warning); padding:12px 8px; cursor:pointer;" onclick="App.setProdStatusFilter('in-progress')">
+          <i class="fas fa-seedling" style="font-size:1.2rem;color:var(--orange-warning)"></i>
+          <div class="stat-value" style="font-size:1.4rem;">${inProgress}</div>
+          <p class="card-info" style="justify-content:center; font-size:0.75rem;">En cours</p>
+        </div>
+        <div class="stat-box" style="border-bottom-color:var(--vert-principal); padding:12px 8px; cursor:pointer;" onclick="App.setProdStatusFilter('completed')">
+          <i class="fas fa-check-circle" style="font-size:1.2rem;color:var(--vert-principal)"></i>
+          <div class="stat-value" style="font-size:1.4rem;">${completed}</div>
+          <p class="card-info" style="justify-content:center; font-size:0.75rem;">Récoltés</p>
+        </div>
+        ${totalPlants > 0 ? `
+        <div class="stat-box" style="border-bottom-color:#8338ec; padding:12px 8px;">
+          <i class="fas fa-leaf" style="font-size:1.2rem;color:#8338ec"></i>
+          <div class="stat-value" style="font-size:1.4rem;">${totalPlants}</div>
+          <p class="card-info" style="justify-content:center; font-size:0.75rem;">Plants total</p>
+        </div>` : ''}
+        ${totalHarvest > 0 ? `
+        <div class="stat-box" style="border-bottom-color:#e76f51; padding:12px 8px;">
+          <i class="fas fa-box-open" style="font-size:1.2rem;color:#e76f51"></i>
+          <div class="stat-value" style="font-size:1.4rem;">${Math.round(totalHarvest)}</div>
+          <p class="card-info" style="justify-content:center; font-size:0.75rem;">gr récoltés</p>
+        </div>` : ''}
+      </div>
+      ${speciesList.length > 1 ? `
+      <div style="grid-column:1/-1;">
+        <details style="background:var(--blanc-pur); border-radius:var(--rayon-petit); box-shadow:var(--ombre-douce); overflow:hidden;">
+          <summary style="padding:12px 16px; font-weight:700; color:var(--vert-fonce); cursor:pointer; list-style:none; display:flex; justify-content:space-between; align-items:center;">
+            <span><i class="fas fa-leaf" style="color:var(--vert-principal); margin-right:6px;"></i> Plants par espèce</span>
+            <i class="fas fa-chevron-down" style="font-size:0.8rem; color:var(--texte-gris);"></i>
+          </summary>
+          <div style="padding:0 16px 12px;">${plantsRows}</div>
+        </details>
+      </div>` : ''}
+    `;
+  },
+
+  renderProductionList() {
+    const container = document.getElementById('production-list');
+
+    // Mise à jour filtre espèces
+    const spSel = document.getElementById('prod-filter-species');
+    const currentSp = spSel ? spSel.value : '';
+    if (spSel) {
+      spSel.innerHTML = '<option value="">Toutes les espèces</option>' +
+        this.data.species.sort((a,b) => a.name.localeCompare(b.name))
+          .map(s => `<option value="${s.id}" ${currentSp === s.id ? 'selected' : ''}>${s.name}</option>`).join('');
+    }
+
+    // Mise à jour filtre années
+    const yearSel = document.getElementById('prod-filter-year');
+    const currentYear = yearSel ? yearSel.value : '';
+    if (yearSel) {
+      const years = [...new Set(this.data.productions.map(p => p.year))].sort((a,b) => b-a);
+      yearSel.innerHTML = '<option value="">Toutes les années</option>' +
+        years.map(y => `<option value="${y}" ${currentYear === String(y) ? 'selected' : ''}>${y}</option>`).join('');
+    }
+
+    if (this.data.productions.length === 0) {
+      document.getElementById('prod-stats') && (document.getElementById('prod-stats').innerHTML = '');
+      container.innerHTML = `<div class="empty-state"><i class="fas fa-clipboard-list"></i><p>Aucune production planifiée.<br>L'app planifie automatiquement les renouvellements.</p></div>`;
+      return;
+    }
+
+    const filterStatus = this.prodStatusFilter || '';
+    const filterSpId = spSel ? spSel.value : '';
+    const filterYear = yearSel ? yearSel.value : '';
+    const sortVal = document.getElementById('prod-sort') ? document.getElementById('prod-sort').value : 'year-desc';
+
+    // Stats sur toutes les productions (sans filtre)
+    this.renderProductionStats(this.data.productions);
+
+    let list = this.data.productions.map(p => {
+      const v = this.data.varieties.find(x => x.id === p.varId);
+      const sp = v ? this.data.species.find(s => s.id === v.spId) : null;
+      return { ...p, _v: v, _sp: sp };
+    });
+
+    if (filterStatus) list = list.filter(p => p.status === filterStatus);
+    if (filterSpId) list = list.filter(p => p._v && p._v.spId === filterSpId);
+    if (filterYear) list = list.filter(p => String(p.year) === filterYear);
+
+    list.sort((a, b) => {
+      if (sortVal === 'year-desc') return b.year - a.year;
+      if (sortVal === 'year-asc') return a.year - b.year;
+      if (sortVal === 'species-asc') return (a._sp?.name || '').localeCompare(b._sp?.name || '');
+      if (sortVal === 'plants-desc') return (parseInt(b.plants) || 0) - (parseInt(a.plants) || 0);
+      if (sortVal === 'harvest-desc') return (parseFloat(b.harvestQty) || 0) - (parseFloat(a.harvestQty) || 0);
+      return 0;
+    });
+
+    if (list.length === 0) {
+      container.innerHTML = `<div class="empty-state"><i class="fas fa-filter"></i><p>Aucun résultat pour ces filtres.</p></div>`;
+      return;
+    }
+
+    const statusLabel = { planned: 'Planifié', 'in-progress': 'En cours', completed: 'Récolté' };
+    const statusClass = { planned: 'badge-secondary', 'in-progress': 'badge-warning', completed: 'badge-success' };
+    const statusIcon = { planned: '📝', 'in-progress': '🌱', completed: '🍅' };
+
+    container.innerHTML = list.map(p => {
+      const v = p._v, sp = p._sp;
+      const borderColor = sp ? this._speciesColor(sp.id) : 'var(--vert-principal)';
+      return `
+        <div class="card" style="margin-bottom:10px; border-left-color:${borderColor};">
+          <div class="card-header">
+            <div>
+              <div style="font-size:0.75rem; font-weight:bold; color:${borderColor}">${p.year}${sp ? ' · ' + sp.name : ''}</div>
+              <div class="card-title">${v ? v.name : '?'}</div>
+            </div>
+            <span class="badge ${statusClass[p.status] || 'badge-secondary'}">${statusIcon[p.status] || ''} ${statusLabel[p.status] || p.status}</span>
+          </div>
+          <div class="card-info"><i class="fas fa-leaf"></i> ${p.plants || '?'} plants${p.harvestQty > 0 ? ` &nbsp;|&nbsp; <i class="fas fa-box-open"></i> Récolte : <strong>${p.harvestQty} ${p.harvestUnit}</strong>` : ''}</div>
+          <div style="display:flex; gap:8px; margin-top:10px; align-items:center;">
+            <button class="btn btn-sm btn-secondary" onclick="UI.openModal('modal-production', '${p.id}', '${p.varId}')"><i class="fas fa-edit"></i></button>
+            <button class="btn btn-sm btn-danger" onclick="App.deleteProd('${p.id}')"><i class="fas fa-trash"></i></button>
+            ${v ? `<button class="btn btn-sm" style="background:#f0fdf4;color:var(--vert-fonce);border:1px solid var(--vert-clair); margin-left:auto;" onclick="App.renderVarieties('${v.spId}')" title="Voir la fiche variété"><i class="fas fa-leaf"></i> Fiche</button>` : ''}
+          </div>
+        </div>
+      `;
+    }).join('');
+  },
+
+  renderWishlist() {
+    const container = document.getElementById('wishlist-list');
+
+    // Mise à jour filtre espèces
+    const spSel = document.getElementById('wish-filter-species');
+    if (spSel) {
+      const currentSp = spSel.value;
+      const spNames = [...new Set(this.data.wishlist.map(w => w.species).filter(Boolean))].sort();
+      spSel.innerHTML = '<option value="">Toutes espèces</option>' +
+        spNames.map(n => `<option value="${n}" ${currentSp === n ? 'selected' : ''}>${n}</option>`).join('');
+    }
+
+    // --- Stats ---
+    const statsEl = document.getElementById('wish-stats');
+    if (statsEl) {
+      const total = this.data.wishlist.length;
+      const pending = this.data.wishlist.filter(w => !w.ordered).length;
+      const ordered = this.data.wishlist.filter(w => w.ordered).length;
+      let budget = 0;
+      this.data.wishlist.filter(w => !w.ordered).forEach(w => {
+        const m = String(w.price || '').match(/[\d.,]+/);
+        if (m) budget += parseFloat(m[0].replace(',', '.'));
+      });
+      const suppliers = new Set(this.data.wishlist.map(w => w.supplier).filter(s => s && s !== 'AUTO (Stock Critique)'));
+
+      statsEl.innerHTML = `
+        <div class="stat-box" style="border-bottom-color:var(--vert-principal); padding:12px 8px; cursor:pointer;" onclick="App.setWishStatusFilter('all')">
+          <i class="fas fa-heart" style="font-size:1.2rem;color:var(--vert-principal)"></i>
+          <div class="stat-value" style="font-size:1.4rem;">${total}</div>
+          <p class="card-info" style="justify-content:center; font-size:0.75rem;">Total souhaits</p>
+        </div>
+        <div class="stat-box" style="border-bottom-color:var(--orange-warning); padding:12px 8px; cursor:pointer;" onclick="App.setWishStatusFilter('pending')">
+          <i class="fas fa-hourglass-half" style="font-size:1.2rem;color:var(--orange-warning)"></i>
+          <div class="stat-value" style="font-size:1.4rem;">${pending}</div>
+          <p class="card-info" style="justify-content:center; font-size:0.75rem;">En attente</p>
+        </div>
+        <div class="stat-box" style="border-bottom-color:#22c55e; padding:12px 8px; cursor:pointer;" onclick="App.setWishStatusFilter('ordered')">
+          <i class="fas fa-check-circle" style="font-size:1.2rem;color:#22c55e"></i>
+          <div class="stat-value" style="font-size:1.4rem;">${ordered}</div>
+          <p class="card-info" style="justify-content:center; font-size:0.75rem;">Commandés</p>
+        </div>
+        ${budget > 0 ? `<div class="stat-box" style="border-bottom-color:#1d4ed8; padding:12px 8px;">
+          <i class="fas fa-euro-sign" style="font-size:1.2rem;color:#1d4ed8"></i>
+          <div class="stat-value" style="font-size:1.2rem;">~${budget.toFixed(0)}€</div>
+          <p class="card-info" style="justify-content:center; font-size:0.75rem;">Budget estimé</p>
+        </div>` : ''}
+        ${suppliers.size > 0 ? `<div class="stat-box" style="border-bottom-color:#7c3aed; padding:12px 8px;">
+          <i class="fas fa-store" style="font-size:1.2rem;color:#7c3aed"></i>
+          <div class="stat-value" style="font-size:1.4rem;">${suppliers.size}</div>
+          <p class="card-info" style="justify-content:center; font-size:0.75rem;">Fournisseurs</p>
+        </div>` : ''}
+      `;
+    }
+
+    if (this.data.wishlist.length === 0) {
+      container.innerHTML = `<div class="empty-state"><i class="fas fa-shopping-basket"></i><p>Votre liste de souhaits est vide.</p></div>`;
+      return;
+    }
+
+    // Filtres
+    const searchTerm = (document.getElementById('wish-search')?.value || '').toLowerCase();
+    const filterSpecies = document.getElementById('wish-filter-species')?.value || '';
+    const sortVal = document.getElementById('wish-sort')?.value || 'supplier';
+    const statusFilter = this.wishStatusFilter || 'all';
+
+    let list = this.data.wishlist.map(w => {
+      const v = w.varId ? this.data.varieties.find(x => x.id === w.varId) : null;
+      const sp = v ? this.data.species.find(x => x.id === v.spId) : null;
+      return { ...w, _spId: sp ? sp.id : null, _spName: sp ? sp.name : w.species };
+    });
+
+    if (searchTerm) list = list.filter(w =>
+      w.species.toLowerCase().includes(searchTerm) ||
+      w.variety.toLowerCase().includes(searchTerm) ||
+      (w.supplier && w.supplier.toLowerCase().includes(searchTerm))
+    );
+    if (filterSpecies) list = list.filter(w => w.species === filterSpecies);
+    if (statusFilter === 'pending') list = list.filter(w => !w.ordered);
+    if (statusFilter === 'ordered') list = list.filter(w => w.ordered);
+
+    list.sort((a, b) => {
+      if (sortVal === 'supplier') return (a.supplier || 'À déterminer').localeCompare(b.supplier || 'À déterminer');
+      if (sortVal === 'species') return (a.species || '').localeCompare(b.species || '');
+      if (sortVal === 'price-asc' || sortVal === 'price-desc') {
+        const pa = parseFloat(String(a.price || '0').replace(',', '.')) || 0;
+        const pb = parseFloat(String(b.price || '0').replace(',', '.')) || 0;
+        return sortVal === 'price-asc' ? pa - pb : pb - pa;
+      }
+      return 0;
+    });
+
+    if (list.length === 0) {
+      container.innerHTML = `<div class="empty-state"><i class="fas fa-filter"></i><p>Aucun résultat pour ces filtres.</p></div>`;
+      return;
+    }
+
+    // Grouper selon le tri actif (sauf prix)
+    const useGroups = sortVal === 'supplier' || sortVal === 'species';
+    const groupKey = sortVal === 'supplier' ? (w => w.supplier || 'À déterminer')
+                   : sortVal === 'species'   ? (w => w.species || '?')
+                   : null;
+
+    if (useGroups && groupKey) {
+      const groups = {};
+      list.forEach(w => {
+        const k = groupKey(w);
+        if (!groups[k]) groups[k] = [];
+        groups[k].push(w);
+      });
+
+      container.innerHTML = Object.keys(groups).sort().map(gName => {
+        const items = groups[gName];
+        const orderedCount = items.filter(i => i.ordered).length;
+        const isSupplierGroup = sortVal === 'supplier';
+        let groupBudget = 0;
+        items.filter(i => !i.ordered).forEach(i => {
+          const m = String(i.price || '').match(/[\d.,]+/);
+          if (m) groupBudget += parseFloat(m[0].replace(',', '.'));
+        });
+
+        return `
+          <div class="supplier-group">
+            <div class="supplier-title">
+              <span>
+                <i class="fas fa-${isSupplierGroup ? 'store' : 'leaf'}"></i> ${gName}
+                ${groupBudget > 0 && isSupplierGroup ? `<span style="font-size:0.75rem; color:var(--texte-gris); margin-left:6px; font-weight:400;">~${groupBudget.toFixed(0)}€</span>` : ''}
+              </span>
+              <div class="supplier-actions">
+                <span class="supplier-total">${orderedCount}/${items.length} ok</span>
+                ${isSupplierGroup ? `<button class="btn btn-sm btn-primary" onclick="App.buyAndTransferWishlistGroup(this.dataset.supplier)" data-supplier="${gName.replace(/"/g, '&quot;')}" title="Transférer au stock"><i class="fas fa-box-open"></i></button>` : ''}
+              </div>
+            </div>
+            ${items.map(w => this._renderWishCard(w)).join('')}
+          </div>
+        `;
+      }).join('');
+    } else {
+      container.innerHTML = list.map(w => this._renderWishCard(w)).join('');
+    }
+
+    // Suggestions fournisseurs
+    const datalist = document.getElementById('supplier-suggestions');
+    if (datalist) {
+      const uniqueSuppliers = [...new Set(this.data.wishlist.map(w => w.supplier).filter(s => s))];
+      datalist.innerHTML = uniqueSuppliers.map(s => `<option value="${s}">`).join('');
+    }
+  },
+
+  _renderWishCard(w) {
+    const borderColor = w._spId ? this._speciesColor(w._spId) : 'var(--bordure-douce)';
+    return `
+      <div class="card" style="margin-bottom:8px; opacity:${w.ordered ? '0.6' : '1'}; border-left-color:${borderColor};">
+        <div class="card-header">
+          <div>
+            <div style="font-size:0.75rem; color:${borderColor}; font-weight:700; text-transform:uppercase;">${w.species}</div>
+            <span class="card-title" style="${w.ordered ? 'text-decoration:line-through' : ''}">${w.variety}</span>
+          </div>
+          <span class="badge badge-secondary">${w.price || '?'}</span>
+        </div>
+        ${w.supplier && w.supplier !== 'À déterminer' ? `<div class="card-info" style="font-size:0.8rem;"><i class="fas fa-store"></i> ${w.supplier}</div>` : ''}
+        ${w.ordered ? `<div style="font-size:0.8rem; color:#22c55e; font-weight:600; margin-top:4px;"><i class="fas fa-check-circle"></i> Commandé</div>` : ''}
+        <div style="display:flex; gap:8px; margin-top:8px; align-items:center;">
+          <button class="btn btn-sm ${w.ordered ? 'btn-primary' : 'btn-secondary'}" onclick="App.toggleWishOrdered('${w.id}')" title="${w.ordered ? 'Marquer en attente' : 'Marquer commandé'}"><i class="fas fa-check"></i></button>
+          <button class="btn btn-sm btn-secondary" onclick="UI.openModal('modal-wishlist', '${w.id}')"><i class="fas fa-edit"></i></button>
+          <button class="btn btn-sm btn-danger" onclick="App.deleteWish('${w.id}')"><i class="fas fa-trash"></i></button>
+          ${w.varId && w._spId ? `<button class="btn btn-sm" style="background:#f0fdf4;color:var(--vert-fonce);border:1px solid var(--vert-clair); margin-left:auto;" onclick="App.renderVarieties('${w._spId}')"><i class="fas fa-leaf"></i> Fiche</button>` : ''}
+        </div>
+      </div>
+    `;
+  },
+
+  // --- PLANNING STATE ---
+  planningSelectMode: false,
+  planningStatusFilter: '',
+  planningSelectedIds: new Set(),
+
+  togglePlanningSelectMode() {
+    this.planningSelectMode = !this.planningSelectMode;
+    this.planningSelectedIds = new Set();
+    const btn = document.getElementById('plan-select-btn');
+    const bar = document.getElementById('planning-batch-bar');
+    if (this.planningSelectMode) {
+      btn.innerHTML = '<i class="fas fa-times"></i> Annuler';
+      btn.classList.remove('btn-secondary'); btn.classList.add('btn-danger');
+      bar.style.display = 'block';
+    } else {
+      btn.innerHTML = '<i class="fas fa-check-square"></i> Sélectionner';
+      btn.classList.remove('btn-danger'); btn.classList.add('btn-secondary');
+      bar.style.display = 'none';
+    }
+    this.renderPlanningList();
+  },
+
+  setPlanStatusFilter(status) {
+    this.planningStatusFilter = status;
+    document.querySelectorAll('.plan-pill').forEach(p => {
+      p.classList.toggle('active', p.dataset.status === status);
+    });
+    this.renderPlanningList();
+  },
+
+  onPlanSpeciesFilterChange() {
+    const spId = document.getElementById('plan-filter-species').value;
+    const varSel = document.getElementById('plan-filter-variety');
+    const vars = this.data.varieties.filter(v => !spId || v.spId === spId).sort((a,b) => a.name.localeCompare(b.name));
+    varSel.innerHTML = '<option value="">Toutes les variétés</option>' + vars.map(v => `<option value="${v.id}">${v.name}</option>`).join('');
+    this.renderPlanningList();
+  },
+
+  togglePlanningSelection(id) {
+    if (this.planningSelectedIds.has(id)) this.planningSelectedIds.delete(id);
+    else this.planningSelectedIds.add(id);
+    document.getElementById('plan-batch-count').innerHTML = `<i class="fas fa-check-square"></i> ${this.planningSelectedIds.size} sélectionné(s)`;
+    const cb = document.querySelector(`.plan-checkbox[data-id="${id}"]`);
+    if (cb) cb.checked = this.planningSelectedIds.has(id);
+    const card = document.querySelector(`.plan-card[data-id="${id}"]`);
+    if (card) card.style.outline = this.planningSelectedIds.has(id) ? '3px solid var(--vert-principal)' : 'none';
+  },
+
+  selectSpeciesPlanned(spId, spName) {
+    // Activer le mode sélection si pas déjà actif
+    if (!this.planningSelectMode) {
+      this.planningSelectMode = true;
+      this.planningSelectedIds = new Set();
+      const btn = document.getElementById('plan-select-btn');
+      const bar = document.getElementById('planning-batch-bar');
+      btn.innerHTML = '<i class="fas fa-times"></i> Annuler';
+      btn.classList.remove('btn-secondary'); btn.classList.add('btn-danger');
+      bar.style.display = 'block';
+    }
+    // Sélectionner tous les "planned" de cette espèce
+    const ids = this.data.plannings.filter(p => {
+      const v = this.data.varieties.find(x => x.id === p.varId);
+      return v && v.spId === spId && p.status === 'planned';
+    }).map(p => p.id);
+    if (ids.length === 0) return UI.toast(`Aucun "À faire" pour ${spName}.`);
+    ids.forEach(id => this.planningSelectedIds.add(id));
+    document.getElementById('plan-batch-count').innerHTML = `<i class="fas fa-check-square"></i> ${this.planningSelectedIds.size} sélectionné(s)`;
+    this.renderPlanningList();
+    // Scroll vers la barre batch
+    document.getElementById('planning-batch-bar').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    UI.toast(`${ids.length} entrée(s) "À faire" sélectionnée(s) pour ${spName}`);
+  },
+
+  batchSelectAll() {
+    const visibleIds = [...document.querySelectorAll('.plan-checkbox')].map(c => c.dataset.id);
+    const allSelected = visibleIds.every(id => this.planningSelectedIds.has(id));
+    visibleIds.forEach(id => { if (allSelected) this.planningSelectedIds.delete(id); else this.planningSelectedIds.add(id); });
+    document.getElementById('plan-batch-count').innerHTML = `<i class="fas fa-check-square"></i> ${this.planningSelectedIds.size} sélectionné(s)`;
+    this.renderPlanningList();
+  },
+
+  batchChangeStatus(newStatus) {
+    if (this.planningSelectedIds.size === 0) return UI.toast('Sélectionnez au moins une entrée.');
+    let deductCount = 0;
+    this.planningSelectedIds.forEach(id => {
+      const p = this.data.plannings.find(x => String(x.id).trim() === String(id).trim());
+      if (!p) return;
+      // Repasser à "À faire" remet le flag à false pour permettre une future déduction
+      if (newStatus === 'planned') p.stockDeducted = false;
+      // Déduire le stock si on passe à "Semé" et pas encore déduit
+      if (newStatus === 'sown' && !p.stockDeducted) {
+        const seedsQty = p.seedsQty || 0;
+        const weightQty = p.weightQty || 0;
+        if (seedsQty <= 0 && weightQty <= 0) {
+          UI.toast('⚠️ Planning sans quantité, stock non déduit.');
+        } else {
+          let weightPerSeed = (seedsQty > 0 && weightQty > 0) ? weightQty / seedsQty : 0;
+          let stocks = this.data.stocks
+            .filter(s => s.varId === p.varId && (s.unit === 'graines' || s.unit === 'gr'))
+            .sort((a,b) => parseInt(a.prod) - parseInt(b.prod));
+          let toDeduct = seedsQty;
+          let toDeductWeight = seedsQty === 0 && weightQty > 0 ? weightQty : 0;
+          for (let s of stocks) {
+            if (s.unit === 'graines' && toDeduct > 0) {
+              const take = Math.min(s.qty, toDeduct);
+              s.qty -= take;
+              toDeduct -= take;
+            } else if (s.unit === 'gr' && weightPerSeed > 0 && toDeduct > 0) {
+              const takeWeight = Math.min(s.qty, toDeduct * weightPerSeed);
+              s.qty = Math.round((s.qty - takeWeight) * 1000) / 1000;
+              toDeduct -= takeWeight / weightPerSeed;
+            } else if (s.unit === 'gr' && toDeductWeight > 0) {
+              const take = Math.min(s.qty, toDeductWeight);
+              s.qty = Math.round((s.qty - take) * 1000) / 1000;
+              toDeductWeight -= take;
+            }
+          }
+          this.data.stocks = this.data.stocks.filter(s => s.qty > 0.001);
+          deductCount++;
+        }
+        p.stockDeducted = true;
+      }
+      p.status = newStatus;
+    });
+    this.planningSelectedIds = new Set();
+    this.saveAll();
+    this.renderPlanningList();
+    if (newStatus === 'sown' && deductCount > 0) {
+      UI.toast('✅ Stock déduit pour ' + deductCount + ' planning(s).');
+    } else {
+      UI.toast('Statut mis à jour.');
+    }
+  },
+
+
+  batchDelete() {
+    if (this.planningSelectedIds.size === 0) return UI.toast('Sélectionnez au moins une entrée.');
+    if (!confirm(`Supprimer ${this.planningSelectedIds.size} entrée(s) ?`)) return;
+    this.data.plannings = this.data.plannings.filter(p => !this.planningSelectedIds.has(p.id));
+    this.planningSelectedIds = new Set();
+    this.saveAll();
+    this.renderPlanningList();
+    UI.toast('Entrées supprimées.');
+  },
+
+  _speciesColor(spId) {
+    const palette = ['#2d6a4f','#457b9d','#e76f51','#8338ec','#f4a261','#2a9d8f','#e63946','#606c38','#bc6c25','#023e8a'];
+    let hash = 0;
+    for (let i = 0; i < spId.length; i++) hash = (hash * 31 + spId.charCodeAt(i)) & 0xfffffff;
+    return palette[hash % palette.length];
+  },
+
+  renderPlanningStats() {
+    const container = document.getElementById('planning-stats');
+    if (!container) return;
+    const plannings = this.data.plannings;
+    const total = plannings.length;
+    const speciesMap = {};
+    plannings.forEach(p => {
+      const v = this.data.varieties.find(x => x.id === p.varId);
+      const sp = v ? this.data.species.find(s => s.id === v.spId) : null;
+      const spName = sp ? sp.name : 'Inconnu';
+      const spId = sp ? sp.id : 'unknown';
+      if (!speciesMap[spId]) speciesMap[spId] = { name: spName, id: spId, plants: 0, count: 0 };
+      speciesMap[spId].plants += (p.expectedPlants || 0);
+      speciesMap[spId].count++;
+    });
+    const speciesList = Object.values(speciesMap).sort((a,b) => b.plants - a.plants);
+    const statusCounts = { planned: 0, sown: 0, germinated: 0, transplanted: 0, cancelled: 0 };
+    plannings.forEach(p => { if (statusCounts[p.status] !== undefined) statusCounts[p.status]++; });
+
+    const plantsRows = speciesList.map(sp => `
+      <div style="display:flex; justify-content:space-between; align-items:center; padding:6px 0; border-bottom:1px solid var(--bordure-douce);">
+        <span style="display:flex; align-items:center; gap:8px;">
+          <span style="width:10px; height:10px; border-radius:50%; background:${this._speciesColor(sp.id)}; display:inline-block; flex-shrink:0;"></span>
+          <span style="font-weight:600; font-size:0.9rem;">${sp.name}</span>
+          <span style="font-size:0.8rem; color:var(--texte-gris);">(${sp.count} semis)</span>
+        </span>
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span style="font-weight:800; color:var(--vert-fonce); font-size:1rem;">${sp.plants} plants</span>
+          <button class="btn btn-sm btn-secondary" style="font-size:0.75rem; padding:4px 8px;" onclick="App.selectSpeciesPlanned('${sp.id}', '${sp.name.replace(/'/g,"\\'")}')">
+            <i class="fas fa-check-square"></i> Sél. À faire
+          </button>
+        </div>
+      </div>
+    `).join('');
+
+    container.innerHTML = `
+      <div style="grid-column:1/-1; display:grid; grid-template-columns: repeat(auto-fit, minmax(110px,1fr)); gap:10px; margin-bottom:10px;">
+        <div class="stat-box" style="border-bottom-color:var(--bleu-info); padding:12px 8px; cursor:pointer;" onclick="App.setPlanStatusFilter('')">
+          <i class="fas fa-calendar-check" style="font-size:1.2rem;color:var(--bleu-info)"></i>
+          <div class="stat-value" style="font-size:1.4rem;">${total}</div>
+          <p class="card-info" style="justify-content:center; font-size:0.75rem;">Semis planifiés</p>
+        </div>
+        <div class="stat-box" style="border-bottom-color:var(--orange-warning); padding:12px 8px; cursor:pointer;" onclick="App.setPlanStatusFilter('planned')">
+          <i class="fas fa-hourglass-half" style="font-size:1.2rem;color:var(--orange-warning)"></i>
+          <div class="stat-value" style="font-size:1.4rem;">${statusCounts.planned}</div>
+          <p class="card-info" style="justify-content:center; font-size:0.75rem;">À faire</p>
+        </div>
+        <div class="stat-box" style="border-bottom-color:var(--vert-principal); padding:12px 8px; cursor:pointer;" onclick="App.setPlanStatusFilter('sown')">
+          <i class="fas fa-seedling" style="font-size:1.2rem;color:var(--vert-principal)"></i>
+          <div class="stat-value" style="font-size:1.4rem;">${statusCounts.sown}</div>
+          <p class="card-info" style="justify-content:center; font-size:0.75rem;">Semés</p>
+        </div>
+        <div class="stat-box" style="border-bottom-color:#6c757d; padding:12px 8px; cursor:pointer;" onclick="App.setPlanStatusFilter('transplanted')">
+          <i class="fas fa-tree" style="font-size:1.2rem;color:#6c757d"></i>
+          <div class="stat-value" style="font-size:1.4rem;">${statusCounts.transplanted}</div>
+          <p class="card-info" style="justify-content:center; font-size:0.75rem;">Repiqués</p>
+        </div>
+      </div>
+      <div style="grid-column:1/-1;">
+        <details style="background:var(--blanc-pur); border-radius:var(--rayon-petit); box-shadow:var(--ombre-douce); overflow:hidden;">
+          <summary style="padding:12px 16px; font-weight:700; color:var(--vert-fonce); cursor:pointer; list-style:none; display:flex; justify-content:space-between; align-items:center;">
+            <span><i class="fas fa-seedling" style="color:var(--vert-principal); margin-right:6px;"></i> Plants attendus par espèce</span>
+            <i class="fas fa-chevron-down" style="font-size:0.8rem; color:var(--texte-gris);"></i>
+          </summary>
+          <div style="padding:0 16px 12px;">
+            ${speciesList.length > 0 ? plantsRows : '<p style="color:var(--texte-gris); font-style:italic; text-align:center; padding:8px 0;">Aucune donnée</p>'}
+          </div>
+        </details>
+      </div>
+    `;
+  },
+
+  renderPlanningList() {
+    const container = document.getElementById('planning-list');
+
+    // Mise à jour des filtres espèces
+    const spSel = document.getElementById('plan-filter-species');
+    const currentSp = spSel ? spSel.value : '';
+    if (spSel) {
+      spSel.innerHTML = '<option value="">Toutes les espèces</option>' +
+        this.data.species.sort((a,b) => a.name.localeCompare(b.name)).map(s => `<option value="${s.id}" ${currentSp === s.id ? 'selected' : ''}>${s.name}</option>`).join('');
+    }
+
+    this.renderPlanningStats();
+
+    if (this.data.plannings.length === 0) {
+      container.innerHTML = `<div class="empty-state"><i class="fas fa-calendar-alt"></i><p>Aucun planning de semis.</p></div>`;
+      return;
+    }
+
+    const filterStatus = this.planningStatusFilter;
+    const filterSpId = spSel ? spSel.value : '';
+    const filterVarId = document.getElementById('plan-filter-variety') ? document.getElementById('plan-filter-variety').value : '';
+    const sortVal = document.getElementById('plan-sort') ? document.getElementById('plan-sort').value : 'date-asc';
+    const today = new Date(); today.setHours(0,0,0,0);
+
+    let list = this.data.plannings.map(p => {
+      const v = this.data.varieties.find(x => x.id === p.varId);
+      const sp = v ? this.data.species.find(s => s.id === v.spId) : null;
+      return { ...p, _v: v, _sp: sp };
+    });
+
+    if (filterStatus) list = list.filter(p => p.status === filterStatus);
+    if (filterSpId) list = list.filter(p => p._v && p._v.spId === filterSpId);
+    if (filterVarId) list = list.filter(p => p.varId === filterVarId);
+
+    list.sort((a, b) => {
+      if (sortVal === 'date-asc') return new Date(a.sowingDate) - new Date(b.sowingDate);
+      if (sortVal === 'date-desc') return new Date(b.sowingDate) - new Date(a.sowingDate);
+      if (sortVal === 'species-asc') return (a._sp?.name || '').localeCompare(b._sp?.name || '');
+      if (sortVal === 'plants-desc') return (b.expectedPlants || 0) - (a.expectedPlants || 0);
+      return 0;
+    });
+
+    if (list.length === 0) {
+      container.innerHTML = `<div class="empty-state"><i class="fas fa-filter"></i><p>Aucun résultat pour ces filtres.</p></div>`;
+      return;
+    }
+
+    const statusLabels = { planned: 'À faire', sown: 'Semé', germinated: 'Levée', transplanted: 'Repiqué', cancelled: 'Annulé' };
+    const statusIcons = { planned: '📅', sown: '🌱', germinated: '🌿', transplanted: '🪴', cancelled: '❌' };
+
+    container.innerHTML = list.map(p => {
+      const v = p._v, sp = p._sp;
+      const dateStr = new Date(p.sowingDate).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' });
+      const isLate = p.status === 'planned' && new Date(p.sowingDate) < today;
+      const borderColor = sp ? this._speciesColor(sp.id) : 'var(--vert-principal)';
+      const isSelected = this.planningSelectedIds.has(p.id);
+
+      return `
+        <div class="card plan-card" data-id="${p.id}" style="border-left-color:${borderColor}; ${isSelected ? 'outline:3px solid var(--vert-principal);' : ''} cursor:${this.planningSelectMode ? 'pointer' : 'default'};"
+          ${this.planningSelectMode ? `onclick="App.togglePlanningSelection('${p.id}')"` : ''}>
+          <div class="card-header">
+            <div style="display:flex; align-items:flex-start; gap:8px;">
+              ${this.planningSelectMode ? `<input type="checkbox" class="plan-checkbox" data-id="${p.id}" ${isSelected ? 'checked' : ''} onclick="event.stopPropagation();App.togglePlanningSelection('${p.id}')" style="width:18px;height:18px;margin-top:4px;accent-color:var(--vert-principal)">` : ''}
+              <div>
+                <div style="font-size:0.75rem; font-weight:bold; color:${borderColor}">${dateStr}${sp ? ' · ' + sp.name : ''}</div>
+                <div class="card-title">${v ? v.name : '?'}</div>
+              </div>
+            </div>
+            <div style="display:flex; flex-direction:column; align-items:flex-end; gap:4px;">
+              <span class="badge ${p.status === 'planned' ? 'badge-secondary' : p.status === 'cancelled' ? 'badge-danger' : 'badge-success'}">${statusIcons[p.status] || ''} ${statusLabels[p.status] || p.status}</span>
+              ${isLate ? '<span class="badge badge-danger" style="font-size:0.7rem;">⏰ En retard</span>' : ''}
+            </div>
+          </div>
+          <div class="card-info">
+            <i class="fas fa-bullseye"></i> Objectif : ${p.expectedPlants || 0} plants (${p.seedsQty ? p.seedsQty + ' graines' : (p.weightQty ? p.weightQty + ' gr' : '?')} semées, ${p.lossRate || 0}% pertes)
+          </div>
+          ${p.transplantDate ? `<div class="card-info"><i class="fas fa-box-open"></i> Repiquage : ${new Date(p.transplantDate).toLocaleDateString('fr-FR')}</div>` : ''}
+          ${p.comments ? `<div class="card-info" style="font-style:italic;"><i class="fas fa-comment"></i> ${p.comments}</div>` : ''}
+          ${!this.planningSelectMode ? `
+          <div style="display:flex; gap:8px; margin-top:12px; align-items:center;">
+            <button class="btn btn-sm btn-secondary" onclick="UI.openPlanningModal('${p.id}')"><i class="fas fa-edit"></i></button>
+            <button class="btn btn-sm btn-danger" onclick="App.deletePlanning('${p.id}')"><i class="fas fa-trash"></i></button>
+            ${v ? `<button class="btn btn-sm" style="background:#f0fdf4;color:var(--vert-fonce);border:1px solid var(--vert-clair); margin-left:auto;" onclick="App.renderVarieties('${v.spId}')" title="Voir la fiche variété"><i class="fas fa-leaf"></i> Fiche</button>` : ''}
+          </div>` : ''}
+        </div>
+      `;
+    }).join('');
+  }
+};
+
+/**
+ * ==========================================
+ * INTERFACE UTILISATEUR (UI)
+ * ==========================================
+ */
+const UI = {
+  toast(msg) {
+    const t = document.getElementById('toast');
+    t.innerText = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 3000);
+  },
+
+  openModal(modalId, id = '', parentId = '') {
+    this.closeModals();
+    const modal = document.getElementById(modalId);
+    modal.classList.add('open');
+    
+    // Reset & Fill
+    if (modalId === 'modal-species') {
+      document.getElementById('species-id').value = id;
+      const s = App.data.species.find(x => x.id === id);
+      document.getElementById('species-name').value = s ? s.name : '';
+    } 
+    else if (modalId === 'modal-variety') {
+      document.getElementById('var-id').value = id;
+      document.getElementById('var-spId').value = parentId || '';
+      const v = App.data.varieties.find(x => x.id === id);
+      document.getElementById('var-name').value = v ? v.name : '';
+      document.getElementById('var-cycle').value = v ? v.renewalCycle : 3;
+      document.getElementById('var-mode').value = v ? v.renewalMode : 'produce';
+      document.getElementById('var-notes').value = v ? v.notes : '';
+      document.getElementById('var-minStockQty').value = v ? (v.minStockQty || 5) : 5;
+      document.getElementById('var-disableTracking').checked = v ? (v.disableTracking || false) : false;
+    }
+    else if (modalId === 'modal-stock') {
+      document.getElementById('stock-id').value = id;
+      document.getElementById('stock-varId').value = parentId;
+      const s = App.data.stocks.find(x => x.id === id);
+      document.getElementById('stock-qty').value = s ? s.qty : '';
+      document.getElementById('stock-unit').value = s ? s.unit : 'gr';
+      document.getElementById('stock-prod').value = s ? s.prod : new Date().getFullYear();
+      document.getElementById('stock-exp').value = s ? s.exp : new Date().getFullYear() + 3;
+      document.getElementById('stock-notes').value = s ? s.notes : '';
+      // Origine et fournisseur
+      const origine = s ? (s.origine || 'produce') : 'produce';
+      document.getElementById('stock-origine').value = origine;
+      document.getElementById('stock-fournisseur').value = s ? (s.fournisseur || '') : '';
+      document.getElementById('stock-fournisseur-group').style.display = origine === 'produce' ? 'none' : 'block';
+    }
+    else if (modalId === 'modal-wishlist') {
+      // Peupler le select variétés existantes
+      const varSel = document.getElementById('wish-varId');
+      varSel.innerHTML = '<option value="">— Nouvelle variété —</option>';
+      App.data.species.sort((a,b) => a.name.localeCompare(b.name)).forEach(sp => {
+        const vars = App.data.varieties.filter(v => v.spId === sp.id).sort((a,b) => a.name.localeCompare(b.name));
+        if (vars.length === 0) return;
+        const grp = document.createElement('optgroup');
+        grp.label = sp.name;
+        vars.forEach(v => {
+          const opt = document.createElement('option');
+          opt.value = v.id;
+          opt.textContent = v.name;
+          grp.appendChild(opt);
+        });
+        varSel.appendChild(grp);
+      });
+
+      document.getElementById('wish-id').value = id;
+      const w = App.data.wishlist.find(x => x.id === id);
+      // Si l'item existant a un varId lié, le sélectionner
+      varSel.value = (w && w.varId) ? w.varId : '';
+      document.getElementById('wish-species').value = w ? w.species : '';
+      document.getElementById('wish-variety').value = w ? w.variety : '';
+      document.getElementById('wish-supplier').value = w ? w.supplier : '';
+      document.getElementById('wish-price').value = w ? w.price : '';
+    }
+    else if (modalId === 'modal-production') {
+      document.getElementById('prod-id').value = id;
+      document.getElementById('prod-varId').value = parentId;
+      const p = App.data.productions.find(x => x.id === id);
+      document.getElementById('prod-year').value = p ? p.year : new Date().getFullYear();
+      document.getElementById('prod-plants').value = p ? p.plants : '';
+      document.getElementById('prod-status').value = p ? p.status : 'planned';
+      document.getElementById('prod-harvest-qty').value = p ? p.harvestQty : 0;
+      document.getElementById('prod-harvest-unit').value = p ? p.harvestUnit : 'gr';
+    }
+  },
+
+  onStockOrigineChange() {
+    const origine = document.getElementById('stock-origine').value;
+    document.getElementById('stock-fournisseur-group').style.display = origine === 'produce' ? 'none' : 'block';
+    if (origine === 'produce') document.getElementById('stock-fournisseur').value = '';
+  },
+
+  onWishVarietyLink() {
+    const varId = document.getElementById('wish-varId').value;
+    if (!varId) return;
+    const v = App.data.varieties.find(x => x.id === varId);
+    if (!v) return;
+    const sp = App.data.species.find(x => x.id === v.spId);
+    document.getElementById('wish-species').value = sp ? sp.name : '';
+    document.getElementById('wish-variety').value = v.name;
+  },
+
+  closeModals() {
+    document.querySelectorAll('.modal-overlay').forEach(m => m.classList.remove('open'));
+  },
+
+  openVarietyModal() {
+    this.openModal('modal-variety', '', App.currentSpeciesId);
+  },
+
+  openReduceModal(stockId) {
+    const s = App.data.stocks.find(x => x.id === stockId);
+    if (!s) return;
+    const v = App.data.varieties.find(x => x.id === s.varId);
+    document.getElementById('reduce-id').value = stockId;
+    document.getElementById('reduce-qty').value = '';
+    document.getElementById('reduce-info').innerText = `${v ? v.name : 'Graines'} (Lot ${s.prod}) : ${s.qty} ${s.unit} disponibles.`;
+    this.openModal('modal-reduce');
+  },
+
+  openPlanningModal(id = '') {
+    this.openModal('modal-planning');
+    App.initConversionSelect();
+    
+    const speciesSel = document.getElementById('plan-species');
+    speciesSel.innerHTML = '<option value="">-- Choisir --</option>' + 
+      App.data.species.sort((a,b) => a.name.localeCompare(b.name)).map(s => `<option value="${s.id}">${s.name}</option>`).join('');
+    
+    if (id) {
+      const p = App.data.plannings.find(x => x.id === id);
+      const v = App.data.varieties.find(x => x.id === p.varId);
+      document.getElementById('plan-id').value = id;
+      speciesSel.value = v ? v.spId : '';
+      this.updatePlanVarietyOptions(p.varId);
+      document.getElementById('plan-sowing-date').value = p.sowingDate;
+      document.getElementById('plan-seeds-qty').value = p.seedsQty;
+      document.getElementById('plan-weight-qty').value = p.weightQty;
+      document.getElementById('plan-loss-rate').value = p.lossRate;
+      document.getElementById('plan-transplant-date').value = p.transplantDate;
+      document.getElementById('plan-comments').value = p.comments;
+      document.getElementById('plan-status').value = p.status;
+    } else {
+      document.getElementById('plan-id').value = '';
+      document.getElementById('plan-sowing-date').value = new Date().toISOString().split('T')[0];
+      document.getElementById('plan-seeds-qty').value = '';
+      document.getElementById('plan-weight-qty').value = '';
+      document.getElementById('plan-comments').value = '';
+      document.getElementById('plan-status').value = 'planned';
+    }
+  },
+
+  updatePlanVarietyOptions(selectedVarId = '') {
+    const spId = document.getElementById('plan-species').value;
+    const varSel = document.getElementById('plan-variety');
+    const filtered = App.data.varieties.filter(v => v.spId === spId).sort((a,b) => a.name.localeCompare(b.name));
+    varSel.innerHTML = filtered.map(v => `<option value="${v.id}" ${v.id === selectedVarId ? 'selected' : ''}>${v.name}</option>`).join('');
+  },
+
+  openBatchPlanningModal() {
+    this.openModal('modal-batch-planning');
+    const bSp = document.getElementById('batch-species');
+    bSp.innerHTML = '<option value="">-- Choisir --</option>' + 
+      App.data.species.sort((a,b) => a.name.localeCompare(b.name)).map(s => `<option value="${s.id}">${s.name}</option>`).join('');
+    
+    const bConv = document.getElementById('batch-conversion-species');
+    bConv.innerHTML = Object.entries(App.SEED_CONVERSION_RATES).map(([k, d]) => `<option value="${k}">${d.name}</option>`).join('');
+    
+    document.getElementById('batch-variety-list').innerHTML = '<p style="color:var(--texte-gris);font-style:italic; text-align:center;">S&eacute;lectionnez d\'abord une esp&egrave;ce</p>';
+    document.getElementById('batch-sowing-date').value = new Date().toISOString().split('T')[0];
+  },
+
+  updateBatchVarietyList() {
+    const spId = document.getElementById('batch-species').value;
+    const container = document.getElementById('batch-variety-list');
+    const vars = App.data.varieties.filter(v => v.spId === spId).sort((a,b) => a.name.localeCompare(b.name));
+    
+    if (vars.length === 0) {
+      container.innerHTML = '<p>Aucune variété trouvée.</p>';
+      return;
+    }
+    container.innerHTML = vars.map(v => `
+      <label style="display:flex; align-items:center; gap:10px; margin-bottom:8px; cursor:pointer;">
+        <input type="checkbox" class="batch-variety-checkbox" value="${v.id}" style="width:18px; height:18px; accent-color:var(--vert-principal)">
+        <span>${v.name}</span>
+      </label>
+    `).join('');
+  },
+
+  alertLevelFilter: 'all',
+
+  setAlertLevelFilter(level) {
+    this.alertLevelFilter = level;
+    document.querySelectorAll('#alert-urgency-pills .plan-pill').forEach(p => {
+      p.classList.toggle('active', p.dataset.level === level);
+    });
+    this.renderAlerts();
+  },
+
+  renderAlerts() {
+    const container = document.getElementById('alerts-dynamic-list');
+    const searchTerm = (document.getElementById('alert-search')?.value || '').toLowerCase();
+    const filterSpecies = document.getElementById('alert-filter-species')?.value || '';
+    const filterLevel = this.alertLevelFilter || 'all';
+
+    // Mise à jour filtre espèces
+    const spSel = document.getElementById('alert-filter-species');
+    const currentSp = spSel ? spSel.value : '';
+    if (spSel) {
+      spSel.innerHTML = '<option value="">Toutes les espèces</option>' +
+        App.data.species.sort((a,b) => a.name.localeCompare(b.name))
+          .map(s => `<option value="${s.id}" ${currentSp === s.id ? 'selected' : ''}>${s.name}</option>`).join('');
+    }
+
+    let list = [...(App.runtimeAlerts[App.currentAlertTab] || [])];
+
+    if (searchTerm) list = list.filter(a => a.variety.name.toLowerCase().includes(searchTerm) || a.speciesName.toLowerCase().includes(searchTerm));
+    if (filterSpecies) list = list.filter(a => a.variety.spId === filterSpecies);
+    if (filterLevel !== 'all') list = list.filter(a => a.level === filterLevel);
+
+    if (list.length === 0) {
+      container.innerHTML = `<div class="empty-state"><i class="fas fa-check-circle" style="color:var(--vert-principal)"></i><p>Tout est en ordre !</p></div>`;
+      return;
+    }
+
+    // Grouper par espèce
+    const groups = {};
+    list.forEach(a => {
+      const key = a.variety.spId || 'other';
+      if (!groups[key]) groups[key] = { name: a.speciesName, spId: a.variety.spId, items: [] };
+      groups[key].items.push(a);
+    });
+
+    container.innerHTML = Object.values(groups)
+      .sort((a,b) => {
+        // Urgents en premier
+        const aUrgent = a.items.filter(x => x.level === 'urgent').length;
+        const bUrgent = b.items.filter(x => x.level === 'urgent').length;
+        if (bUrgent !== aUrgent) return bUrgent - aUrgent;
+        return a.name.localeCompare(b.name);
+      })
+      .map(group => {
+        const borderColor = App._speciesColor(group.spId);
+        const urgentCount = group.items.filter(x => x.level === 'urgent').length;
+        return `
+          <div style="margin-bottom:16px;">
+            <div style="display:flex; align-items:center; gap:8px; margin-bottom:6px; padding:6px 10px; background:var(--blanc-pur); border-radius:var(--rayon-petit); box-shadow:var(--ombre-douce);">
+              <span style="width:10px; height:10px; border-radius:50%; background:${borderColor}; display:inline-block; flex-shrink:0;"></span>
+              <span style="font-weight:700; color:var(--vert-fonce); font-size:0.95rem;">${group.name}</span>
+              <span class="badge ${urgentCount > 0 ? 'badge-danger' : 'badge-warning'}" style="margin-left:auto;">${group.items.length} alerte(s)</span>
+            </div>
+            ${group.items.map(a => {
+              const stockInfo = App.getValidStockInfo(a.variety.id);
+              const stockDisplay = stockInfo.hasValidStock 
+                ? `${stockInfo.totalValidQty.toFixed(1)} (exp. ${stockInfo.minExpYear})`
+                : 'Aucun';
+              const lastProd = App.data.productions.filter(p => p.varId === a.variety.id && p.status === 'completed').sort((x,y) => y.year - x.year)[0];
+              return `
+              <div class="card" style="border-left-color:${a.level === 'urgent' ? 'var(--rouge-alerte)' : 'var(--orange-warning)'}; margin-bottom:8px;">
+                <div class="card-header">
+                  <div>
+                    <div class="card-title">${a.variety.name}</div>
+                    <div style="font-size:0.8rem; color:var(--texte-gris); margin-top:2px;">
+                      <i class="fas fa-boxes"></i> Stock : <strong>${stockDisplay}</strong>
+                      ${lastProd ? ` &nbsp;|&nbsp; <i class="fas fa-history"></i> Dernière prod : ${lastProd.year}` : ''}
+                    </div>
+                  </div>
+                  <span class="badge ${a.level === 'urgent' ? 'badge-danger' : 'badge-warning'}">${a.level === 'urgent' ? '🔴 Urgent' : '🟠 Surveiller'}</span>
+                </div>
+                <div class="card-info" style="color:${a.level === 'urgent' ? 'var(--rouge-alerte)' : 'var(--orange-warning)'}; font-weight:600;">
+                  <i class="fas fa-exclamation-circle"></i> ${a.reason}
+                </div>
+                <div style="display:flex; gap:8px; margin-top:10px; flex-wrap:wrap;">
+                  ${App.currentAlertTab === 'produce'
+                    ? `<button class="btn btn-sm btn-primary" onclick="UI.openModal('modal-production', '', '${a.variety.id}')"><i class="fas fa-seedling"></i> Planifier prod.</button>`
+                    : `<button class="btn btn-sm btn-primary" onclick="UI.openModal('modal-wishlist', '', '${a.variety.id}')"><i class="fas fa-heart"></i> Ajouter wishlist</button>`
+                  }
+                  <button class="btn btn-sm btn-secondary" onclick="App.renderVarieties('${a.variety.spId}')"><i class="fas fa-leaf"></i> Voir fiche</button>
+                  <button class="btn btn-sm" style="background:#f0fdf4;color:var(--vert-fonce);border:1px solid var(--vert-clair);" onclick="UI.openModal('modal-stock', '', '${a.variety.id}')"><i class="fas fa-plus"></i> Stock</button>
+                </div>
+              </div>`;
+            }).join('')}
+          </div>
+        `;
+      }).join('');
+  }
+};
+
+// --- INITIALISATION ---
+window.onload = () => {
+  App.loadAll();
+  App.checkAutoPlanning();
+  App.renderAll();
+  
+  // Fermeture des modales au clic extérieur
+  window.onclick = (event) => {
+    if (event.target.classList.contains('modal-overlay')) {
+      UI.closeModals();
+    }
+  };
+
+  // Enregistrement du Service Worker (PWA)
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('./sw.js')
+      .then(reg => {
+        console.log('[PWA] Service Worker enregistré', reg.scope);
+        // Vérifier si une mise à jour est disponible
+        reg.addEventListener('updatefound', () => {
+          const newSW = reg.installing;
+          newSW.addEventListener('statechange', () => {
+            if (newSW.state === 'installed' && navigator.serviceWorker.controller) {
+              UI.toast('🔄 Mise à jour disponible — rechargez la page');
+            }
+          });
+        });
+      })
+      .catch(err => console.warn('[PWA] SW non enregistré:', err));
+  }
+
+  // Init GitHub
+  GitHub.init();
+};
+
+/**
+ * ============================================================
+ * MODULE GITHUB — Sync des données via GitHub API
+ * ============================================================
+ */
+const GitHub = {
+  CONFIG_KEY: 'gh_config',
+  DATA_FILE: 'data.json',
+  _saveTimeout: null,
+  _pendingPush: false,
+
+  // Charger la config depuis localStorage
+  init() {
+    const cfg = this.getConfig();
+    if (cfg) {
+      console.log('[GitHub] Config trouvée pour', cfg.username + '/' + cfg.repo);
+      this.updateSyncIcon('idle');
+      // Auto-pull au démarrage si configuré
+      this.pull(true);
+    } else {
+      this.updateSyncIcon('unconfigured');
+    }
+  },
+
+  getConfig() {
+    try {
+      return JSON.parse(localStorage.getItem(this.CONFIG_KEY));
+    } catch { return null; }
+  },
+
+  saveConfig() {
+    const username = document.getElementById('gh-username').value.trim();
+    const repo = document.getElementById('gh-repo').value.trim();
+    const token = document.getElementById('gh-token').value.trim();
+    if (!username || !repo || !token) {
+      this.setStatus('⚠️ Tous les champs sont requis.', 'orange');
+      return;
+    }
+    localStorage.setItem(this.CONFIG_KEY, JSON.stringify({ username, repo, token }));
+    this.setStatus('✅ Configuration enregistrée !', 'green');
+    this.updateSyncIcon('idle');
+    setTimeout(() => UI.closeModals(), 1000);
+  },
+
+  // Tester la connexion
+  async testConnection() {
+    const cfg = this.getConfig();
+    if (!cfg) { this.setStatus('⚠️ Enregistre d\'abord la config.', 'orange'); return; }
+    this.setStatus('⏳ Test en cours...', 'gray');
+    try {
+      const r = await fetch(`https://api.github.com/repos/${cfg.username}/${cfg.repo}`, {
+        headers: { Authorization: `token ${cfg.token}`, Accept: 'application/vnd.github.v3+json' }
+      });
+      if (r.ok) {
+        const d = await r.json();
+        this.setStatus(`✅ Connecté ! Repo "${d.name}" (${d.private ? 'privé' : 'public'})`, 'green');
+      } else {
+        this.setStatus(`❌ Erreur ${r.status} — vérifiez le token et le nom du repo.`, 'red');
+      }
+    } catch {
+      this.setStatus('❌ Pas de connexion réseau.', 'red');
+    }
+  },
+
+  // Lire data.json depuis GitHub
+  async pull(silent = false) {
+    const cfg = this.getConfig();
+    if (!cfg) return;
+    if (!silent) this.updateSyncIcon('syncing');
+    try {
+      const r = await fetch(
+        `https://api.github.com/repos/${cfg.username}/${cfg.repo}/contents/${this.DATA_FILE}`,
+        { headers: { Authorization: `token ${cfg.token}`, Accept: 'application/vnd.github.v3+json' } }
+      );
+      if (r.status === 404) {
+        // Fichier n'existe pas encore → on pousse les données locales
+        if (!silent) UI.toast('📤 Première sync — envoi des données locales...');
+        await this.push();
+        return;
+      }
+      if (!r.ok) throw new Error(`HTTP ${r.status}`);
+      const file = await r.json();
+      const content = JSON.parse(atob(file.content.replace(/\n/g, '')));
+      // Comparer avec les données locales
+      const localStr = JSON.stringify(App.data);
+      const remoteStr = JSON.stringify(content);
+      if (localStr !== remoteStr) {
+        if (silent) {
+          // Fusion silencieuse : GitHub gagne si données locales vides
+          const localEmpty = App.data.varieties.length === 0 && App.data.stocks.length === 0;
+          if (localEmpty) {
+            App.data = content;
+            App.saveAll();
+            App.renderAll();
+            UI.toast('☁️ Données chargées depuis GitHub');
+          } else {
+            // Données des deux côtés → signaler le conflit
+            this.updateSyncIcon('conflict');
+            UI.toast('⚠️ Données locales et GitHub différentes — ouvrez Sync pour choisir');
+          }
+        } else {
+          if (confirm('Les données GitHub sont différentes des données locales.\n\nOK = charger depuis GitHub (écrase le local)\nAnnuler = garder le local')) {
+            App.data = content;
+            App.saveAll();
+            App.renderAll();
+            UI.toast('☁️ Données chargées depuis GitHub');
+          }
+        }
+      } else {
+        if (!silent) UI.toast('✅ Données déjà à jour');
+      }
+      this.updateSyncIcon('idle');
+      // Stocker le SHA pour le prochain push
+      localStorage.setItem('gh_sha', file.sha);
+    } catch (e) {
+      console.warn('[GitHub] Pull échoué:', e);
+      this.updateSyncIcon(navigator.onLine ? 'error' : 'offline');
+      if (!silent) UI.toast('❌ Sync échouée : ' + e.message);
+    }
+  },
+
+  // Écrire data.json vers GitHub
+  async push() {
+    const cfg = this.getConfig();
+    if (!cfg) {
+      UI.openModal('modal-github');
+      return;
+    }
+    this.updateSyncIcon('syncing');
+    try {
+      const content = btoa(unescape(encodeURIComponent(JSON.stringify(App.data, null, 2))));
+      const sha = localStorage.getItem('gh_sha') || null;
+      const body = {
+        message: `Sync ${new Date().toLocaleString('fr-FR')}`,
+        content,
+        ...(sha ? { sha } : {})
+      };
+      const r = await fetch(
+        `https://api.github.com/repos/${cfg.username}/${cfg.repo}/contents/${this.DATA_FILE}`,
+        {
+          method: 'PUT',
+          headers: {
+            Authorization: `token ${cfg.token}`,
+            Accept: 'application/vnd.github.v3+json',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(body)
+        }
+      );
+      if (!r.ok) {
+        const err = await r.json();
+        // Conflit SHA (quelqu'un a modifié entre-temps) → refetch le SHA et retry
+        if (r.status === 409 || r.status === 422) {
+          await this.refreshSha(cfg);
+          return this.push();
+        }
+        throw new Error(err.message || `HTTP ${r.status}`);
+      }
+      const result = await r.json();
+      localStorage.setItem('gh_sha', result.content.sha);
+      this.updateSyncIcon('idle');
+      this._pendingPush = false;
+      UI.toast('☁️ Sauvegardé sur GitHub');
+    } catch (e) {
+      console.warn('[GitHub] Push échoué:', e);
+      this._pendingPush = true;
+      this.updateSyncIcon(navigator.onLine ? 'error' : 'offline');
+      UI.toast('⚠️ Sync échouée — données sauvées localement');
+    }
+  },
+
+  // Récupérer le SHA actuel du fichier
+  async refreshSha(cfg) {
+    try {
+      const r = await fetch(
+        `https://api.github.com/repos/${cfg.username}/${cfg.repo}/contents/${this.DATA_FILE}`,
+        { headers: { Authorization: `token ${cfg.token}`, Accept: 'application/vnd.github.v3+json' } }
+      );
+      if (r.ok) {
+        const f = await r.json();
+        localStorage.setItem('gh_sha', f.sha);
+      }
+    } catch {}
+  },
+
+  // Sync automatique : push 3s après la dernière modification
+  schedulePush() {
+    clearTimeout(this._saveTimeout);
+    this.updateSyncIcon('pending');
+    this._saveTimeout = setTimeout(() => {
+      if (this.getConfig()) this.push();
+    }, 3000);
+  },
+
+  // Sync manuelle depuis le bouton header
+  syncNow() {
+    const cfg = this.getConfig();
+    if (!cfg) {
+      // Pas configuré → ouvrir la modale de config
+      this.openConfigModal();
+    } else {
+      this.push();
+    }
+  },
+
+  openConfigModal() {
+    const cfg = this.getConfig() || {};
+    document.getElementById('gh-username').value = cfg.username || '';
+    document.getElementById('gh-repo').value = cfg.repo || '';
+    document.getElementById('gh-token').value = cfg.token || '';
+    document.getElementById('gh-status').textContent = '';
+    UI.closeModals();
+    document.getElementById('modal-github').classList.add('open');
+  },
+
+  setStatus(msg, color) {
+    const el = document.getElementById('gh-status');
+    if (el) {
+      el.textContent = msg;
+      el.style.color = color === 'green' ? 'var(--vert-principal)' : color === 'red' ? 'var(--rouge-alerte)' : color === 'orange' ? 'var(--orange-warning)' : 'var(--texte-gris)';
+    }
+  },
+
+  updateSyncIcon(state) {
+    const btn = document.getElementById('github-sync-btn');
+    const icon = document.getElementById('github-sync-icon');
+    const dot = document.getElementById('github-sync-dot');
+    if (!btn || !icon) return;
+    const states = {
+      idle:          { icon: 'fa-cloud',              color: '#22c55e', dot: false,   title: 'Sync GitHub — à jour' },
+      syncing:       { icon: 'fa-sync fa-spin',        color: '#457b9d', dot: false,   title: 'Synchronisation...' },
+      pending:       { icon: 'fa-cloud-upload-alt',    color: '#f4a261', dot: true,    title: 'Modifications en attente...' },
+      conflict:      { icon: 'fa-exclamation-circle',  color: '#f4a261', dot: true,    title: 'Conflit — cliquez pour résoudre' },
+      error:         { icon: 'fa-exclamation-triangle', color: '#e63946', dot: true,   title: 'Erreur de sync' },
+      offline:       { icon: 'fa-cloud',               color: '#6b7280', dot: false,   title: 'Hors-ligne — données locales' },
+      unconfigured:  { icon: 'fa-cloud',               color: '#6b7280', dot: false,   title: 'Configurer GitHub Sync' },
+    };
+    const s = states[state] || states.unconfigured;
+    icon.className = `fas ${s.icon}`;
+    icon.style.color = s.color;
+    dot.style.display = s.dot ? 'block' : 'none';
+    btn.title = s.title;
+  }
+};
+
+// Connecter saveAll au push GitHub automatique
+const _origSaveAll = App.saveAll.bind(App);
+App.saveAll = function() {
+  _origSaveAll();
+  GitHub.schedulePush();
+};
+
+// Retry push auto quand réseau revient
+window.addEventListener('online', () => {
+  if (GitHub._pendingPush) {
+    UI.toast('📶 Connexion rétablie — sync en cours...');
+    GitHub.push();
+  }
+});
+
+</script>
+</body>
+</html>
