@@ -3153,8 +3153,8 @@ window.onload = () => {
       .catch(err => console.warn('[PWA] SW non enregistré:', err));
   }
 
-  // Init GitHub — après renderAll pour que le DOM soit prêt
-  GitHub.init();
+  // Init GitHub — délai pour laisser le DOM se stabiliser après renderAll
+  setTimeout(() => GitHub.init(), 500);
 };
 
 /**
