@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="fr">
 <head>
   <meta charset="utf-8" />
@@ -3156,7 +3156,6 @@ window.onload = () => {
   // Init GitHub — délai pour laisser le DOM se stabiliser après renderAll
   setTimeout(() => GitHub.init(), 500);
 };
-
 /**
  * ============================================================
  * MODULE GITHUB — Sync des données via GitHub API
@@ -3168,13 +3167,11 @@ const GitHub = {
   _saveTimeout: null,
   _pendingPush: false,
 
-  // Charger la config depuis localStorage
   init() {
     const cfg = this.getConfig();
     if (cfg) {
       console.log('[GitHub] Config trouvée pour', cfg.username + '/' + cfg.repo);
       this.updateSyncIcon('idle');
-      // Auto-pull au démarrage si configuré
       this.pull(true);
     } else {
       this.updateSyncIcon('unconfigured');
@@ -3184,87 +3181,77 @@ const GitHub = {
   getConfig() {
     try {
       return JSON.parse(localStorage.getItem(this.CONFIG_KEY));
-    } catch { return null; }
-  },
-
-  saveConfig() {
-    const username = document.getElementById('gh-username').value.trim();
-    const repo = document.getElementById('gh-repo').value.trim();
-    const token = document.getElementById('gh-token').value.trim();
-    if (!username || !repo || !token) {
-      this.setStatus('⚠️ Tous les champs sont requis.', 'orange');
-      return;
-    }
-    localStorage.setItem(this.CONFIG_KEY, JSON.stringify({ username, repo, token }));
-    this.setStatus('✅ Configuration enregistrée !', 'green');
-    this.updateSyncIcon('idle');
-    setTimeout(() => UI.closeModals(), 1000);
-  },
-
-  // Tester la connexion
-  async testConnection() {
-    const username = document.getElementById('gh-username').value.trim();
-    const repo = document.getElementById('gh-repo').value.trim();
-    const token = document.getElementById('gh-token').value.trim();
-    if (!username || !repo || !token) {
-      this.setStatus('⚠️ Remplis les 3 champs avant de tester.', 'orange');
-      return;
-    }
-    this.setStatus('⏳ Test en cours...', 'gray');
-    try {
-      const r = await fetch(`https://api.github.com/repos/${username}/${repo}`, {
-        headers: { Authorization: `token ${token}`, Accept: 'application/vnd.github.v3+json' }
-      });
-      if (r.ok) {
-        const d = await r.json();
-        this.setStatus(`✅ Connecté ! Repo "${d.name}" (${d.private ? 'privé' : 'public'})`, 'green');
-      } else {
-        this.setStatus(`❌ Erreur ${r.status} — vérifiez le token et le nom du repo.`, 'red');
-      }
     } catch {
-      this.setStatus('❌ Pas de connexion réseau.', 'red');
+      return null;
     }
   },
 
-  // Lire data.json depuis GitHub
+  /* =======================
+     UTF-8 SAFE HELPERS
+  ======================= */
+
+  encodeBase64Utf8(obj) {
+    const json = JSON.stringify(obj, null, 2);
+    const bytes = new TextEncoder().encode(json);
+    let binary = '';
+    bytes.forEach(b => binary += String.fromCharCode(b));
+    return btoa(binary);
+  },
+
+  decodeBase64Utf8(base64) {
+    const binary = atob(base64.replace(/\n/g, ''));
+    const bytes = Uint8Array.from(binary, c => c.charCodeAt(0));
+    return JSON.parse(new TextDecoder('utf-8').decode(bytes));
+  },
+
+  /* =======================
+     PULL
+  ======================= */
+
   async pull(silent = false) {
     const cfg = this.getConfig();
     if (!cfg) return;
+
     if (!silent) this.updateSyncIcon('syncing');
+
     try {
       const r = await fetch(
         `https://api.github.com/repos/${cfg.username}/${cfg.repo}/contents/${this.DATA_FILE}`,
-        { headers: { Authorization: `token ${cfg.token}`, Accept: 'application/vnd.github.v3+json' } }
+        { headers: { Authorization: `token ${cfg.token}` } }
       );
+
       if (r.status === 404) {
-        // Fichier n'existe pas encore → on pousse les données locales
-        if (!silent) UI.toast('📤 Première sync — envoi des données locales...');
+        if (!silent) UI.toast('📤 Première synchronisation — envoi des données locales...');
         await this.push();
         return;
       }
+
       if (!r.ok) throw new Error(`HTTP ${r.status}`);
+
       const file = await r.json();
-      const content = JSON.parse(atob(file.content.replace(/\n/g, '')));
-      // Comparer avec les données locales
+      const remoteData = this.decodeBase64Utf8(file.content);
+
       const localStr = JSON.stringify(App.data);
-      const remoteStr = JSON.stringify(content);
+      const remoteStr = JSON.stringify(remoteData);
+
       if (localStr !== remoteStr) {
         if (silent) {
-          // Fusion silencieuse : GitHub gagne si données locales vides
-          const localEmpty = App.data.varieties.length === 0 && App.data.stocks.length === 0;
+          const localEmpty =
+            App.data.varieties.length === 0 &&
+            App.data.stocks.length === 0;
+
           if (localEmpty) {
-            App.data = content;
+            App.data = remoteData;
             App.saveAll();
             App.renderAll();
             UI.toast('☁️ Données chargées depuis GitHub');
           } else {
-            // Données des deux côtés → signaler le conflit
             this.updateSyncIcon('conflict');
-            UI.toast('⚠️ Données locales et GitHub différentes — ouvrez Sync pour choisir');
+            UI.toast('⚠️ Données locales et GitHub différentes');
           }
         } else {
-          if (confirm('Les données GitHub sont différentes des données locales.\n\nOK = charger depuis GitHub (écrase le local)\nAnnuler = garder le local')) {
-            App.data = content;
+          if (confirm('Les données GitHub sont différentes.\n\nOK = charger GitHub\nAnnuler = garder local')) {
+            App.data = remoteData;
             App.saveAll();
             App.renderAll();
             UI.toast('☁️ Données chargées depuis GitHub');
@@ -3273,9 +3260,10 @@ const GitHub = {
       } else {
         if (!silent) UI.toast('✅ Données déjà à jour');
       }
-      this.updateSyncIcon('idle');
-      // Stocker le SHA pour le prochain push
+
       localStorage.setItem('gh_sha', file.sha);
+      this.updateSyncIcon('idle');
+
     } catch (e) {
       console.warn('[GitHub] Pull échoué:', e);
       this.updateSyncIcon(navigator.onLine ? 'error' : 'offline');
@@ -3283,126 +3271,127 @@ const GitHub = {
     }
   },
 
-  // Écrire data.json vers GitHub
+  /* =======================
+     PUSH
+  ======================= */
+
   async push() {
     const cfg = this.getConfig();
-    if (!cfg) {
-      UI.openModal('modal-github');
-      return;
-    }
+    if (!cfg) return;
+
     this.updateSyncIcon('syncing');
+
     try {
-      // Si pas de SHA connu, le récupérer d'abord pour éviter le 422
-      let sha = localStorage.getItem('gh_sha') || null;
+      let sha = localStorage.getItem('gh_sha');
+
       if (!sha) {
-        await this.refreshSha(cfg);
-        sha = localStorage.getItem('gh_sha') || null;
+        sha = await this.refreshSha(cfg);
       }
 
-      const content = btoa(new TextEncoder().encode(JSON.stringify(App.data, null, 2))
-  .reduce((data, byte) => data + String.fromCharCode(byte), ''));
+      const content = this.encodeBase64Utf8(App.data);
+
       const body = {
         message: `Sync ${new Date().toLocaleString('fr-FR')}`,
         content,
         ...(sha ? { sha } : {})
       };
+
       const r = await fetch(
         `https://api.github.com/repos/${cfg.username}/${cfg.repo}/contents/${this.DATA_FILE}`,
         {
           method: 'PUT',
           headers: {
             Authorization: `token ${cfg.token}`,
-            Accept: 'application/vnd.github.v3+json',
             'Content-Type': 'application/json'
           },
           body: JSON.stringify(body)
         }
       );
+
+      // Gestion conflit une seule fois
+      if (r.status === 409 || r.status === 422) {
+        const newSha = await this.refreshSha(cfg);
+
+        const retryBody = {
+          message: `Sync ${new Date().toLocaleString('fr-FR')}`,
+          content,
+          ...(newSha ? { sha: newSha } : {})
+        };
+
+        const retry = await fetch(
+          `https://api.github.com/repos/${cfg.username}/${cfg.repo}/contents/${this.DATA_FILE}`,
+          {
+            method: 'PUT',
+            headers: {
+              Authorization: `token ${cfg.token}`,
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(retryBody)
+          }
+        );
+
+        if (!retry.ok) {
+          const err2 = await retry.json();
+          throw new Error(err2.message || `HTTP ${retry.status}`);
+        }
+
+        const result = await retry.json();
+        localStorage.setItem('gh_sha', result.content.sha);
+        this.updateSyncIcon('idle');
+        UI.toast('☁️ Sauvegardé sur GitHub');
+        return;
+      }
+
       if (!r.ok) {
         const err = await r.json();
-        // Conflit SHA → refetch et retry une fois
-        if (r.status === 409 || r.status === 422) {
-  console.warn('Conflit d�tect�, r�cup�ration du nouveau SHA...');
-  const newSha = await this.refreshSha(cfg);
-
-  const retryBody = {
-    message: `Sync ${new Date().toLocaleString('fr-FR')}`,
-    content,
-    ...(newSha ? { sha: newSha } : {})
-  };
-
-  const retry = await fetch(
-    `https://api.github.com/repos/${cfg.username}/${cfg.repo}/contents/${this.DATA_FILE}`,
-    {
-      method: 'PUT',
-      headers: {
-        Authorization: `token ${cfg.token}`,
-        Accept: 'application/vnd.github.v3+json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(retryBody)
-    }
-  );
-
-  if (!retry.ok) {
-    const err2 = await retry.json();
-    throw new Error(err2.message || `HTTP ${retry.status}`);
-  }
-
-  const result = await retry.json();
-  localStorage.setItem('gh_sha', result.content.sha);
-  this.updateSyncIcon('idle');
-  this._pendingPush = false;
-  UI.toast('?? Sauvegard� sur GitHub');
-  return;
-}
         throw new Error(err.message || `HTTP ${r.status}`);
       }
+
       const result = await r.json();
       localStorage.setItem('gh_sha', result.content.sha);
       this.updateSyncIcon('idle');
       this._pendingPush = false;
       UI.toast('☁️ Sauvegardé sur GitHub');
+
     } catch (e) {
       console.warn('[GitHub] Push échoué:', e);
       this._pendingPush = true;
       this.updateSyncIcon(navigator.onLine ? 'error' : 'offline');
-      UI.toast('⚠️ Sync échouée — données sauvées localement');
+      UI.toast('⚠️ Sync échouée — données conservées localement');
     }
   },
 
-  // Récupérer le SHA actuel du fichier
   async refreshSha(cfg) {
-  try {
-    const r = await fetch(
-      `https://api.github.com/repos/${cfg.username}/${cfg.repo}/contents/${this.DATA_FILE}`,
-      { headers: { Authorization: `token ${cfg.token}`, Accept: 'application/vnd.github.v3+json' } }
-    );
+    try {
+      const r = await fetch(
+        `https://api.github.com/repos/${cfg.username}/${cfg.repo}/contents/${this.DATA_FILE}`,
+        { headers: { Authorization: `token ${cfg.token}` } }
+      );
 
-    if (r.status === 404) {
-      localStorage.removeItem('gh_sha');
+      if (r.status === 404) {
+        localStorage.removeItem('gh_sha');
+        return null;
+      }
+
+      if (!r.ok) return null;
+
+      const file = await r.json();
+      localStorage.setItem('gh_sha', file.sha);
+      return file.sha;
+
+    } catch {
       return null;
     }
+  },
 
-    if (!r.ok) return null;
-
-    const f = await r.json();
-    localStorage.setItem('gh_sha', f.sha);
-    return f.sha;
-
-  } catch {
-    return null;
-  }
-},
-
-  // Sync automatique : push 3s après la dernière modification
   schedulePush() {
     clearTimeout(this._saveTimeout);
     this.updateSyncIcon('pending');
     this._saveTimeout = setTimeout(() => {
       if (this.getConfig()) this.push();
     }, 3000);
-  },
+  }
+};
 
   // Sync manuelle depuis le bouton header
   syncNow() {
