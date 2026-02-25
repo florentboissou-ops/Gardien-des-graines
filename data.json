@@ -1,5 +1,10 @@
 {
-  "species": [],
+  "species": [
+    {
+      "id": "mm24dvidjn6y4p",
+      "name": "Test"
+    }
+  ],
   "varieties": [],
   "stocks": [],
   "wishlist": [],
