@@ -978,12 +978,19 @@ const App = {
     const file = input.files[0];
     if (!file) return;
     const reader = new FileReader();
-    reader.onload = e => {
+    reader.onload = async e => {
       try { 
-        this.data = JSON.parse(e.target.result); 
-        this.saveAll(); 
+        this.data = JSON.parse(e.target.result);
+        this.saveAll();
         UI.toast('Données importées avec succès !'); 
-        this.renderAll(); 
+        this.renderAll();
+        // Rafraîchir le SHA avant le push pour éviter le conflit 422
+        const cfg = GitHub.getConfig();
+        if (cfg) {
+          clearTimeout(GitHub._saveTimeout); // annule le push auto déclenché par saveAll
+          await GitHub.refreshSha(cfg);
+          GitHub.push();
+        }
       } catch(err) { 
         alert('Erreur lors de la lecture du fichier JSON.'); 
       }
@@ -2833,6 +2840,7 @@ const App = {
 const UI = {
   toast(msg) {
     const t = document.getElementById('toast');
+    if (!t) { console.log('[Toast]', msg); return; }
     t.innerText = msg;
     t.classList.add('show');
     setTimeout(() => t.classList.remove('show'), 3000);
@@ -3133,7 +3141,6 @@ window.onload = () => {
     navigator.serviceWorker.register('./sw.js')
       .then(reg => {
         console.log('[PWA] Service Worker enregistré', reg.scope);
-        // Vérifier si une mise à jour est disponible
         reg.addEventListener('updatefound', () => {
           const newSW = reg.installing;
           newSW.addEventListener('statechange', () => {
@@ -3146,7 +3153,7 @@ window.onload = () => {
       .catch(err => console.warn('[PWA] SW non enregistré:', err));
   }
 
-  // Init GitHub
+  // Init GitHub — après renderAll pour que le DOM soit prêt
   GitHub.init();
 };
 
@@ -3285,8 +3292,14 @@ const GitHub = {
     }
     this.updateSyncIcon('syncing');
     try {
+      // Si pas de SHA connu, le récupérer d'abord pour éviter le 422
+      let sha = localStorage.getItem('gh_sha') || null;
+      if (!sha) {
+        await this.refreshSha(cfg);
+        sha = localStorage.getItem('gh_sha') || null;
+      }
+
       const content = btoa(unescape(encodeURIComponent(JSON.stringify(App.data, null, 2))));
-      const sha = localStorage.getItem('gh_sha') || null;
       const body = {
         message: `Sync ${new Date().toLocaleString('fr-FR')}`,
         content,
@@ -3306,7 +3319,7 @@ const GitHub = {
       );
       if (!r.ok) {
         const err = await r.json();
-        // Conflit SHA (quelqu'un a modifié entre-temps) → refetch le SHA et retry
+        // Conflit SHA → refetch et retry une fois
         if (r.status === 409 || r.status === 422) {
           await this.refreshSha(cfg);
           return this.push();
