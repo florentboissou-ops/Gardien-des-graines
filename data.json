@@ -5,10 +5,6 @@
       "name": "Ail"
     },
     {
-      "id": "miw4rma6og1nnymw37r",
-      "name": "Ãpinard "
-    },
-    {
       "id": "_bhw3gy4xm",
       "name": "Aubergine"
     },
@@ -29,20 +25,20 @@
       "name": "Brocoli "
     },
     {
-      "id": "miw669x2kg8qhnxybf",
-      "name": "CÃ©leri branche "
-    },
-    {
-      "id": "mivo0r2g5yrdnxk2oui",
-      "name": "CÃ©leri rave"
-    },
-    {
       "id": "mivh7r6lzx9wn7alikd",
       "name": "Carotte"
     },
     {
+      "id": "miw669x2kg8qhnxybf",
+      "name": "Céleri branche "
+    },
+    {
+      "id": "mivo0r2g5yrdnxk2oui",
+      "name": "Céleri rave"
+    },
+    {
       "id": "miw53jbcc1tbzam3pg",
-      "name": "ChicorÃ©e "
+      "name": "Chicorée "
     },
     {
       "id": "miuoszwknpttfh5cvon",
@@ -62,7 +58,7 @@
     },
     {
       "id": "miuokfqic20bxaknup",
-      "name": "Chou FrisÃ© "
+      "name": "Chou Frisé "
     },
     {
       "id": "mivntix13ly4o61cctm",
@@ -85,12 +81,16 @@
       "name": "Courgette"
     },
     {
-      "id": "mixhffe9x2pom5",
-      "name": "FÃ¨ves"
+      "id": "miw4rma6og1nnymw37r",
+      "name": "Épinard "
     },
     {
       "id": "mivo20qd3xyfxymou2w",
       "name": "Fenouil "
+    },
+    {
+      "id": "mixhffe9x2pom5",
+      "name": "Fèves"
     },
     {
       "id": "miw6l8qm3v8y9glpheh",
@@ -102,11 +102,11 @@
     },
     {
       "id": "mkclodv2j0nm52",
-      "name": "Haricot Ã  rames"
+      "name": "Haricot à rames"
     },
     {
       "id": "mkclodv2e6rqw7",
-      "name": "Haricot Ã  rames mangetout"
+      "name": "Haricot à rames mangetout"
     },
     {
       "id": "miw4vt9vhbnag0y6vj7",
@@ -129,16 +129,16 @@
       "name": "Oignon"
     },
     {
-      "id": "miw4t9h8syubdxv6g3",
-      "name": "PÃ©rilla "
-    },
-    {
       "id": "mkclodv2f0ecl1",
       "name": "Panais"
     },
     {
       "id": "mivg4gt5yjsnj6z3d8h",
-      "name": "PastÃ¨que "
+      "name": "Pastèque "
+    },
+    {
+      "id": "miw4t9h8syubdxv6g3",
+      "name": "Périlla "
     },
     {
       "id": "miw6vviacaxqacffvmc",
@@ -173,16 +173,16 @@
       "name": "Rutabaga "
     },
     {
-      "id": "mkvo4djymml35v",
-      "name": "SÃ©same"
-    },
-    {
       "id": "miw4utc6yfmqyo85y6i",
       "name": "Salade "
     },
     {
       "id": "mivo4a0i3nqf2e0kh5l",
-      "name": "ScorsonÃ¨re "
+      "name": "Scorsonère "
+    },
+    {
+      "id": "mkvo4djymml35v",
+      "name": "Sésame"
     },
     {
       "id": "_o2znjaz3b",
@@ -256,7 +256,7 @@
     {
       "id": "_3y4jtzz88",
       "spId": "_o2znjaz3b",
-      "name": "Noire de crimÃ©e",
+      "name": "Noire de crimée",
       "renewalCycle": 5,
       "productionNotes": "",
       "renewalMode": "produce",
@@ -377,7 +377,7 @@
     {
       "id": "_0c54bj9w5",
       "spId": "_o2znjaz3b",
-      "name": "Dadâs Sunset",
+      "name": "Dad’s Sunset",
       "renewalCycle": 5,
       "productionNotes": "",
       "renewalMode": "produce",
@@ -432,7 +432,7 @@
     {
       "id": "_itehpgllt",
       "spId": "_o2znjaz3b",
-      "name": "BÃKI ÃRIÃS",
+      "name": "BÜKI ÓRIÁS",
       "renewalCycle": 5,
       "productionNotes": "",
       "renewalMode": "produce",
@@ -672,7 +672,7 @@
       "name": "Spugnillo dei Monti Lattari Longkeeper",
       "renewalCycle": 5,
       "renewalMode": "buy",
-      "notes": "ImportÃ© de Wishlist, prix: 2,50â¬, Fournisseur: Merakiseeds.",
+      "notes": "Importé de Wishlist, prix: 2,50€, Fournisseur: Merakiseeds.",
       "minStockQty": 5,
       "disableTracking": false
     },
@@ -682,7 +682,7 @@
       "name": "Borgo Celano Longkeeper",
       "renewalCycle": 5,
       "renewalMode": "buy",
-      "notes": "ImportÃ© de Wishlist, prix: 3â¬, Fournisseur: Merakiseeds.",
+      "notes": "Importé de Wishlist, prix: 3€, Fournisseur: Merakiseeds.",
       "minStockQty": 5,
       "disableTracking": false
     },
@@ -692,7 +692,7 @@
       "name": "Legenda Tarasenko Multi-Flora",
       "renewalCycle": 5,
       "renewalMode": "buy",
-      "notes": "ImportÃ© de Wishlist, prix: 3â¬, Fournisseur: Merakiseeds.",
+      "notes": "Importé de Wishlist, prix: 3€, Fournisseur: Merakiseeds.",
       "minStockQty": 5,
       "disableTracking": false
     },
@@ -702,7 +702,7 @@
       "name": "Graue Florentiner Grey",
       "renewalCycle": 3,
       "renewalMode": "produce",
-      "notes": "ImportÃ© de Wishlist, prix: 4â¬, Fournisseur: Merakiseeds.",
+      "notes": "Importé de Wishlist, prix: 4€, Fournisseur: Merakiseeds.",
       "minStockQty": 5,
       "disableTracking": false
     },
@@ -712,27 +712,27 @@
       "name": "Kulla Marrowfat",
       "renewalCycle": 3,
       "renewalMode": "produce",
-      "notes": "ImportÃ© de Wishlist, prix: 4â¬, Fournisseur: Merakiseeds.",
+      "notes": "Importé de Wishlist, prix: 4€, Fournisseur: Merakiseeds.",
       "minStockQty": 5,
       "disableTracking": false
     },
     {
       "id": "mirvlhicg5fuqodxxlo",
       "spId": "mirvlhiccpcx9us7ucu",
-      "name": "RÃ¤ttviksÃ¤rt Grey",
+      "name": "Rättviksärt Grey",
       "renewalCycle": 3,
       "renewalMode": "produce",
-      "notes": "ImportÃ© de Wishlist, prix: 4â¬, Fournisseur: Merakiseeds.",
+      "notes": "Importé de Wishlist, prix: 4€, Fournisseur: Merakiseeds.",
       "minStockQty": 5,
       "disableTracking": false
     },
     {
       "id": "mirvlhic6nvac6nt2pu",
       "spId": "mirvlhiccpcx9us7ucu",
-      "name": "Bishopâs",
+      "name": "Bishop’s",
       "renewalCycle": 3,
       "renewalMode": "produce",
-      "notes": "ImportÃ© de Wishlist, prix: 4â¬, Fournisseur: Merakiseeds.",
+      "notes": "Importé de Wishlist, prix: 4€, Fournisseur: Merakiseeds.",
       "minStockQty": 5,
       "disableTracking": false
     },
@@ -839,7 +839,7 @@
     {
       "id": "miun2sgi6byentdw7ke",
       "spId": "_d148lm7cn",
-      "name": "FrÃ¼her Dickfleischiger",
+      "name": "Früher Dickfleischiger",
       "renewalCycle": 4,
       "renewalMode": "produce",
       "notes": "",
@@ -882,7 +882,7 @@
       "name": "Cookstown orange ",
       "renewalCycle": 4,
       "renewalMode": "produce",
-      "notes": "AmÃ¨re ",
+      "notes": "Amère ",
       "minStockQty": 5,
       "disableTracking": false
     },
@@ -899,7 +899,7 @@
     {
       "id": "miuodkl7611xeyhfeyb",
       "spId": "_bhw3gy4xm",
-      "name": "AmÃ¨re/Africaine ",
+      "name": "Amère/Africaine ",
       "renewalCycle": 4,
       "renewalMode": "produce",
       "notes": "",
@@ -949,7 +949,7 @@
     {
       "id": "miuomkxoa9hp7vof4z7",
       "spId": "mkcloduzqyz9ji",
-      "name": "GÃ©ant d'automne primus ",
+      "name": "Géant d'automne primus ",
       "renewalCycle": 3,
       "renewalMode": "buy",
       "notes": "",
@@ -1019,7 +1019,7 @@
     {
       "id": "miuoy1gwongmzv4gjh",
       "spId": "miuoszwknpttfh5cvon",
-      "name": "MarchÃ© de Copenhague ",
+      "name": "Marché de Copenhague ",
       "renewalCycle": 3,
       "renewalMode": "buy",
       "notes": "",
@@ -1039,7 +1039,7 @@
     {
       "id": "miupjuvgsory427dlef",
       "spId": "miupimkt4rf1v8wycbr",
-      "name": "PÃ¢tisson",
+      "name": "Pâtisson",
       "renewalCycle": 4,
       "renewalMode": "buy",
       "notes": "",
@@ -1189,7 +1189,7 @@
     {
       "id": "miuq5ickhazq1iwnl6",
       "spId": "miuq4bsu0o5dernecpq",
-      "name": "Bourgogne AllongÃ© ",
+      "name": "Bourgogne Allongé ",
       "renewalCycle": 4,
       "renewalMode": "produce",
       "notes": "",
@@ -1209,7 +1209,7 @@
     {
       "id": "miuq7q9z2trpc9ppzcf",
       "spId": "miuq4bsu0o5dernecpq",
-      "name": "Senteur dudaÃ¯m",
+      "name": "Senteur dudaïm",
       "renewalCycle": 4,
       "renewalMode": "buy",
       "notes": "",
@@ -1219,7 +1219,7 @@
     {
       "id": "miuqa105nwtoky55hx",
       "spId": "miuq4bsu0o5dernecpq",
-      "name": "Ananas Ã  chair rouge",
+      "name": "Ananas à chair rouge",
       "renewalCycle": 4,
       "renewalMode": "buy",
       "notes": "",
@@ -1319,7 +1319,7 @@
     {
       "id": "miuqota5kvu6332h6z",
       "spId": "miuqkcikz1uasn84cy",
-      "name": "MusquÃ©e du Maroc ",
+      "name": "Musquée du Maroc ",
       "renewalCycle": 4,
       "renewalMode": "buy",
       "notes": "Moschata ",
@@ -1359,7 +1359,7 @@
     {
       "id": "miuqvdbvuuermq8pfh",
       "spId": "miuqkcikz1uasn84cy",
-      "name": "MusquÃ©e de Provence ",
+      "name": "Musquée de Provence ",
       "renewalCycle": 4,
       "renewalMode": "buy",
       "notes": "Moschata ",
@@ -1399,7 +1399,7 @@
     {
       "id": "miur160qzqfj3swzgt",
       "spId": "miuqkcikz1uasn84cy",
-      "name": "Ayote Ã  chair verte du Guatemala ",
+      "name": "Ayote à chair verte du Guatemala ",
       "renewalCycle": 4,
       "renewalMode": "buy",
       "notes": "Moschata ",
@@ -1469,7 +1469,7 @@
     {
       "id": "mivggwgxmfpo1lu9cd",
       "spId": "mkclok9hdu9upl",
-      "name": "Blanc hÃ¢tif de Paris ",
+      "name": "Blanc hâtif de Paris ",
       "renewalCycle": 3,
       "renewalMode": "buy",
       "notes": "",
@@ -1479,7 +1479,7 @@
     {
       "id": "mivgigw93mj9xtvceel",
       "spId": "mkclok9hdu9upl",
-      "name": "Rouge pÃ¢le de Niort ",
+      "name": "Rouge pâle de Niort ",
       "renewalCycle": 3,
       "renewalMode": "buy",
       "notes": "",
@@ -1529,7 +1529,7 @@
     {
       "id": "mivgs783d4n97n5t9ib",
       "spId": "mivgm9pn6vj0ouzrkkx",
-      "name": "De milan Ã  forcer",
+      "name": "De milan à forcer",
       "renewalCycle": 3,
       "renewalMode": "buy",
       "notes": "",
@@ -1589,7 +1589,7 @@
     {
       "id": "mivh49wwzdzdxe4qivn",
       "spId": "mivgwlv9jxqnyc3us3a",
-      "name": "BiÃ¨re de Munich ",
+      "name": "Bière de Munich ",
       "renewalCycle": 3,
       "renewalMode": "buy",
       "notes": "",
@@ -1629,7 +1629,7 @@
     {
       "id": "mivh9q3ydvn5gn4nevo",
       "spId": "mivh7r6lzx9wn7alikd",
-      "name": "GÃ©ante de Tilques",
+      "name": "Géante de Tilques",
       "renewalCycle": 3,
       "renewalMode": "buy",
       "notes": "",
@@ -1639,7 +1639,7 @@
     {
       "id": "mivhay32d6bq1tcvn3r",
       "spId": "mivh7r6lzx9wn7alikd",
-      "name": "MÃ©lange de couleurs ",
+      "name": "Mélange de couleurs ",
       "renewalCycle": 3,
       "renewalMode": "buy",
       "notes": "",
@@ -1739,7 +1739,7 @@
     {
       "id": "mivo2ntcvouagiqn6b",
       "spId": "mivo20qd3xyfxymou2w",
-      "name": "PrÃ©coce d'Ã©tÃ© ",
+      "name": "Précoce d'été ",
       "renewalCycle": 3,
       "renewalMode": "buy",
       "notes": "",
@@ -1749,7 +1749,7 @@
     {
       "id": "mivo4z1lbpi96b3ggvi",
       "spId": "mivo4a0i3nqf2e0kh5l",
-      "name": "GÃ©ante noire de Russie ",
+      "name": "Géante noire de Russie ",
       "renewalCycle": 3,
       "renewalMode": "buy",
       "notes": "",
@@ -1779,7 +1779,7 @@
     {
       "id": "mivo959bchwn5dl0t4a",
       "spId": "mivo889z4nf2i8cz8bj",
-      "name": "Champion jaune Ã  collet rouge ",
+      "name": "Champion jaune à collet rouge ",
       "renewalCycle": 3,
       "renewalMode": "buy",
       "notes": "",
@@ -1839,7 +1839,7 @@
     {
       "id": "miw3yin58z9lsdht45e",
       "spId": "miw3wxsy1y9dn5ycj9k",
-      "name": "Yalova Ãorbaci",
+      "name": "Yalova Çorbaci",
       "renewalCycle": 4,
       "renewalMode": "produce",
       "notes": "",
@@ -1949,7 +1949,7 @@
     {
       "id": "miw4gc6yedl4f0wvvc",
       "spId": "miw4fqtbv7te18xiya",
-      "name": "Tulsi tempÃ©rÃ©e ",
+      "name": "Tulsi tempérée ",
       "renewalCycle": 3,
       "renewalMode": "produce",
       "notes": "",
@@ -1969,7 +1969,7 @@
     {
       "id": "miw4lqzd08dpofxui2fb",
       "spId": "miw4jhwx26gn07b4r7x",
-      "name": "Asperge bang tsaÃ¯",
+      "name": "Asperge bang tsaï",
       "renewalCycle": 2,
       "renewalMode": "buy",
       "notes": "",
@@ -1979,7 +1979,7 @@
     {
       "id": "miw4nltv4i4vr1kqcxj",
       "spId": "miw4jhwx26gn07b4r7x",
-      "name": "Rave grosse tÃªte ",
+      "name": "Rave grosse tête ",
       "renewalCycle": 2,
       "renewalMode": "buy",
       "notes": "",
@@ -2009,7 +2009,7 @@
     {
       "id": "miw4s8jch528edla93c",
       "spId": "miw4rma6og1nnymw37r",
-      "name": "Aquatique Ã  grandes feuilles ",
+      "name": "Aquatique à grandes feuilles ",
       "renewalCycle": 2,
       "renewalMode": "buy",
       "notes": "",
@@ -2049,7 +2049,7 @@
     {
       "id": "miw4wnb3pgp9gf4a46",
       "spId": "miw4vt9vhbnag0y6vj7",
-      "name": "You mai caÃ­ ya ya green ",
+      "name": "You mai caí ya ya green ",
       "renewalCycle": 2,
       "renewalMode": "buy",
       "notes": "",
@@ -2059,7 +2059,7 @@
     {
       "id": "miw4y6w808drhn6cp6c",
       "spId": "miw4vt9vhbnag0y6vj7",
-      "name": "Tian mai cai Ã  feuilles dÃ©coupÃ©es ",
+      "name": "Tian mai cai à feuilles découpées ",
       "renewalCycle": 2,
       "renewalMode": "buy",
       "notes": "",
@@ -2069,7 +2069,7 @@
     {
       "id": "miw4z5ici5ufzjm5azi",
       "spId": "mivgwlv9jxqnyc3us3a",
-      "name": "DaÃ¯kon",
+      "name": "Daïkon",
       "renewalCycle": 3,
       "renewalMode": "buy",
       "notes": "",
@@ -2089,7 +2089,7 @@
     {
       "id": "miw546njuz2bnvniek",
       "spId": "miw53jbcc1tbzam3pg",
-      "name": "FrisÃ©e de Ruffec ",
+      "name": "Frisée de Ruffec ",
       "renewalCycle": 3,
       "renewalMode": "buy",
       "notes": "",
@@ -2119,7 +2119,7 @@
     {
       "id": "miw59waroffj7h9j65i",
       "spId": "miw596n5du24zcs5ic",
-      "name": "FicoÃ¯de glaciale ",
+      "name": "Ficoïde glaciale ",
       "renewalCycle": 3,
       "renewalMode": "buy",
       "notes": "",
@@ -2209,7 +2209,7 @@
     {
       "id": "miw614d3t5i85ngmr8j",
       "spId": "miw596n5du24zcs5ic",
-      "name": "Arroche en mÃ©lange de couleurs ",
+      "name": "Arroche en mélange de couleurs ",
       "renewalCycle": 3,
       "renewalMode": "produce",
       "notes": "",
@@ -2229,7 +2229,7 @@
     {
       "id": "miw632rdzw2rpoi19e",
       "spId": "miw596n5du24zcs5ic",
-      "name": "TÃ©tragone cornue",
+      "name": "Tétragone cornue",
       "renewalCycle": 3,
       "renewalMode": "produce",
       "notes": "",
@@ -2279,7 +2279,7 @@
     {
       "id": "miw69tk1gj8eo6ikkmm",
       "spId": "miw596n5du24zcs5ic",
-      "name": "Mesclun de printemps et d'Ã©tÃ© ",
+      "name": "Mesclun de printemps et d'été ",
       "renewalCycle": 3,
       "renewalMode": "buy",
       "notes": "",
@@ -2289,7 +2289,7 @@
     {
       "id": "miw6bklo6k80ws9ykrr",
       "spId": "miw6b8w3irmefr3x0ki",
-      "name": "MÃ©lange de couleurs ",
+      "name": "Mélange de couleurs ",
       "renewalCycle": 3,
       "renewalMode": "produce",
       "notes": "",
@@ -2319,7 +2319,7 @@
     {
       "id": "miw6i1y9ucauvn1zaed",
       "spId": "miw596n5du24zcs5ic",
-      "name": "Ãpinard fraise ",
+      "name": "Épinard fraise ",
       "renewalCycle": 3,
       "renewalMode": "produce",
       "notes": "",
@@ -2419,7 +2419,7 @@
     {
       "id": "miw6w7l9c7jt2bmp5qo",
       "spId": "miw6vviacaxqacffvmc",
-      "name": "PÃ©rou ",
+      "name": "Pérou ",
       "renewalCycle": 3,
       "renewalMode": "produce",
       "notes": "",
@@ -2479,7 +2479,7 @@
     {
       "id": "mixhlvv1ne6evp",
       "spId": "mixhffe9x2pom5",
-      "name": "FÃ©verole",
+      "name": "Féverole",
       "renewalCycle": 5,
       "renewalMode": "produce",
       "notes": "",
@@ -2572,7 +2572,7 @@
       "name": "Red noodle",
       "renewalCycle": 3,
       "renewalMode": "produce",
-      "notes": "KilomÃ¨tre",
+      "notes": "Kilomètre",
       "minStockQty": 5,
       "disableTracking": false
     },
@@ -2582,14 +2582,14 @@
       "name": "Taiwan yard long",
       "renewalCycle": 3,
       "renewalMode": "produce",
-      "notes": "KilomÃ¨tre ",
+      "notes": "Kilomètre ",
       "minStockQty": 5,
       "disableTracking": false
     },
     {
       "id": "mixi8xamj71bp6",
       "spId": "mixi2xe7rv9pl5",
-      "name": "ChÃ¢taigne d'Echenans",
+      "name": "Châtaigne d'Echenans",
       "renewalCycle": 4,
       "renewalMode": "produce",
       "notes": "Grimpant en frais ou sec",
@@ -2819,7 +2819,7 @@
     {
       "id": "mj1af7dmkpcn0a",
       "spId": "_o2znjaz3b",
-      "name": "Fleur de RÃ©agir",
+      "name": "Fleur de Réagir",
       "renewalCycle": 5,
       "renewalMode": "produce",
       "notes": "",
@@ -2889,10 +2889,10 @@
     {
       "id": "mkcloduz2mc05l",
       "spId": "mkcloduzqyz9ji",
-      "name": "Extra hÃ¢tif d'Angers",
+      "name": "Extra hâtif d'Angers",
       "renewalCycle": 3,
       "renewalMode": "buy",
-      "notes": "ImportÃ© de Wishlist, prix:1,99â¬",
+      "notes": "Importé de Wishlist, prix:1,99€",
       "minStockQty": 5,
       "disableTracking": false
     },
@@ -2902,17 +2902,17 @@
       "name": "Merveille de toutes saisons",
       "renewalCycle": 3,
       "renewalMode": "buy",
-      "notes": "ImportÃ© de Wishlist, prix:1,99â¬",
+      "notes": "Importé de Wishlist, prix:1,99€",
       "minStockQty": 5,
       "disableTracking": false
     },
     {
       "id": "mkclodv0l2l0aq",
       "spId": "miuoszwknpttfh5cvon",
-      "name": "CÅur de bÅuf moyen de la halle",
+      "name": "Cœur de bœuf moyen de la halle",
       "renewalCycle": 3,
       "renewalMode": "buy",
-      "notes": "ImportÃ© de Wishlist, prix:1,99â¬",
+      "notes": "Importé de Wishlist, prix:1,99€",
       "minStockQty": 5,
       "disableTracking": false
     },
@@ -2922,17 +2922,17 @@
       "name": "Jaune obtuse du Doubs",
       "renewalCycle": 3,
       "renewalMode": "buy",
-      "notes": "ImportÃ© de Wishlist, prix:1,99â¬",
+      "notes": "Importé de Wishlist, prix:1,99€",
       "minStockQty": 5,
       "disableTracking": false
     },
     {
       "id": "mkclodv13lxvpn",
       "spId": "mivh7r6lzx9wn7alikd",
-      "name": "Nantaise amÃ©liorÃ©e -3",
+      "name": "Nantaise améliorée -3",
       "renewalCycle": 3,
       "renewalMode": "buy",
-      "notes": "ImportÃ© de Wishlist, prix:4,15â¬",
+      "notes": "Importé de Wishlist, prix:4,15€",
       "minStockQty": 5,
       "disableTracking": false
     },
@@ -2942,7 +2942,7 @@
       "name": "1/2 long de Guernesey",
       "renewalCycle": 3,
       "renewalMode": "buy",
-      "notes": "ImportÃ© de Wishlist, prix:1,99â¬",
+      "notes": "Importé de Wishlist, prix:1,99€",
       "minStockQty": 5,
       "disableTracking": false
     },
@@ -2952,7 +2952,7 @@
       "name": "MONTE GUSTO",
       "renewalCycle": 3,
       "renewalMode": "buy",
-      "notes": "ImportÃ© de Wishlist, prix:4,49â¬",
+      "notes": "Importé de Wishlist, prix:4,49€",
       "minStockQty": 5,
       "disableTracking": false
     },
@@ -2962,7 +2962,7 @@
       "name": "Monte Bello",
       "renewalCycle": 3,
       "renewalMode": "buy",
-      "notes": "ImportÃ© de Wishlist, prix:4,49â¬",
+      "notes": "Importé de Wishlist, prix:4,49€",
       "minStockQty": 5,
       "disableTracking": false
     },
@@ -2972,7 +2972,7 @@
       "name": "Andy's Green Mountain Multiplier",
       "renewalCycle": 3,
       "renewalMode": "buy",
-      "notes": "ImportÃ© de Wishlist, prix:5$",
+      "notes": "Importé de Wishlist, prix:5$",
       "minStockQty": 5,
       "disableTracking": false
     },
@@ -2982,7 +2982,7 @@
       "name": "Nodding Onion (Maine-adapted)",
       "renewalCycle": 3,
       "renewalMode": "buy",
-      "notes": "ImportÃ© de Wishlist, prix:4$",
+      "notes": "Importé de Wishlist, prix:4$",
       "minStockQty": 5,
       "disableTracking": false
     },
@@ -2992,7 +2992,7 @@
       "name": "'Hun Ken' Fragrant Flowered Garlic",
       "renewalCycle": 3,
       "renewalMode": "buy",
-      "notes": "ImportÃ© de Wishlist, prix:4$",
+      "notes": "Importé de Wishlist, prix:4$",
       "minStockQty": 5,
       "disableTracking": false
     },
@@ -3089,7 +3089,7 @@
     {
       "id": "mkvo90uky1gtvw",
       "spId": "miw596n5du24zcs5ic",
-      "name": "Mesclun mÃ©lange",
+      "name": "Mesclun mélange",
       "renewalCycle": 4,
       "renewalMode": "produce",
       "notes": "",
@@ -5421,7 +5421,7 @@
       "unit": "graines",
       "prod": 2025,
       "exp": 2028,
-      "notes": "QualitÃ© Ã  vÃ©rifier ",
+      "notes": "Qualité à vérifier ",
       "origine": "produce",
       "fournisseur": ""
     },
@@ -6059,7 +6059,7 @@
       "unit": "gr",
       "prod": 2023,
       "exp": 2026,
-      "notes": "Plus colorÃ© ",
+      "notes": "Plus coloré ",
       "origine": "produce",
       "fournisseur": ""
     },
@@ -6378,7 +6378,7 @@
       "unit": "graines",
       "prod": 2025,
       "exp": 2027,
-      "notes": "Potager de santÃ© ",
+      "notes": "Potager de santé ",
       "origine": "produce",
       "fournisseur": ""
     },
@@ -6400,7 +6400,7 @@
       "unit": "graines",
       "prod": 2025,
       "exp": 2027,
-      "notes": "Potager de santÃ© ",
+      "notes": "Potager de santé ",
       "origine": "buy",
       "fournisseur": ""
     },
@@ -6411,7 +6411,7 @@
       "unit": "graines",
       "prod": 2025,
       "exp": 2029,
-      "notes": "Potager de santÃ© ",
+      "notes": "Potager de santé ",
       "origine": "produce",
       "fournisseur": ""
     },
@@ -6422,7 +6422,7 @@
       "unit": "graines",
       "prod": 2025,
       "exp": 2028,
-      "notes": "Potager de santÃ© ",
+      "notes": "Potager de santé ",
       "origine": "buy",
       "fournisseur": ""
     },
@@ -6733,7 +6733,7 @@
     {
       "id": "miuskzmztjr4rd6rqqb",
       "species": "Courgette",
-      "variety": "PÃ¢tisson",
+      "variety": "Pâtisson",
       "supplier": "AUTO (Achat Urgent)",
       "price": "?",
       "ordered": false
@@ -6821,7 +6821,7 @@
     {
       "id": "mix0i4096sdt68",
       "species": "Pois",
-      "variety": "RÃ¤ttviksÃ¤rt Grey",
+      "variety": "Rättviksärt Grey",
       "supplier": "AUTO (Stock Critique)",
       "price": "?",
       "ordered": false
@@ -6829,7 +6829,7 @@
     {
       "id": "mix0i409iozyad",
       "species": "Pois",
-      "variety": "Bishopâs",
+      "variety": "Bishop’s",
       "supplier": "AUTO (Stock Critique)",
       "price": "?",
       "ordered": false
@@ -6877,7 +6877,7 @@
     {
       "id": "mkcln6tu6y7gj6",
       "species": "Chou Fleur",
-      "variety": "GÃ©ant d'automne primus ",
+      "variety": "Géant d'automne primus ",
       "supplier": "AUTO (Stock Critique)",
       "price": "?",
       "ordered": false
@@ -6901,7 +6901,7 @@
     {
       "id": "mkcln6tvczqehq",
       "species": "Chou Cabus",
-      "variety": "MarchÃ© de Copenhague ",
+      "variety": "Marché de Copenhague ",
       "supplier": "AUTO (Stock Critique)",
       "price": "?",
       "ordered": false
@@ -6941,7 +6941,7 @@
     {
       "id": "mkcln6tyxljs8h",
       "species": "Oignon",
-      "variety": "Rouge pÃ¢le de Niort ",
+      "variety": "Rouge pâle de Niort ",
       "supplier": "AUTO (Stock Critique)",
       "price": "?",
       "ordered": false
@@ -6949,7 +6949,7 @@
     {
       "id": "mkclodw0veh65u",
       "species": "Chou Fleur",
-      "variety": "Extra hÃ¢tif d'Angers",
+      "variety": "Extra hâtif d'Angers",
       "supplier": "AUTO (Stock Critique)",
       "price": "?",
       "ordered": false
@@ -6965,7 +6965,7 @@
     {
       "id": "mkclodw1qtc3y8",
       "species": "Chou Cabus",
-      "variety": "CÅur de bÅuf moyen de la halle",
+      "variety": "Cœur de bœuf moyen de la halle",
       "supplier": "AUTO (Stock Critique)",
       "price": "?",
       "ordered": false
@@ -6981,7 +6981,7 @@
     {
       "id": "mkclodw1omu64d",
       "species": "Carotte",
-      "variety": "Nantaise amÃ©liorÃ©e -3",
+      "variety": "Nantaise améliorée -3",
       "supplier": "AUTO (Stock Critique)",
       "price": "?",
       "ordered": false
@@ -6996,7 +6996,7 @@
     },
     {
       "id": "mkclodw1wm9ef4",
-      "species": "Haricot Ã  rames mangetout",
+      "species": "Haricot à rames mangetout",
       "variety": "MONTE GUSTO",
       "supplier": "AUTO (Stock Critique)",
       "price": "?",
@@ -7004,7 +7004,7 @@
     },
     {
       "id": "mkclodw1cym5wc",
-      "species": "Haricot Ã  rames",
+      "species": "Haricot à rames",
       "variety": "Monte Bello",
       "supplier": "AUTO (Stock Critique)",
       "price": "?",
@@ -7037,7 +7037,7 @@
     {
       "id": "mkclqb9uazq84a",
       "species": "Chou Fleur",
-      "variety": "GÃ©ant d'automne primus ",
+      "variety": "Géant d'automne primus ",
       "supplier": "AUTO (Stock Critique)",
       "price": "?",
       "ordered": false
