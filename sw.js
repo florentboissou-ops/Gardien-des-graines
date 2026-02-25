@@ -5,7 +5,7 @@
  * ============================================================
  */
 
-const CACHE_NAME = 'gardien-graines-v1';
+const CACHE_NAME = 'gardien-graines-v3';
 
 // Assets à mettre en cache au premier chargement
 const ASSETS_TO_CACHE = [
@@ -20,7 +20,8 @@ const ASSETS_TO_CACHE = [
 
 // ---- INSTALLATION : mise en cache initiale ----
 self.addEventListener('install', event => {
-  console.log('[SW] Installation...');
+  console.log('[SW] Installation v3...');
+  self.skipWaiting(); // prend le contrôle immédiatement sans attendre
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then(cache => {
@@ -59,7 +60,7 @@ self.addEventListener('activate', event => {
 self.addEventListener('fetch', event => {
   const url = new URL(event.request.url);
 
-  // Requêtes GitHub API → toujours réseau (pas de cache pour les données)
+  // Requêtes GitHub API → toujours réseau
   if (url.hostname === 'api.github.com') {
     event.respondWith(fetch(event.request).catch(() =>
       new Response(JSON.stringify({ error: 'Hors-ligne' }), {
@@ -69,23 +70,31 @@ self.addEventListener('fetch', event => {
     return;
   }
 
-  // Assets locaux et CDN → Cache-first, réseau en fallback
+  // index.html → Network-first : toujours essayer le réseau pour avoir les mises à jour
+  if (url.pathname.endsWith('/') || url.pathname.endsWith('index.html')) {
+    event.respondWith(
+      fetch(event.request)
+        .then(response => {
+          const clone = response.clone();
+          caches.open(CACHE_NAME).then(c => c.put(event.request, clone));
+          return response;
+        })
+        .catch(() => caches.match(event.request))
+    );
+    return;
+  }
+
+  // Tous les autres assets (CSS, JS, fonts CDN) → Cache-first
   event.respondWith(
     caches.match(event.request).then(cached => {
       if (cached) return cached;
       return fetch(event.request).then(response => {
-        // Mettre en cache les nouvelles ressources valides
-        if (response && response.status === 200 && response.type !== 'opaque') {
-          const responseClone = response.clone();
-          caches.open(CACHE_NAME).then(cache => cache.put(event.request, responseClone));
+        if (response && response.status === 200) {
+          const clone = response.clone();
+          caches.open(CACHE_NAME).then(c => c.put(event.request, clone));
         }
         return response;
-      }).catch(() => {
-        // Page HTML de fallback si vraiment hors-ligne et pas en cache
-        if (event.request.destination === 'document') {
-          return caches.match('./index.html');
-        }
-      });
+      }).catch(() => null);
     })
   );
 });
