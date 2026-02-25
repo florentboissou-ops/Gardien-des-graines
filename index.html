@@ -3196,12 +3196,17 @@ const GitHub = {
 
   // Tester la connexion
   async testConnection() {
-    const cfg = this.getConfig();
-    if (!cfg) { this.setStatus('⚠️ Enregistre d\'abord la config.', 'orange'); return; }
+    const username = document.getElementById('gh-username').value.trim();
+    const repo = document.getElementById('gh-repo').value.trim();
+    const token = document.getElementById('gh-token').value.trim();
+    if (!username || !repo || !token) {
+      this.setStatus('⚠️ Remplis les 3 champs avant de tester.', 'orange');
+      return;
+    }
     this.setStatus('⏳ Test en cours...', 'gray');
     try {
-      const r = await fetch(`https://api.github.com/repos/${cfg.username}/${cfg.repo}`, {
-        headers: { Authorization: `token ${cfg.token}`, Accept: 'application/vnd.github.v3+json' }
+      const r = await fetch(`https://api.github.com/repos/${username}/${repo}`, {
+        headers: { Authorization: `token ${token}`, Accept: 'application/vnd.github.v3+json' }
       });
       if (r.ok) {
         const d = await r.json();
