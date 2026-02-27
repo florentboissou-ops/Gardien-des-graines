@@ -3175,6 +3175,16 @@
       "notes": "",
       "minStockQty": 0.5,
       "disableTracking": true
+    },
+    {
+      "id": "mm5a2w8xuyn09g",
+      "spId": "mivgm9pn6vj0ouzrkkx",
+      "name": "Hinona Kabu",
+      "renewalCycle": 3,
+      "renewalMode": "buy",
+      "notes": "",
+      "minStockQty": 5,
+      "disableTracking": true
     }
   ],
   "stocks": [
