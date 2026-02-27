@@ -3165,6 +3165,16 @@
       "notes": "",
       "minStockQty": 0.5,
       "disableTracking": true
+    },
+    {
+      "id": "mm5a1q2roncz98",
+      "spId": "mivgm9pn6vj0ouzrkkx",
+      "name": "De Montesson",
+      "renewalCycle": 3,
+      "renewalMode": "buy",
+      "notes": "",
+      "minStockQty": 0.5,
+      "disableTracking": false
     }
   ],
   "stocks": [
@@ -7093,6 +7103,14 @@
       "id": "mlxq4llgbt6n5c",
       "species": "Poivron",
       "variety": "ZULU",
+      "supplier": "AUTO (Stock Critique)",
+      "price": "?",
+      "ordered": false
+    },
+    {
+      "id": "mm5a1q3gyzwd50",
+      "species": "Navet",
+      "variety": "De Montesson",
       "supplier": "AUTO (Stock Critique)",
       "price": "?",
       "ordered": false
