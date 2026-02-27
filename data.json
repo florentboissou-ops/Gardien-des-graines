@@ -3155,6 +3155,16 @@
       "notes": "",
       "minStockQty": 0.5,
       "disableTracking": true
+    },
+    {
+      "id": "mm5a0k4xqhkzvb",
+      "spId": "mkclok9hdu9upl",
+      "name": "Rijnsburger bingo",
+      "renewalCycle": 2,
+      "renewalMode": "buy",
+      "notes": "",
+      "minStockQty": 0.5,
+      "disableTracking": true
     }
   ],
   "stocks": [
