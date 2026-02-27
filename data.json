@@ -6805,6 +6805,17 @@
       "notes": "",
       "origine": "buy",
       "fournisseur": "Aubépin"
+    },
+    {
+      "id": "mm5a4rdndpgraa",
+      "varId": "mm5a49dklxzvo7",
+      "qty": 3,
+      "unit": "gr",
+      "prod": 2025,
+      "exp": 2029,
+      "notes": "",
+      "origine": "buy",
+      "fournisseur": "Aubépin"
     }
   ],
   "wishlist": [
