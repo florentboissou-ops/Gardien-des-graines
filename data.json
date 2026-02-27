@@ -3185,6 +3185,16 @@
       "notes": "",
       "minStockQty": 5,
       "disableTracking": true
+    },
+    {
+      "id": "mm5a49dklxzvo7",
+      "spId": "mivh7r6lzx9wn7alikd",
+      "name": "De Carentan",
+      "renewalCycle": 3,
+      "renewalMode": "buy",
+      "notes": "",
+      "minStockQty": 5,
+      "disableTracking": true
     }
   ],
   "stocks": [
