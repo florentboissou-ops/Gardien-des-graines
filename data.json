@@ -3145,6 +3145,16 @@
       "notes": "",
       "minStockQty": 5,
       "disableTracking": false
+    },
+    {
+      "id": "mm59xvauguizrh",
+      "spId": "mkclok9hdu9upl",
+      "name": "Oignon rouge de Huy",
+      "renewalCycle": 2,
+      "renewalMode": "buy",
+      "notes": "",
+      "minStockQty": 0.5,
+      "disableTracking": true
     }
   ],
   "stocks": [
@@ -7603,6 +7613,16 @@
       "year": 2026,
       "plants": 9,
       "status": "in-progress",
+      "harvestQty": 0,
+      "harvestUnit": "gr",
+      "stockAdded": false
+    },
+    {
+      "id": "mm59urqn7s2cu2",
+      "varId": "_dqrq06tkl",
+      "year": 2026,
+      "plants": null,
+      "status": "planned",
       "harvestQty": 0,
       "harvestUnit": "gr",
       "stockAdded": false
