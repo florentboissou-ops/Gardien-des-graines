@@ -3174,7 +3174,7 @@
       "renewalMode": "buy",
       "notes": "",
       "minStockQty": 0.5,
-      "disableTracking": false
+      "disableTracking": true
     }
   ],
   "stocks": [
