@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
   <meta charset="utf-8" />
@@ -820,6 +820,23 @@ const App = {
     UI.toast('Sauvegarde téléchargée avec succès !');
   },
   
+  // Convertit les caractères accentués pour jsPDF (police Helvetica sans unicode)
+  pdfStr(str) {
+    if (!str) return '';
+    return String(str)
+      .replace(/[àâä]/g, 'a').replace(/[ÀÂÄÄ]/g, 'A')
+      .replace(/[éèêë]/g, 'e').replace(/[ÉÈÊË]/g, 'E')
+      .replace(/[îï]/g, 'i').replace(/[ÎÏ]/g, 'I')
+      .replace(/[ôö]/g, 'o').replace(/[ÔÖ]/g, 'O')
+      .replace(/[ùûü]/g, 'u').replace(/[ÙÛÜ]/g, 'U')
+      .replace(/[ç]/g, 'c').replace(/[Ç]/g, 'C')
+      .replace(/[œ]/g, 'oe').replace(/[Œ]/g, 'OE')
+      .replace(/[æ]/g, 'ae').replace(/[Æ]/g, 'AE')
+      .replace(/[–—]/g, '-')
+      .replace(/['']/g, "'")
+      .replace(/[""]/g, '"');
+  },
+
   exportPDF() {
     if (!window.jspdf) {
       alert("Erreur : Les librairies PDF ne sont pas chargées. Vérifiez votre connexion internet.");
@@ -833,13 +850,13 @@ const App = {
       const v = this.data.varieties.find(x => x.id === s.varId);
       const sp = v ? this.data.species.find(x => x.id === v.spId) : null;
       return {
-        speciesName: sp ? sp.name : 'Inconnu',
-        varietyName: v ? v.name : 'Inconnu',
+        speciesName: sp ? this.pdfStr(sp.name) : 'Inconnu',
+        varietyName: v ? this.pdfStr(v.name) : 'Inconnu',
         qty: s.qty,
         unit: s.unit,
         prod: s.prod,
         exp: s.exp,
-        notes: s.notes || ''
+        notes: this.pdfStr(s.notes || '')
       };
     });
 
@@ -862,15 +879,15 @@ const App = {
 
     doc.setFontSize(18);
     doc.setTextColor(45, 106, 79); 
-    doc.text("État du Stock - Le Gardien des Graines", 14, 22);
+    doc.text("Etat du Stock - Le Gardien des Graines", 14, 22);
     
     doc.setFontSize(10);
     doc.setTextColor(100);
-    doc.text(`Généré le : ${new Date().toLocaleDateString('fr-FR')}`, 14, 28);
+    doc.text(`Genere le : ${new Date().toLocaleDateString('fr-FR')}`, 14, 28);
 
     doc.autoTable({
       startY: 35,
-      head: [['Espèce', 'Variété', 'Qté', 'Prod.', 'Exp.', 'Notes']],
+      head: [['Espece', 'Variete', 'Qte', 'Prod.', 'Exp.', 'Notes']],
       body: tableBody,
       theme: 'grid',
       headStyles: { fillColor: [45, 106, 79], textColor: 255, fontStyle: 'bold' },
@@ -915,13 +932,13 @@ const App = {
       return 0;
     });
 
-    const statusLabels = { planned: 'À faire', sown: 'Semé', germinated: 'Levée', transplanted: 'Repiqué', cancelled: 'Annulé' };
+    const statusLabels = { planned: 'A faire', sown: 'Seme', germinated: 'Levee', transplanted: 'Repique', cancelled: 'Annule' };
     const today = new Date(); today.setHours(0,0,0,0);
 
     const filterLabel = [
       filterStatus ? `Statut : ${statusLabels[filterStatus]}` : '',
-      filterSpId ? `Espèce : ${this.data.species.find(s => s.id === filterSpId)?.name || ''}` : '',
-      filterVarId ? `Variété : ${this.data.varieties.find(v => v.id === filterVarId)?.name || ''}` : '',
+      filterSpId ? `Espece : ${this.pdfStr(this.data.species.find(s => s.id === filterSpId)?.name || '')}` : '',
+      filterVarId ? `Variete : ${this.pdfStr(this.data.varieties.find(v => v.id === filterVarId)?.name || '')}` : '',
     ].filter(Boolean).join(' | ') || 'Tous les plannings';
 
     doc.setFontSize(18);
@@ -929,25 +946,25 @@ const App = {
     doc.text("Planning de Semis - Le Gardien des Graines", 14, 22);
     doc.setFontSize(9);
     doc.setTextColor(100);
-    doc.text(`Généré le : ${new Date().toLocaleDateString('fr-FR')} | Filtre : ${filterLabel}`, 14, 28);
+    doc.text(`Genere le : ${new Date().toLocaleDateString('fr-FR')} | Filtre : ${filterLabel}`, 14, 28);
 
     const tableBody = list.map(p => {
       const isLate = p.status === 'planned' && new Date(p.sowingDate) < today;
       return [
         new Date(p.sowingDate).toLocaleDateString('fr-FR'),
-        p._sp ? p._sp.name : '?',
-        p._v ? p._v.name : '?',
+        p._sp ? this.pdfStr(p._sp.name) : '?',
+        p._v ? this.pdfStr(p._v.name) : '?',
         p.seedsQty ? `${p.seedsQty} gr.` : (p.weightQty ? `${p.weightQty} gr` : '?'),
         `${p.expectedPlants || 0}`,
         p.transplantDate ? new Date(p.transplantDate).toLocaleDateString('fr-FR') : '-',
-        (statusLabels[p.status] || p.status) + (isLate ? ' ⚠' : ''),
-        p.comments || ''
+        (statusLabels[p.status] || p.status) + (isLate ? ' !' : ''),
+        this.pdfStr(p.comments || '')
       ];
     });
 
     doc.autoTable({
       startY: 34,
-      head: [['Date semis', 'Espèce', 'Variété', 'Qté', 'Plants', 'Repiquage', 'Statut', 'Notes']],
+      head: [['Date semis', 'Espece', 'Variete', 'Qte', 'Plants', 'Repiquage', 'Statut', 'Notes']],
       body: tableBody,
       theme: 'grid',
       headStyles: { fillColor: [45, 106, 79], textColor: 255, fontStyle: 'bold', fontSize: 8 },
@@ -995,7 +1012,7 @@ const App = {
         alert('Erreur lors de la lecture du fichier JSON.'); 
       }
     };
-    reader.readAsText(file);
+    reader.readAsText(file, 'UTF-8');
   },
 
   // --- 4. NAVIGATION ---
