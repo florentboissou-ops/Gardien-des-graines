@@ -4805,17 +4805,6 @@
       "fournisseur": ""
     },
     {
-      "id": "mivs3uocu29vx2pbdwq",
-      "varId": "_s20zb1zuc",
-      "qty": 5,
-      "unit": "graines",
-      "prod": 2024,
-      "exp": 2027,
-      "notes": "",
-      "origine": "produce",
-      "fournisseur": ""
-    },
-    {
       "id": "miw413x9d5s1f76gj7w",
       "varId": "miw404f80h5mck045l7d",
       "qty": 76,
@@ -7120,6 +7109,14 @@
       "id": "mm5a1q3gyzwd50",
       "species": "Navet",
       "variety": "De Montesson",
+      "supplier": "AUTO (Stock Critique)",
+      "price": "?",
+      "ordered": false
+    },
+    {
+      "id": "mmfbau8qa7cnex",
+      "species": "Poivron",
+      "variety": "YOLO WONDER",
       "supplier": "AUTO (Stock Critique)",
       "price": "?",
       "ordered": false
