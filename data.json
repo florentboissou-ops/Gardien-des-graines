@@ -4497,17 +4497,6 @@
       "fournisseur": ""
     },
     {
-      "id": "miw6k02pypcor3tg41b",
-      "varId": "miw6ji3dwh70tfm337",
-      "qty": 2,
-      "unit": "gr",
-      "prod": 2023,
-      "exp": 2027,
-      "notes": "",
-      "origine": "produce",
-      "fournisseur": ""
-    },
-    {
       "id": "miw6n26kmfujfwh8qm",
       "varId": "miw6meby5x8vr8jkz3o",
       "qty": 100,
@@ -7577,6 +7566,56 @@
     {
       "id": "mm59urqn7s2cu2",
       "varId": "_dqrq06tkl",
+      "year": 2026,
+      "plants": null,
+      "status": "planned",
+      "harvestQty": 0,
+      "harvestUnit": "gr",
+      "stockAdded": false
+    },
+    {
+      "id": "mmgd5o8zpi4c1w",
+      "varId": "miumoqdn47nixrityku",
+      "year": 2026,
+      "plants": null,
+      "status": "planned",
+      "harvestQty": 0,
+      "harvestUnit": "gr",
+      "stockAdded": false
+    },
+    {
+      "id": "mmgd5o93k7klv9",
+      "varId": "mj19xk5x0m3crb",
+      "year": 2026,
+      "plants": null,
+      "status": "planned",
+      "harvestQty": 0,
+      "harvestUnit": "gr",
+      "stockAdded": false
+    },
+    {
+      "id": "mmgd5o93p2rnuw",
+      "varId": "mj19z5f0sg4m72",
+      "year": 2026,
+      "plants": null,
+      "status": "planned",
+      "harvestQty": 0,
+      "harvestUnit": "gr",
+      "stockAdded": false
+    },
+    {
+      "id": "mmgd5o93lnncbt",
+      "varId": "mj1a0s3z2un36y",
+      "year": 2026,
+      "plants": null,
+      "status": "planned",
+      "harvestQty": 0,
+      "harvestUnit": "gr",
+      "stockAdded": false
+    },
+    {
+      "id": "mmgd5o93bfqxtl",
+      "varId": "mj1abw2i6uty53",
       "year": 2026,
       "plants": null,
       "status": "planned",
