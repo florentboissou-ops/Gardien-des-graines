@@ -4057,17 +4057,6 @@
       "fournisseur": ""
     },
     {
-      "id": "mit959mrd9zquu1i7ko",
-      "varId": "_lolrwkpp9",
-      "qty": 10,
-      "unit": "graines",
-      "prod": 2023,
-      "exp": 2025,
-      "notes": "",
-      "origine": "produce",
-      "fournisseur": ""
-    },
-    {
       "id": "miuo6jfp958uw9hi3xq",
       "varId": "miuo50vzdmecmj2grz5",
       "qty": 40,
@@ -5071,7 +5060,7 @@
     {
       "id": "miumbxuzxzxxbq4giqd",
       "varId": "_3jwfvm0vn",
-      "qty": 50,
+      "qty": 38,
       "unit": "graines",
       "prod": 2025,
       "exp": 2028,
@@ -5082,7 +5071,7 @@
     {
       "id": "miumc8ij3vijz1d2eru",
       "varId": "miuma82aui9awq8soj",
-      "qty": 20,
+      "qty": 8,
       "unit": "graines",
       "prod": 2025,
       "exp": 2028,
@@ -5093,7 +5082,7 @@
     {
       "id": "miumco53jpftacmwudn",
       "varId": "_0c54bj9w5",
-      "qty": 50,
+      "qty": 38,
       "unit": "graines",
       "prod": 2025,
       "exp": 2028,
@@ -5104,7 +5093,7 @@
     {
       "id": "miumd2ueh3t5xlbw0nm",
       "varId": "_r3v7qx580",
-      "qty": 30,
+      "qty": 18,
       "unit": "graines",
       "prod": 2025,
       "exp": 2028,
@@ -5115,7 +5104,7 @@
     {
       "id": "miumdcpcy5e5uf2al9b",
       "varId": "_4tqv9tmb1",
-      "qty": 50,
+      "qty": 38,
       "unit": "graines",
       "prod": 2025,
       "exp": 2028,
@@ -5126,7 +5115,7 @@
     {
       "id": "miumdkx6hbjn1igd2cg",
       "varId": "mium9akdfa7xxkf8x5v",
-      "qty": 50,
+      "qty": 38,
       "unit": "graines",
       "prod": 2025,
       "exp": 2028,
@@ -5137,7 +5126,7 @@
     {
       "id": "miumdte5vadsqgakkva",
       "varId": "_31cahqetv",
-      "qty": 50,
+      "qty": 38,
       "unit": "graines",
       "prod": 2025,
       "exp": 2028,
@@ -5148,7 +5137,7 @@
     {
       "id": "miume933gogb9j9wdjr",
       "varId": "_fuxq1h1eu",
-      "qty": 50,
+      "qty": 38,
       "unit": "graines",
       "prod": 2025,
       "exp": 2028,
@@ -5159,7 +5148,7 @@
     {
       "id": "miumeim5ht770zlv89",
       "varId": "_mjjxqiu6h",
-      "qty": 50,
+      "qty": 38,
       "unit": "graines",
       "prod": 2025,
       "exp": 2028,
@@ -5170,7 +5159,7 @@
     {
       "id": "miumesgiwgaaawtxpo",
       "varId": "_uk8ltyc2p",
-      "qty": 50,
+      "qty": 38,
       "unit": "graines",
       "prod": 2025,
       "exp": 2028,
@@ -5181,7 +5170,7 @@
     {
       "id": "miumf3a7yi241cx72pd",
       "varId": "_azpex4tgy",
-      "qty": 80,
+      "qty": 68,
       "unit": "graines",
       "prod": 2025,
       "exp": 2028,
@@ -5192,7 +5181,7 @@
     {
       "id": "miumfdyllylhjt16mzf",
       "varId": "_s0m9fgp40",
-      "qty": 60,
+      "qty": 48,
       "unit": "graines",
       "prod": 2025,
       "exp": 2028,
@@ -5203,7 +5192,7 @@
     {
       "id": "miumfq5v852sgnn9mrk",
       "varId": "_n92a8nwil",
-      "qty": 80,
+      "qty": 68,
       "unit": "graines",
       "prod": 2025,
       "exp": 2028,
@@ -5214,7 +5203,7 @@
     {
       "id": "miumg219wfsefxyl0ps",
       "varId": "_dpdo0n9ed",
-      "qty": 60,
+      "qty": 48,
       "unit": "graines",
       "prod": 2025,
       "exp": 2028,
@@ -5225,7 +5214,7 @@
     {
       "id": "miumghdmhrfp09q49tk",
       "varId": "_3y4jtzz88",
-      "qty": 60,
+      "qty": 48,
       "unit": "graines",
       "prod": 2025,
       "exp": 2028,
@@ -5236,7 +5225,7 @@
     {
       "id": "miumgtoyedu5qjb31hm",
       "varId": "_i49zheo04",
-      "qty": 80,
+      "qty": 68,
       "unit": "graines",
       "prod": 2025,
       "exp": 2028,
@@ -5247,7 +5236,7 @@
     {
       "id": "miumh512shhxd3rlbn8",
       "varId": "_itehpgllt",
-      "qty": 100,
+      "qty": 88,
       "unit": "graines",
       "prod": 2025,
       "exp": 2028,
@@ -5258,7 +5247,7 @@
     {
       "id": "miumhg7oo6enpd29kbk",
       "varId": "_l3phh90lg",
-      "qty": 50,
+      "qty": 38,
       "unit": "graines",
       "prod": 2025,
       "exp": 2028,
@@ -5280,7 +5269,7 @@
     {
       "id": "miumi6wjzaj8mkz6r2e",
       "varId": "_6ijrse7lo",
-      "qty": 60,
+      "qty": 48,
       "unit": "graines",
       "prod": 2025,
       "exp": 2028,
@@ -5291,7 +5280,7 @@
     {
       "id": "miumidz7enqpptwyd5",
       "varId": "_0x46y1x7p",
-      "qty": 60,
+      "qty": 48,
       "unit": "graines",
       "prod": 2025,
       "exp": 2028,
@@ -5302,7 +5291,7 @@
     {
       "id": "miumiyax3iqfk62r74v",
       "varId": "_31z8lysf4",
-      "qty": 50,
+      "qty": 38,
       "unit": "graines",
       "prod": 2025,
       "exp": 2028,
@@ -5313,7 +5302,7 @@
     {
       "id": "miumjq5zt5ghrrzr9m",
       "varId": "_thyvjxijg",
-      "qty": 60,
+      "qty": 48,
       "unit": "graines",
       "prod": 2025,
       "exp": 2028,
@@ -6081,61 +6070,6 @@
       "fournisseur": ""
     },
     {
-      "id": "mj19kjjat1hm5e",
-      "varId": "mj19jtyjc7rkxc",
-      "qty": 12,
-      "unit": "graines",
-      "prod": 2025,
-      "exp": 2029,
-      "notes": "Achat Tomatofifou",
-      "origine": "buy",
-      "fournisseur": ""
-    },
-    {
-      "id": "mj19m5ov31raqx",
-      "varId": "_fljh1goq8",
-      "qty": 12,
-      "unit": "graines",
-      "prod": 2025,
-      "exp": 2030,
-      "notes": "Achat Tomatofifou ",
-      "origine": "buy",
-      "fournisseur": ""
-    },
-    {
-      "id": "mj19ol8tczigj4",
-      "varId": "mj19o7a3zf5fu1",
-      "qty": 12,
-      "unit": "graines",
-      "prod": 2025,
-      "exp": 2029,
-      "notes": "Achat Tomatofifou ",
-      "origine": "buy",
-      "fournisseur": ""
-    },
-    {
-      "id": "mj19qaq17mpd8u",
-      "varId": "mj19px0jwpaac0",
-      "qty": 12,
-      "unit": "graines",
-      "prod": 2025,
-      "exp": 2029,
-      "notes": "Achat Tomatofifou ",
-      "origine": "buy",
-      "fournisseur": ""
-    },
-    {
-      "id": "mj19se24rh8d2d",
-      "varId": "mj19rrtklab2zo",
-      "qty": 12,
-      "unit": "graines",
-      "prod": 2023,
-      "exp": 2027,
-      "notes": "Achat Tomatofifou ",
-      "origine": "buy",
-      "fournisseur": ""
-    },
-    {
       "id": "mj19tz3e6gkqu1",
       "varId": "mj19titapc3k7r",
       "qty": 10,
@@ -6144,50 +6078,6 @@
       "exp": 2029,
       "notes": "Achat Tomatofifou ",
       "origine": "buy",
-      "fournisseur": ""
-    },
-    {
-      "id": "mj19vtr4xcjjka",
-      "varId": "mj19vndjqdn2xz",
-      "qty": 12,
-      "unit": "graines",
-      "prod": 2025,
-      "exp": 2029,
-      "notes": "",
-      "origine": "produce",
-      "fournisseur": ""
-    },
-    {
-      "id": "mj1aa6glzc5b45",
-      "varId": "_u0bsiaatg",
-      "qty": 10,
-      "unit": "graines",
-      "prod": 2025,
-      "exp": 2030,
-      "notes": "Achat cultive ta rue",
-      "origine": "buy",
-      "fournisseur": ""
-    },
-    {
-      "id": "mj1afex53bhx2m",
-      "varId": "mj1af7dmkpcn0a",
-      "qty": 10,
-      "unit": "graines",
-      "prod": 2025,
-      "exp": 2030,
-      "notes": "Achat cultive ta rue",
-      "origine": "buy",
-      "fournisseur": ""
-    },
-    {
-      "id": "mj4r498ntlw6ix",
-      "varId": "mj4r3i22ds4yrv",
-      "qty": 7,
-      "unit": "graines",
-      "prod": 2025,
-      "exp": 2030,
-      "notes": "",
-      "origine": "produce",
       "fournisseur": ""
     },
     {
@@ -6204,7 +6094,7 @@
     {
       "id": "mjag608mm7z7cx",
       "varId": "mjag595xpeegfz",
-      "qty": 20,
+      "qty": 8,
       "unit": "graines",
       "prod": 2025,
       "exp": 2030,
@@ -6215,7 +6105,7 @@
     {
       "id": "mjajlupo8cgtcl",
       "varId": "mjajkufi830qua",
-      "qty": 50,
+      "qty": 38,
       "unit": "graines",
       "prod": 2021,
       "exp": 2026,
@@ -6528,17 +6418,6 @@
       "prod": 2025,
       "exp": 2029,
       "notes": "Merakiseeds ",
-      "origine": "produce",
-      "fournisseur": ""
-    },
-    {
-      "id": "mlxppkiqnrn8rr",
-      "varId": "mlxpp85d54dii9",
-      "qty": 10,
-      "unit": "graines",
-      "prod": 2025,
-      "exp": 2029,
-      "notes": "",
       "origine": "produce",
       "fournisseur": ""
     },
@@ -8235,8 +8114,8 @@
       "expectedPlants": 10,
       "transplantDate": "2026-05-09",
       "comments": "",
-      "status": "planned",
-      "stockDeducted": false
+      "status": "sown",
+      "stockDeducted": true
     },
     {
       "id": "mmqqn7xnqdoi0x",
@@ -8248,8 +8127,8 @@
       "expectedPlants": 10,
       "transplantDate": "2026-05-09",
       "comments": "",
-      "status": "planned",
-      "stockDeducted": false
+      "status": "sown",
+      "stockDeducted": true
     },
     {
       "id": "mmqqn7xnzeq1fc",
@@ -8261,8 +8140,8 @@
       "expectedPlants": 10,
       "transplantDate": "2026-05-09",
       "comments": "",
-      "status": "planned",
-      "stockDeducted": false
+      "status": "sown",
+      "stockDeducted": true
     },
     {
       "id": "mmqqn7xnlk8xdo",
@@ -8274,8 +8153,8 @@
       "expectedPlants": 10,
       "transplantDate": "2026-05-09",
       "comments": "",
-      "status": "planned",
-      "stockDeducted": false
+      "status": "sown",
+      "stockDeducted": true
     },
     {
       "id": "mmqqn7xny4ofns",
@@ -8287,8 +8166,8 @@
       "expectedPlants": 10,
       "transplantDate": "2026-05-09",
       "comments": "",
-      "status": "planned",
-      "stockDeducted": false
+      "status": "sown",
+      "stockDeducted": true
     },
     {
       "id": "mmqqn7xn2mzthy",
@@ -8300,8 +8179,8 @@
       "expectedPlants": 10,
       "transplantDate": "2026-05-09",
       "comments": "",
-      "status": "planned",
-      "stockDeducted": false
+      "status": "sown",
+      "stockDeducted": true
     },
     {
       "id": "mmqqn7xn97l03v",
@@ -8313,8 +8192,8 @@
       "expectedPlants": 10,
       "transplantDate": "2026-05-09",
       "comments": "",
-      "status": "planned",
-      "stockDeducted": false
+      "status": "sown",
+      "stockDeducted": true
     },
     {
       "id": "mmqqn7xnd11kvi",
@@ -8326,8 +8205,8 @@
       "expectedPlants": 10,
       "transplantDate": "2026-05-09",
       "comments": "",
-      "status": "planned",
-      "stockDeducted": false
+      "status": "sown",
+      "stockDeducted": true
     },
     {
       "id": "mmqqn7xnvq89mq",
@@ -8339,8 +8218,8 @@
       "expectedPlants": 10,
       "transplantDate": "2026-05-09",
       "comments": "",
-      "status": "planned",
-      "stockDeducted": false
+      "status": "sown",
+      "stockDeducted": true
     },
     {
       "id": "mmqqn7xnfpea4g",
@@ -8352,8 +8231,8 @@
       "expectedPlants": 10,
       "transplantDate": "2026-05-09",
       "comments": "",
-      "status": "planned",
-      "stockDeducted": false
+      "status": "sown",
+      "stockDeducted": true
     },
     {
       "id": "mmqqn7xn7qfh23",
@@ -8365,8 +8244,8 @@
       "expectedPlants": 10,
       "transplantDate": "2026-05-09",
       "comments": "",
-      "status": "planned",
-      "stockDeducted": false
+      "status": "sown",
+      "stockDeducted": true
     },
     {
       "id": "mmqqn7xny9dri5",
@@ -8378,8 +8257,8 @@
       "expectedPlants": 10,
       "transplantDate": "2026-05-09",
       "comments": "",
-      "status": "planned",
-      "stockDeducted": false
+      "status": "sown",
+      "stockDeducted": true
     },
     {
       "id": "mmqqn7xn5pt0be",
@@ -8391,8 +8270,8 @@
       "expectedPlants": 10,
       "transplantDate": "2026-05-09",
       "comments": "",
-      "status": "planned",
-      "stockDeducted": false
+      "status": "sown",
+      "stockDeducted": true
     },
     {
       "id": "mmqqn7xnlj4hxr",
@@ -8404,8 +8283,8 @@
       "expectedPlants": 10,
       "transplantDate": "2026-05-09",
       "comments": "",
-      "status": "planned",
-      "stockDeducted": false
+      "status": "sown",
+      "stockDeducted": true
     },
     {
       "id": "mmqqn7xnoxie5m",
@@ -8417,8 +8296,8 @@
       "expectedPlants": 10,
       "transplantDate": "2026-05-09",
       "comments": "",
-      "status": "planned",
-      "stockDeducted": false
+      "status": "sown",
+      "stockDeducted": true
     },
     {
       "id": "mmqqn7xo4lbd95",
@@ -8430,8 +8309,8 @@
       "expectedPlants": 10,
       "transplantDate": "2026-05-09",
       "comments": "",
-      "status": "planned",
-      "stockDeducted": false
+      "status": "sown",
+      "stockDeducted": true
     },
     {
       "id": "mmqqn7xou7ynsb",
@@ -8443,8 +8322,8 @@
       "expectedPlants": 10,
       "transplantDate": "2026-05-09",
       "comments": "",
-      "status": "planned",
-      "stockDeducted": false
+      "status": "sown",
+      "stockDeducted": true
     },
     {
       "id": "mmqqn7xoi6eq8e",
@@ -8456,8 +8335,8 @@
       "expectedPlants": 10,
       "transplantDate": "2026-05-09",
       "comments": "",
-      "status": "planned",
-      "stockDeducted": false
+      "status": "sown",
+      "stockDeducted": true
     },
     {
       "id": "mmqqn7xocwjjw5",
@@ -8469,8 +8348,8 @@
       "expectedPlants": 10,
       "transplantDate": "2026-05-09",
       "comments": "",
-      "status": "planned",
-      "stockDeducted": false
+      "status": "sown",
+      "stockDeducted": true
     },
     {
       "id": "mmqqn7xo1uwd95",
@@ -8482,8 +8361,8 @@
       "expectedPlants": 10,
       "transplantDate": "2026-05-09",
       "comments": "",
-      "status": "planned",
-      "stockDeducted": false
+      "status": "sown",
+      "stockDeducted": true
     },
     {
       "id": "mmqqn7xoblzmij",
@@ -8495,8 +8374,8 @@
       "expectedPlants": 10,
       "transplantDate": "2026-05-09",
       "comments": "",
-      "status": "planned",
-      "stockDeducted": false
+      "status": "sown",
+      "stockDeducted": true
     },
     {
       "id": "mmqqn7xosl25i1",
@@ -8508,8 +8387,8 @@
       "expectedPlants": 10,
       "transplantDate": "2026-05-09",
       "comments": "",
-      "status": "planned",
-      "stockDeducted": false
+      "status": "sown",
+      "stockDeducted": true
     },
     {
       "id": "mmqqn7xooz8ywl",
@@ -8521,8 +8400,8 @@
       "expectedPlants": 10,
       "transplantDate": "2026-05-09",
       "comments": "",
-      "status": "planned",
-      "stockDeducted": false
+      "status": "sown",
+      "stockDeducted": true
     },
     {
       "id": "mmqqn7xovzir72",
@@ -8534,8 +8413,8 @@
       "expectedPlants": 10,
       "transplantDate": "2026-05-09",
       "comments": "",
-      "status": "planned",
-      "stockDeducted": false
+      "status": "sown",
+      "stockDeducted": true
     },
     {
       "id": "mmqqn7xodmdzxd",
@@ -8547,8 +8426,8 @@
       "expectedPlants": 10,
       "transplantDate": "2026-05-09",
       "comments": "",
-      "status": "planned",
-      "stockDeducted": false
+      "status": "sown",
+      "stockDeducted": true
     },
     {
       "id": "mmqqn7xokwpgdt",
@@ -8560,8 +8439,8 @@
       "expectedPlants": 10,
       "transplantDate": "2026-05-09",
       "comments": "",
-      "status": "planned",
-      "stockDeducted": false
+      "status": "sown",
+      "stockDeducted": true
     },
     {
       "id": "mmqqn7xohfeg5a",
@@ -8573,8 +8452,8 @@
       "expectedPlants": 10,
       "transplantDate": "2026-05-09",
       "comments": "",
-      "status": "planned",
-      "stockDeducted": false
+      "status": "sown",
+      "stockDeducted": true
     },
     {
       "id": "mmqqn7xoxob628",
@@ -8586,8 +8465,8 @@
       "expectedPlants": 10,
       "transplantDate": "2026-05-09",
       "comments": "",
-      "status": "planned",
-      "stockDeducted": false
+      "status": "sown",
+      "stockDeducted": true
     },
     {
       "id": "mmqqn7xo2mq2zh",
@@ -8599,8 +8478,8 @@
       "expectedPlants": 10,
       "transplantDate": "2026-05-09",
       "comments": "",
-      "status": "planned",
-      "stockDeducted": false
+      "status": "sown",
+      "stockDeducted": true
     },
     {
       "id": "mmqqn7xo0jz37z",
@@ -8612,8 +8491,8 @@
       "expectedPlants": 10,
       "transplantDate": "2026-05-09",
       "comments": "",
-      "status": "planned",
-      "stockDeducted": false
+      "status": "sown",
+      "stockDeducted": true
     },
     {
       "id": "mmqqn7xoad8330",
@@ -8625,8 +8504,8 @@
       "expectedPlants": 10,
       "transplantDate": "2026-05-09",
       "comments": "",
-      "status": "planned",
-      "stockDeducted": false
+      "status": "sown",
+      "stockDeducted": true
     },
     {
       "id": "mmqqn7xo7xra2z",
@@ -8638,8 +8517,8 @@
       "expectedPlants": 10,
       "transplantDate": "2026-05-09",
       "comments": "",
-      "status": "planned",
-      "stockDeducted": false
+      "status": "sown",
+      "stockDeducted": true
     },
     {
       "id": "mmqqn7xo3uhuw8",
@@ -8651,8 +8530,8 @@
       "expectedPlants": 10,
       "transplantDate": "2026-05-09",
       "comments": "",
-      "status": "planned",
-      "stockDeducted": false
+      "status": "sown",
+      "stockDeducted": true
     },
     {
       "id": "mmqqn7xo61v957",
@@ -8664,8 +8543,8 @@
       "expectedPlants": 10,
       "transplantDate": "2026-05-09",
       "comments": "",
-      "status": "planned",
-      "stockDeducted": false
+      "status": "sown",
+      "stockDeducted": true
     },
     {
       "id": "mmqqn7xoxubih8",
@@ -8677,8 +8556,8 @@
       "expectedPlants": 10,
       "transplantDate": "2026-05-09",
       "comments": "",
-      "status": "planned",
-      "stockDeducted": false
+      "status": "sown",
+      "stockDeducted": true
     },
     {
       "id": "mmqqn7xoyewqw0",
@@ -8690,8 +8569,8 @@
       "expectedPlants": 10,
       "transplantDate": "2026-05-09",
       "comments": "",
-      "status": "planned",
-      "stockDeducted": false
+      "status": "sown",
+      "stockDeducted": true
     },
     {
       "id": "mmqqn7xoem1rgv",
@@ -8703,8 +8582,8 @@
       "expectedPlants": 10,
       "transplantDate": "2026-05-09",
       "comments": "",
-      "status": "planned",
-      "stockDeducted": false
+      "status": "sown",
+      "stockDeducted": true
     },
     {
       "id": "mmqqn7xov8hikm",
@@ -8716,8 +8595,8 @@
       "expectedPlants": 10,
       "transplantDate": "2026-05-09",
       "comments": "",
-      "status": "planned",
-      "stockDeducted": false
+      "status": "sown",
+      "stockDeducted": true
     },
     {
       "id": "mmqqn7xo4pgvg5",
@@ -8729,8 +8608,8 @@
       "expectedPlants": 10,
       "transplantDate": "2026-05-09",
       "comments": "",
-      "status": "planned",
-      "stockDeducted": false
+      "status": "sown",
+      "stockDeducted": true
     },
     {
       "id": "mmqqn7xoxg0c8z",
@@ -8742,8 +8621,8 @@
       "expectedPlants": 10,
       "transplantDate": "2026-05-09",
       "comments": "",
-      "status": "planned",
-      "stockDeducted": false
+      "status": "sown",
+      "stockDeducted": true
     },
     {
       "id": "mmqqn7xoz0hy2l",
@@ -8755,8 +8634,8 @@
       "expectedPlants": 10,
       "transplantDate": "2026-05-09",
       "comments": "",
-      "status": "planned",
-      "stockDeducted": false
+      "status": "sown",
+      "stockDeducted": true
     }
   ]
 }
