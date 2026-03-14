@@ -5432,17 +5432,6 @@
       "fournisseur": ""
     },
     {
-      "id": "miup30z1veoflpzgsn9",
-      "varId": "_fs5w22km7",
-      "qty": 1,
-      "unit": "sachets",
-      "prod": 2025,
-      "exp": 2028,
-      "notes": "Achat 2025 chez Merakiseeds",
-      "origine": "buy",
-      "fournisseur": "Merakiseeds"
-    },
-    {
       "id": "miupl9xyhrugfy9s2ar",
       "varId": "miupl0mhl6vxn2ryb3i",
       "qty": 300,
