@@ -5335,7 +5335,7 @@
     {
       "id": "miumr1cdjg6dw1o69va",
       "varId": "_t6ys4vxb4",
-      "qty": 40,
+      "qty": 10,
       "unit": "graines",
       "prod": 2025,
       "exp": 2028,
@@ -7429,6 +7429,86 @@
     {
       "id": "mmgd5o93bfqxtl",
       "varId": "mj1abw2i6uty53",
+      "year": 2026,
+      "plants": null,
+      "status": "planned",
+      "harvestQty": 0,
+      "harvestUnit": "gr",
+      "stockAdded": false
+    },
+    {
+      "id": "mmtjky28vswj6e",
+      "varId": "mj19jtyjc7rkxc",
+      "year": 2026,
+      "plants": null,
+      "status": "planned",
+      "harvestQty": 0,
+      "harvestUnit": "gr",
+      "stockAdded": false
+    },
+    {
+      "id": "mmtjky29b7we2z",
+      "varId": "mj19o7a3zf5fu1",
+      "year": 2026,
+      "plants": null,
+      "status": "planned",
+      "harvestQty": 0,
+      "harvestUnit": "gr",
+      "stockAdded": false
+    },
+    {
+      "id": "mmtjky2963twvw",
+      "varId": "mj19px0jwpaac0",
+      "year": 2026,
+      "plants": null,
+      "status": "planned",
+      "harvestQty": 0,
+      "harvestUnit": "gr",
+      "stockAdded": false
+    },
+    {
+      "id": "mmtjky2949hy80",
+      "varId": "mj19rrtklab2zo",
+      "year": 2026,
+      "plants": null,
+      "status": "planned",
+      "harvestQty": 0,
+      "harvestUnit": "gr",
+      "stockAdded": false
+    },
+    {
+      "id": "mmtjky29kbyh8w",
+      "varId": "mj19vndjqdn2xz",
+      "year": 2026,
+      "plants": null,
+      "status": "planned",
+      "harvestQty": 0,
+      "harvestUnit": "gr",
+      "stockAdded": false
+    },
+    {
+      "id": "mmtjky29hnkbfr",
+      "varId": "mj1af7dmkpcn0a",
+      "year": 2026,
+      "plants": null,
+      "status": "planned",
+      "harvestQty": 0,
+      "harvestUnit": "gr",
+      "stockAdded": false
+    },
+    {
+      "id": "mmtjky29vm30kt",
+      "varId": "mj4r3i22ds4yrv",
+      "year": 2026,
+      "plants": null,
+      "status": "planned",
+      "harvestQty": 0,
+      "harvestUnit": "gr",
+      "stockAdded": false
+    },
+    {
+      "id": "mmtjky29phmo6t",
+      "varId": "mlxpp85d54dii9",
       "year": 2026,
       "plants": null,
       "status": "planned",
