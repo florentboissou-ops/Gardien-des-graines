@@ -4156,17 +4156,6 @@
       "fournisseur": ""
     },
     {
-      "id": "miun3tji2dk91cal03i",
-      "varId": "_i1zzgc5i4",
-      "qty": 3,
-      "unit": "graines",
-      "prod": 2023,
-      "exp": 2027,
-      "notes": "",
-      "origine": "produce",
-      "fournisseur": ""
-    },
-    {
       "id": "miuq76jrutxvj9c5f3a",
       "varId": "miuq6iee9uc4529x478",
       "qty": 40,
@@ -5347,17 +5336,6 @@
       "id": "miumrgvtjd1ax0yhlu",
       "varId": "_mbgcpcgoz",
       "qty": 38,
-      "unit": "graines",
-      "prod": 2025,
-      "exp": 2028,
-      "notes": "",
-      "origine": "produce",
-      "fournisseur": ""
-    },
-    {
-      "id": "miums61iynnzh8v30r",
-      "varId": "miumrz4wun7a5hketk8",
-      "qty": 15,
       "unit": "graines",
       "prod": 2025,
       "exp": 2028,
@@ -6820,6 +6798,14 @@
       "id": "mmfbau8qa7cnex",
       "species": "Poivron",
       "variety": "YOLO WONDER",
+      "supplier": "AUTO (Stock Critique)",
+      "price": "?",
+      "ordered": false
+    },
+    {
+      "id": "mmtjlss5441ctu",
+      "species": "Poivron",
+      "variety": "CALIFORNIA MIRACLE",
       "supplier": "AUTO (Stock Critique)",
       "price": "?",
       "ordered": false
