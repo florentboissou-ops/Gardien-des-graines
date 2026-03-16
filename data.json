@@ -5280,7 +5280,7 @@
     {
       "id": "miumqn1jmqr3th0i3da",
       "varId": "_ua205uiw8",
-      "qty": 40,
+      "qty": 20,
       "unit": "graines",
       "prod": 2025,
       "exp": 2028,
@@ -7473,6 +7473,26 @@
     {
       "id": "mmtjky29phmo6t",
       "varId": "mlxpp85d54dii9",
+      "year": 2026,
+      "plants": null,
+      "status": "planned",
+      "harvestQty": 0,
+      "harvestUnit": "gr",
+      "stockAdded": false
+    },
+    {
+      "id": "mmtjmwzq77k8cl",
+      "varId": "miumnc0pnjbdase6ks",
+      "year": 2026,
+      "plants": null,
+      "status": "planned",
+      "harvestQty": 0,
+      "harvestUnit": "gr",
+      "stockAdded": false
+    },
+    {
+      "id": "mmtjmwzqmp3goj",
+      "varId": "miumrz4wun7a5hketk8",
       "year": 2026,
       "plants": null,
       "status": "planned",
