@@ -725,6 +725,8 @@
  * LE GARDIEN DES GRAINES - MOTEUR PRINCIPAL
  * ==========================================
  */
+function esc(v){if(v==null)return '';return String(v).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
+
 const App = {
   // --- 1. ÉTAT ET DONNÉES ---
   data: { 
@@ -759,6 +761,23 @@ const App = {
   // --- 2. UTILITAIRES & SAUVEGARDE ---
   generateId() { 
     return Date.now().toString(36) + Math.random().toString(36).slice(2,8); 
+  },
+
+  // Index id -> objet, reconstruit seulement si le tableau change (ajout/suppression/remplacement).
+  // Les éditions se font en place (même référence d'objet) => pas d'invalidation manuelle nécessaire.
+  varById(id) {
+    if (this._vArr !== this.data.varieties || this._vLen !== this.data.varieties.length) {
+      this._vIdx = new Map(this.data.varieties.map(v => [v.id, v]));
+      this._vArr = this.data.varieties; this._vLen = this.data.varieties.length;
+    }
+    return this._vIdx.get(id);
+  },
+  spById(id) {
+    if (this._sArr !== this.data.species || this._sLen !== this.data.species.length) {
+      this._sIdx = new Map(this.data.species.map(s => [s.id, s]));
+      this._sArr = this.data.species; this._sLen = this.data.species.length;
+    }
+    return this._sIdx.get(id);
   },
 
   saveAll() {
@@ -797,7 +816,7 @@ const App = {
               s.fournisseur = '';
             } else {
               // Par défaut : autoproduction (cohérent avec le mode de renouvellement)
-              const v = this.data.varieties.find(x => x.id === s.varId);
+              const v = this.varById(s.varId);
               s.origine = (v && v.renewalMode === 'buy') ? 'buy' : 'produce';
               s.fournisseur = '';
             }
@@ -830,8 +849,8 @@ const App = {
     const doc = new jsPDF();
 
     let reportData = this.data.stocks.map(s => {
-      const v = this.data.varieties.find(x => x.id === s.varId);
-      const sp = v ? this.data.species.find(x => x.id === v.spId) : null;
+      const v = this.varById(s.varId);
+      const sp = v ? this.spById(v.spId) : null;
       return {
         speciesName: sp ? sp.name : 'Inconnu',
         varietyName: v ? v.name : 'Inconnu',
@@ -900,8 +919,8 @@ const App = {
     const sortVal = document.getElementById('plan-sort') ? document.getElementById('plan-sort').value : 'date-asc';
 
     let list = this.data.plannings.map(p => {
-      const v = this.data.varieties.find(x => x.id === p.varId);
-      const sp = v ? this.data.species.find(s => s.id === v.spId) : null;
+      const v = this.varById(p.varId);
+      const sp = v ? this.spById(v.spId) : null;
       return { ...p, _v: v, _sp: sp };
     });
     if (filterStatus) list = list.filter(p => p.status === filterStatus);
@@ -920,8 +939,8 @@ const App = {
 
     const filterLabel = [
       filterStatus ? `Statut : ${statusLabels[filterStatus]}` : '',
-      filterSpId ? `Espèce : ${this.data.species.find(s => s.id === filterSpId)?.name || ''}` : '',
-      filterVarId ? `Variété : ${this.data.varieties.find(v => v.id === filterVarId)?.name || ''}` : '',
+      filterSpId ? `Espèce : ${this.spById(filterSpId)?.name || ''}` : '',
+      filterVarId ? `Variété : ${this.varById(filterVarId)?.name || ''}` : '',
     ].filter(Boolean).join(' | ') || 'Tous les plannings';
 
     doc.setFontSize(18);
@@ -1179,7 +1198,7 @@ const App = {
     this.data.varieties.forEach(v => {
       if (v.disableTracking === true) return;
 
-      const spName = this.data.species.find(s => s.id === v.spId)?.name || "?";
+      const spName = this.spById(v.spId)?.name || "?";
       const minQty = parseFloat(v.minStockQty) || this.DEFAULT_MIN_STOCK_QTY;
       const stockInfo = this.getValidStockInfo(v.id);
 
@@ -1350,7 +1369,7 @@ const App = {
     const name = document.getElementById('species-name').value.trim();
     if(!name) return alert('Le nom de l\'espèce est requis.');
     if (id) { 
-      const s = this.data.species.find(x => x.id === id); 
+      const s = this.spById(id); 
       if(s) s.name = name; 
     } else {
       this.addSpecies(name);
@@ -1386,7 +1405,7 @@ const App = {
     if(!name) return alert('Le nom de la variété est requis.');
     
     if (id) {
-      const v = this.data.varieties.find(x => x.id === id);
+      const v = this.varById(id);
       if(v) { 
         v.name = name; v.renewalCycle = cycle; v.renewalMode = mode; 
         v.notes = notes; v.minStockQty = minQty; v.disableTracking = disableTracking; 
@@ -1403,7 +1422,7 @@ const App = {
 
   // Stocks
   addStock(varId, qty, unit, prod, exp, notes, origine = 'produce', fournisseur = '') {
-    const variety = this.data.varieties.find(v => v.id === varId);
+    const variety = this.varById(varId);
     const cycle = variety && variety.renewalCycle ? parseInt(variety.renewalCycle) : 3;
     const prodYear = parseInt(prod);
     const expYear = (exp !== undefined && exp !== null) ? parseInt(exp) : (prodYear + cycle);
@@ -1531,10 +1550,10 @@ const App = {
       let varietyNameInput = w.variety.trim();
       
       // Utiliser le lien direct si disponible
-      let variety = w.varId ? this.data.varieties.find(v => v.id === w.varId) : null;
+      let variety = w.varId ? this.varById(w.varId) : null;
       // Sinon recherche par nom
       if (!variety) variety = this.data.varieties.find(v => v.name.toLowerCase() === varietyNameInput.toLowerCase());
-      let species = variety ? this.data.species.find(s => s.id === variety.spId) 
+      let species = variety ? this.spById(variety.spId) 
                             : this.data.species.find(s => s.name.toLowerCase() === speciesNameInput.toLowerCase());
       
       if(!species) { 
@@ -1655,7 +1674,7 @@ const App = {
       if (!id) {
           const existingPlanned = this.data.plannings.find(p => p.varId === varId && p.status === 'planned');
           if (existingPlanned) {
-              const v = this.data.varieties.find(x => x.id === varId);
+              const v = this.varById(varId);
               const dateExist = new Date(existingPlanned.sowingDate).toLocaleDateString('fr-FR');
               if (!confirm(`⚠️ "${v ? v.name : 'Cette variété'}" a déjà un planning "À faire" prévu le ${dateExist}.\n\nVoulez-vous quand même créer un nouveau planning ?`)) return;
           }
@@ -1731,7 +1750,7 @@ const App = {
           const varId = cb.value;
           const existing = this.data.plannings.find(p => p.varId === varId && p.status === 'planned');
           if (existing) {
-              const v = this.data.varieties.find(x => x.id === varId);
+              const v = this.varById(varId);
               duplicates.push(v ? v.name : varId);
           }
       });
@@ -1908,7 +1927,7 @@ const App = {
         return `
           <div class="card" onclick="App.renderVarieties('${s.id}')" style="cursor:pointer">
             <div class="card-header">
-              <span class="card-title">${s.name}</span>
+              <span class="card-title">${esc(s.name)}</span>
               <span class="badge badge-secondary">${varCount} variétés</span>
             </div>
             <div style="display:flex; gap:10px; margin-top:10px">
@@ -1921,7 +1940,7 @@ const App = {
 
   renderVarieties(speciesId) {
     this.currentSpeciesId = speciesId;
-    const species = this.data.species.find(s => s.id === speciesId);
+    const species = this.spById(speciesId);
     document.getElementById('variety-page-title').innerText = species ? `Variétés : ${species.name}` : 'Variétés';
     this.navigate('view-varieties');
 
@@ -1940,7 +1959,7 @@ const App = {
         return `
           <div class="card" style="border-left-color: ${stockInfo.hasValidStock ? 'var(--vert-principal)' : 'var(--rouge-alerte)'}">
             <div class="card-header">
-              <span class="card-title">${v.name}</span>
+              <span class="card-title">${esc(v.name)}</span>
               <div style="display:flex; gap:4px; flex-wrap:wrap; justify-content:flex-end;">
                 <span class="badge ${v.renewalMode === 'produce' ? 'badge-success' : 'badge-secondary'}">${v.renewalMode === 'produce' ? 'Maison' : 'Achat'}</span>
                 ${hasPlanning ? '<span class="badge" style="background:#dbeafe;color:#1d4ed8;" title="Planning À faire en cours">📅 Planifié</span>' : ''}
@@ -1951,8 +1970,8 @@ const App = {
             
             <div style="margin: 12px 0; border-top: 1px solid var(--bordure-douce); padding-top: 12px;">
               ${stockItems.length > 0 ? stockItems.map(s => {
-                const origineLabel = s.origine === 'buy' ? `🛒 ${s.fournisseur || 'Achat'}` 
-                                   : s.origine === 'gift' ? `🎁 Don/Échange${s.fournisseur ? ' · ' + s.fournisseur : ''}`
+                const origineLabel = s.origine === 'buy' ? `🛒 ${esc(s.fournisseur) || 'Achat'}` 
+                                   : s.origine === 'gift' ? `🎁 Don/Échange${s.fournisseur ? ' · ' + esc(s.fournisseur) : ''}`
                                    : '🌱 Autoproduction';
                 const origineColor = s.origine === 'buy' ? '#1d4ed8' : s.origine === 'gift' ? '#7c3aed' : 'var(--vert-fonce)';
                 return `
@@ -1965,7 +1984,7 @@ const App = {
                       <button class="btn btn-sm btn-danger" onclick="App.deleteStock('${s.id}')"><i class="fas fa-trash"></i></button>
                     </div>
                   </div>
-                  <div style="font-size:0.8rem; color:${origineColor}; margin-top:4px;">${origineLabel}${s.notes ? ` · <span style="color:var(--texte-gris); font-style:italic;">${s.notes}</span>` : ''}</div>
+                  <div style="font-size:0.8rem; color:${origineColor}; margin-top:4px;">${origineLabel}${s.notes ? ` · <span style="color:var(--texte-gris); font-style:italic;">${esc(s.notes)}</span>` : ''}</div>
                 </div>`;
               }).join('') : '<p style="font-size:0.85rem; color:var(--rouge-alerte); font-weight:600;"><i class="fas fa-exclamation-triangle"></i> Aucun stock disponible</p>'}
             </div>
@@ -1982,7 +2001,7 @@ const App = {
     }
     
     // Bouton de suppression de l'espèce en bas
-    container.innerHTML += `<div style="margin-top:40px; text-align:center"><button class="btn btn-danger btn-sm" onclick="App.deleteSpecies('${speciesId}')"><i class="fas fa-exclamation-triangle"></i> Supprimer toute l'espèce "${species?.name}"</button></div>`;
+    container.innerHTML += `<div style="margin-top:40px; text-align:center"><button class="btn btn-danger btn-sm" onclick="App.deleteSpecies('${speciesId}')"><i class="fas fa-exclamation-triangle"></i> Supprimer toute l'espèce "${esc(species?.name)}"</button></div>`;
   },
 
   stockStateFilter: 'all',
@@ -2024,12 +2043,12 @@ const App = {
     const currentVal = select.value;
     select.innerHTML = '<option value="">Toutes les espèces</option>';
     this.data.species.sort((a,b) => a.name.localeCompare(b.name)).forEach(s => {
-      select.innerHTML += `<option value="${s.id}" ${currentVal === s.id ? 'selected' : ''}>${s.name}</option>`;
+      select.innerHTML += `<option value="${s.id}" ${currentVal === s.id ? 'selected' : ''}>${esc(s.name)}</option>`;
     });
 
     let list = this.data.stocks.map(s => {
-      const v = this.data.varieties.find(x => x.id === s.varId);
-      const sp = v ? this.data.species.find(x => x.id === v.spId) : null;
+      const v = this.varById(s.varId);
+      const sp = v ? this.spById(v.spId) : null;
       const expired = parseInt(s.exp) < currentYear;
       const expiringSoon = !expired && parseInt(s.exp) === currentYear;
       return { ...s, varietyName: v ? v.name : '?', speciesName: sp ? sp.name : '?', speciesId: sp ? sp.id : '', spId: sp ? sp.id : '', expired, expiringSoon };
@@ -2116,8 +2135,8 @@ const App = {
 
     container.innerHTML = list.map(item => {
       const borderColor = item.expired ? 'var(--rouge-alerte)' : item.expiringSoon ? 'var(--orange-warning)' : this._speciesColor(item.spId);
-      const origineLabel = item.origine === 'buy' ? `🛒 ${item.fournisseur || 'Achat'}`
-                         : item.origine === 'gift' ? `🎁 Don${item.fournisseur ? ' · ' + item.fournisseur : ''}`
+      const origineLabel = item.origine === 'buy' ? `🛒 ${esc(item.fournisseur) || 'Achat'}`
+                         : item.origine === 'gift' ? `🎁 Don${item.fournisseur ? ' · ' + esc(item.fournisseur) : ''}`
                          : '🌱 Autoproduction';
       const origineColor = item.origine === 'buy' ? '#1d4ed8' : item.origine === 'gift' ? '#7c3aed' : 'var(--vert-fonce)';
       const stateBadge = item.expired
@@ -2130,8 +2149,8 @@ const App = {
         <div class="card" style="border-left-color:${borderColor}">
           <div class="card-header">
             <div>
-              <div style="font-size:0.75rem; color:${this._speciesColor(item.spId)}; font-weight:700; text-transform:uppercase">${item.speciesName}</div>
-              <div class="card-title">${item.varietyName}</div>
+              <div style="font-size:0.75rem; color:${this._speciesColor(item.spId)}; font-weight:700; text-transform:uppercase">${esc(item.speciesName)}</div>
+              <div class="card-title">${esc(item.varietyName)}</div>
             </div>
             ${stateBadge}
           </div>
@@ -2139,7 +2158,7 @@ const App = {
             <i class="fas fa-calendar-alt"></i> Prod: ${item.prod} &nbsp;|&nbsp; <i class="fas fa-hourglass-end"></i> Exp: <strong>${item.exp}</strong>
           </div>
           <div style="font-size:0.8rem; color:${origineColor}; margin:4px 0 2px;">${origineLabel}</div>
-          ${item.notes ? `<div class="card-info" style="font-style:italic; font-size:0.8rem;"><i class="fas fa-tag"></i> ${item.notes}</div>` : ''}
+          ${item.notes ? `<div class="card-info" style="font-style:italic; font-size:0.8rem;"><i class="fas fa-tag"></i> ${esc(item.notes)}</div>` : ''}
           <div style="display:flex; gap:8px; margin-top:10px; flex-wrap:wrap;">
             <button class="btn btn-sm btn-secondary" onclick="UI.openReduceModal('${item.id}')"><i class="fas fa-minus"></i> Utiliser</button>
             <button class="btn btn-sm btn-secondary" onclick="UI.openModal('modal-stock', '${item.id}', '${item.varId}')"><i class="fas fa-edit"></i></button>
@@ -2187,8 +2206,8 @@ const App = {
     // Plants par espèce
     const speciesMap = {};
     productions.forEach(p => {
-      const v = this.data.varieties.find(x => x.id === p.varId);
-      const sp = v ? this.data.species.find(s => s.id === v.spId) : null;
+      const v = this.varById(p.varId);
+      const sp = v ? this.spById(v.spId) : null;
       const key = sp ? sp.id : 'inconnu';
       const name = sp ? sp.name : 'Inconnu';
       if (!speciesMap[key]) speciesMap[key] = { name, id: key, plants: 0, count: 0, harvest: 0 };
@@ -2202,7 +2221,7 @@ const App = {
       <div onclick="App.filterProdBySpecies('${sp.id}')" style="display:flex; justify-content:space-between; align-items:center; padding:8px 4px; border-bottom:1px solid var(--bordure-douce); cursor:pointer; border-radius:6px; transition:background 0.15s;" onmouseover="this.style.background='#f0faf4'" onmouseout="this.style.background='transparent'">
         <span style="display:flex; align-items:center; gap:8px;">
           <span style="width:10px; height:10px; border-radius:50%; background:${this._speciesColor(sp.id)}; display:inline-block; flex-shrink:0;"></span>
-          <span style="font-weight:600; font-size:0.9rem;">${sp.name}</span>
+          <span style="font-weight:600; font-size:0.9rem;">${esc(sp.name)}</span>
           <span style="font-size:0.8rem; color:var(--texte-gris);">(${sp.count} prod.)</span>
         </span>
         <div style="display:flex; gap:12px; align-items:center;">
@@ -2270,7 +2289,7 @@ const App = {
     if (spSel) {
       spSel.innerHTML = '<option value="">Toutes les espèces</option>' +
         this.data.species.sort((a,b) => a.name.localeCompare(b.name))
-          .map(s => `<option value="${s.id}" ${currentSp === s.id ? 'selected' : ''}>${s.name}</option>`).join('');
+          .map(s => `<option value="${s.id}" ${currentSp === s.id ? 'selected' : ''}>${esc(s.name)}</option>`).join('');
     }
 
     // Mise à jour filtre années
@@ -2297,8 +2316,8 @@ const App = {
     this.renderProductionStats(this.data.productions);
 
     let list = this.data.productions.map(p => {
-      const v = this.data.varieties.find(x => x.id === p.varId);
-      const sp = v ? this.data.species.find(s => s.id === v.spId) : null;
+      const v = this.varById(p.varId);
+      const sp = v ? this.spById(v.spId) : null;
       return { ...p, _v: v, _sp: sp };
     });
 
@@ -2331,8 +2350,8 @@ const App = {
         <div class="card" style="margin-bottom:10px; border-left-color:${borderColor};">
           <div class="card-header">
             <div>
-              <div style="font-size:0.75rem; font-weight:bold; color:${borderColor}">${p.year}${sp ? ' · ' + sp.name : ''}</div>
-              <div class="card-title">${v ? v.name : '?'}</div>
+              <div style="font-size:0.75rem; font-weight:bold; color:${borderColor}">${p.year}${sp ? ' · ' + esc(sp.name) : ''}</div>
+              <div class="card-title">${v ? esc(v.name) : '?'}</div>
             </div>
             <span class="badge ${statusClass[p.status] || 'badge-secondary'}">${statusIcon[p.status] || ''} ${statusLabel[p.status] || p.status}</span>
           </div>
@@ -2413,8 +2432,8 @@ const App = {
     const statusFilter = this.wishStatusFilter || 'all';
 
     let list = this.data.wishlist.map(w => {
-      const v = w.varId ? this.data.varieties.find(x => x.id === w.varId) : null;
-      const sp = v ? this.data.species.find(x => x.id === v.spId) : null;
+      const v = w.varId ? this.varById(w.varId) : null;
+      const sp = v ? this.spById(v.spId) : null;
       return { ...w, _spId: sp ? sp.id : null, _spName: sp ? sp.name : w.species };
     });
 
@@ -2501,12 +2520,12 @@ const App = {
       <div class="card" style="margin-bottom:8px; opacity:${w.ordered ? '0.6' : '1'}; border-left-color:${borderColor};">
         <div class="card-header">
           <div>
-            <div style="font-size:0.75rem; color:${borderColor}; font-weight:700; text-transform:uppercase;">${w.species}</div>
-            <span class="card-title" style="${w.ordered ? 'text-decoration:line-through' : ''}">${w.variety}</span>
+            <div style="font-size:0.75rem; color:${borderColor}; font-weight:700; text-transform:uppercase;">${esc(w.species)}</div>
+            <span class="card-title" style="${w.ordered ? 'text-decoration:line-through' : ''}">${esc(w.variety)}</span>
           </div>
-          <span class="badge badge-secondary">${w.price || '?'}</span>
+          <span class="badge badge-secondary">${esc(w.price) || '?'}</span>
         </div>
-        ${w.supplier && w.supplier !== 'À déterminer' ? `<div class="card-info" style="font-size:0.8rem;"><i class="fas fa-store"></i> ${w.supplier}</div>` : ''}
+        ${w.supplier && w.supplier !== 'À déterminer' ? `<div class="card-info" style="font-size:0.8rem;"><i class="fas fa-store"></i> ${esc(w.supplier)}</div>` : ''}
         ${w.ordered ? `<div style="font-size:0.8rem; color:#22c55e; font-weight:600; margin-top:4px;"><i class="fas fa-check-circle"></i> Commandé</div>` : ''}
         <div style="display:flex; gap:8px; margin-top:8px; align-items:center;">
           <button class="btn btn-sm ${w.ordered ? 'btn-primary' : 'btn-secondary'}" onclick="App.toggleWishOrdered('${w.id}')" title="${w.ordered ? 'Marquer en attente' : 'Marquer commandé'}"><i class="fas fa-check"></i></button>
@@ -2552,7 +2571,7 @@ const App = {
     const spId = document.getElementById('plan-filter-species').value;
     const varSel = document.getElementById('plan-filter-variety');
     const vars = this.data.varieties.filter(v => !spId || v.spId === spId).sort((a,b) => a.name.localeCompare(b.name));
-    varSel.innerHTML = '<option value="">Toutes les variétés</option>' + vars.map(v => `<option value="${v.id}">${v.name}</option>`).join('');
+    varSel.innerHTML = '<option value="">Toutes les variétés</option>' + vars.map(v => `<option value="${v.id}">${esc(v.name)}</option>`).join('');
     this.renderPlanningList();
   },
 
@@ -2579,7 +2598,7 @@ const App = {
     }
     // Sélectionner tous les "planned" de cette espèce
     const ids = this.data.plannings.filter(p => {
-      const v = this.data.varieties.find(x => x.id === p.varId);
+      const v = this.varById(p.varId);
       return v && v.spId === spId && p.status === 'planned';
     }).map(p => p.id);
     if (ids.length === 0) return UI.toast(`Aucun "À faire" pour ${spName}.`);
@@ -2677,8 +2696,8 @@ const App = {
     const total = plannings.length;
     const speciesMap = {};
     plannings.forEach(p => {
-      const v = this.data.varieties.find(x => x.id === p.varId);
-      const sp = v ? this.data.species.find(s => s.id === v.spId) : null;
+      const v = this.varById(p.varId);
+      const sp = v ? this.spById(v.spId) : null;
       const spName = sp ? sp.name : 'Inconnu';
       const spId = sp ? sp.id : 'unknown';
       if (!speciesMap[spId]) speciesMap[spId] = { name: spName, id: spId, plants: 0, count: 0 };
@@ -2693,12 +2712,12 @@ const App = {
       <div style="display:flex; justify-content:space-between; align-items:center; padding:6px 0; border-bottom:1px solid var(--bordure-douce);">
         <span style="display:flex; align-items:center; gap:8px;">
           <span style="width:10px; height:10px; border-radius:50%; background:${this._speciesColor(sp.id)}; display:inline-block; flex-shrink:0;"></span>
-          <span style="font-weight:600; font-size:0.9rem;">${sp.name}</span>
+          <span style="font-weight:600; font-size:0.9rem;">${esc(sp.name)}</span>
           <span style="font-size:0.8rem; color:var(--texte-gris);">(${sp.count} semis)</span>
         </span>
         <div style="display:flex; align-items:center; gap:8px;">
           <span style="font-weight:800; color:var(--vert-fonce); font-size:1rem;">${sp.plants} plants</span>
-          <button class="btn btn-sm btn-secondary" style="font-size:0.75rem; padding:4px 8px;" onclick="App.selectSpeciesPlanned('${sp.id}', '${sp.name.replace(/'/g,"\\'")}')">
+          <button class="btn btn-sm btn-secondary" style="font-size:0.75rem; padding:4px 8px;" onclick="App.selectSpeciesPlanned('${sp.id}', ${JSON.stringify(sp.name).replace(/"/g,'&quot;')})">
             <i class="fas fa-check-square"></i> Sél. À faire
           </button>
         </div>
@@ -2750,7 +2769,7 @@ const App = {
     const currentSp = spSel ? spSel.value : '';
     if (spSel) {
       spSel.innerHTML = '<option value="">Toutes les espèces</option>' +
-        this.data.species.sort((a,b) => a.name.localeCompare(b.name)).map(s => `<option value="${s.id}" ${currentSp === s.id ? 'selected' : ''}>${s.name}</option>`).join('');
+        this.data.species.sort((a,b) => a.name.localeCompare(b.name)).map(s => `<option value="${s.id}" ${currentSp === s.id ? 'selected' : ''}>${esc(s.name)}</option>`).join('');
     }
 
     this.renderPlanningStats();
@@ -2767,8 +2786,8 @@ const App = {
     const today = new Date(); today.setHours(0,0,0,0);
 
     let list = this.data.plannings.map(p => {
-      const v = this.data.varieties.find(x => x.id === p.varId);
-      const sp = v ? this.data.species.find(s => s.id === v.spId) : null;
+      const v = this.varById(p.varId);
+      const sp = v ? this.spById(v.spId) : null;
       return { ...p, _v: v, _sp: sp };
     });
 
@@ -2806,8 +2825,8 @@ const App = {
             <div style="display:flex; align-items:flex-start; gap:8px;">
               ${this.planningSelectMode ? `<input type="checkbox" class="plan-checkbox" data-id="${p.id}" ${isSelected ? 'checked' : ''} onclick="event.stopPropagation();App.togglePlanningSelection('${p.id}')" style="width:18px;height:18px;margin-top:4px;accent-color:var(--vert-principal)">` : ''}
               <div>
-                <div style="font-size:0.75rem; font-weight:bold; color:${borderColor}">${dateStr}${sp ? ' · ' + sp.name : ''}</div>
-                <div class="card-title">${v ? v.name : '?'}</div>
+                <div style="font-size:0.75rem; font-weight:bold; color:${borderColor}">${dateStr}${sp ? ' · ' + esc(sp.name) : ''}</div>
+                <div class="card-title">${v ? esc(v.name) : '?'}</div>
               </div>
             </div>
             <div style="display:flex; flex-direction:column; align-items:flex-end; gap:4px;">
@@ -2962,7 +2981,7 @@ const UI = {
     
     const speciesSel = document.getElementById('plan-species');
     speciesSel.innerHTML = '<option value="">-- Choisir --</option>' + 
-      App.data.species.sort((a,b) => a.name.localeCompare(b.name)).map(s => `<option value="${s.id}">${s.name}</option>`).join('');
+      App.data.species.sort((a,b) => a.name.localeCompare(b.name)).map(s => `<option value="${s.id}">${esc(s.name)}</option>`).join('');
     
     if (id) {
       const p = App.data.plannings.find(x => x.id === id);
@@ -2991,17 +3010,17 @@ const UI = {
     const spId = document.getElementById('plan-species').value;
     const varSel = document.getElementById('plan-variety');
     const filtered = App.data.varieties.filter(v => v.spId === spId).sort((a,b) => a.name.localeCompare(b.name));
-    varSel.innerHTML = filtered.map(v => `<option value="${v.id}" ${v.id === selectedVarId ? 'selected' : ''}>${v.name}</option>`).join('');
+    varSel.innerHTML = filtered.map(v => `<option value="${v.id}" ${v.id === selectedVarId ? 'selected' : ''}>${esc(v.name)}</option>`).join('');
   },
 
   openBatchPlanningModal() {
     this.openModal('modal-batch-planning');
     const bSp = document.getElementById('batch-species');
     bSp.innerHTML = '<option value="">-- Choisir --</option>' + 
-      App.data.species.sort((a,b) => a.name.localeCompare(b.name)).map(s => `<option value="${s.id}">${s.name}</option>`).join('');
+      App.data.species.sort((a,b) => a.name.localeCompare(b.name)).map(s => `<option value="${s.id}">${esc(s.name)}</option>`).join('');
     
     const bConv = document.getElementById('batch-conversion-species');
-    bConv.innerHTML = Object.entries(App.SEED_CONVERSION_RATES).map(([k, d]) => `<option value="${k}">${d.name}</option>`).join('');
+    bConv.innerHTML = Object.entries(App.SEED_CONVERSION_RATES).map(([k, d]) => `<option value="${k}">${esc(d.name)}</option>`).join('');
     
     document.getElementById('batch-variety-list').innerHTML = '<p style="color:var(--texte-gris);font-style:italic; text-align:center;">S&eacute;lectionnez d\'abord une esp&egrave;ce</p>';
     document.getElementById('batch-sowing-date').value = new Date().toISOString().split('T')[0];
@@ -3019,7 +3038,7 @@ const UI = {
     container.innerHTML = vars.map(v => `
       <label style="display:flex; align-items:center; gap:10px; margin-bottom:8px; cursor:pointer;">
         <input type="checkbox" class="batch-variety-checkbox" value="${v.id}" style="width:18px; height:18px; accent-color:var(--vert-principal)">
-        <span>${v.name}</span>
+        <span>${esc(v.name)}</span>
       </label>
     `).join('');
   },
@@ -3046,7 +3065,7 @@ const UI = {
     if (spSel) {
       spSel.innerHTML = '<option value="">Toutes les espèces</option>' +
         App.data.species.sort((a,b) => a.name.localeCompare(b.name))
-          .map(s => `<option value="${s.id}" ${currentSp === s.id ? 'selected' : ''}>${s.name}</option>`).join('');
+          .map(s => `<option value="${s.id}" ${currentSp === s.id ? 'selected' : ''}>${esc(s.name)}</option>`).join('');
     }
 
     let list = [...(App.runtimeAlerts[App.currentAlertTab] || [])];
@@ -3083,7 +3102,7 @@ const UI = {
           <div style="margin-bottom:16px;">
             <div style="display:flex; align-items:center; gap:8px; margin-bottom:6px; padding:6px 10px; background:var(--blanc-pur); border-radius:var(--rayon-petit); box-shadow:var(--ombre-douce);">
               <span style="width:10px; height:10px; border-radius:50%; background:${borderColor}; display:inline-block; flex-shrink:0;"></span>
-              <span style="font-weight:700; color:var(--vert-fonce); font-size:0.95rem;">${group.name}</span>
+              <span style="font-weight:700; color:var(--vert-fonce); font-size:0.95rem;">${esc(group.name)}</span>
               <span class="badge ${urgentCount > 0 ? 'badge-danger' : 'badge-warning'}" style="margin-left:auto;">${group.items.length} alerte(s)</span>
             </div>
             ${group.items.map(a => {
@@ -3096,7 +3115,7 @@ const UI = {
               <div class="card" style="border-left-color:${a.level === 'urgent' ? 'var(--rouge-alerte)' : 'var(--orange-warning)'}; margin-bottom:8px;">
                 <div class="card-header">
                   <div>
-                    <div class="card-title">${a.variety.name}</div>
+                    <div class="card-title">${esc(a.variety.name)}</div>
                     <div style="font-size:0.8rem; color:var(--texte-gris); margin-top:2px;">
                       <i class="fas fa-boxes"></i> Stock : <strong>${stockDisplay}</strong>
                       ${lastProd ? ` &nbsp;|&nbsp; <i class="fas fa-history"></i> Dernière prod : ${lastProd.year}` : ''}
@@ -3322,40 +3341,36 @@ const GitHub = {
         const err = await r.json();
         // Conflit SHA → refetch et retry une fois
         if (r.status === 409 || r.status === 422) {
-  console.warn('Conflit d�tect�, r�cup�ration du nouveau SHA...');
-  const newSha = await this.refreshSha(cfg);
-
-  const retryBody = {
-    message: `Sync ${new Date().toLocaleString('fr-FR')}`,
-    content,
-    ...(newSha ? { sha: newSha } : {})
-  };
-
-  const retry = await fetch(
-    `https://api.github.com/repos/${cfg.username}/${cfg.repo}/contents/${this.DATA_FILE}`,
-    {
-      method: 'PUT',
-      headers: {
-        Authorization: `token ${cfg.token}`,
-        Accept: 'application/vnd.github.v3+json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(retryBody)
-    }
-  );
-
-  if (!retry.ok) {
-    const err2 = await retry.json();
-    throw new Error(err2.message || `HTTP ${retry.status}`);
-  }
-
-  const result = await retry.json();
-  localStorage.setItem('gh_sha', result.content.sha);
-  this.updateSyncIcon('idle');
-  this._pendingPush = false;
-  UI.toast('?? Sauvegard� sur GitHub');
-  return;
-}
+          console.warn('Conflit détecté, récupération du nouveau SHA...');
+          const newSha = await this.refreshSha(cfg);
+          const retryBody = {
+            message: `Sync ${new Date().toLocaleString('fr-FR')}`,
+            content,
+            ...(newSha ? { sha: newSha } : {})
+          };
+          const retry = await fetch(
+            `https://api.github.com/repos/${cfg.username}/${cfg.repo}/contents/${this.DATA_FILE}`,
+            {
+              method: 'PUT',
+              headers: {
+                Authorization: `token ${cfg.token}`,
+                Accept: 'application/vnd.github.v3+json',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(retryBody)
+            }
+          );
+          if (!retry.ok) {
+            const err2 = await retry.json();
+            throw new Error(err2.message || `HTTP ${retry.status}`);
+          }
+          const result = await retry.json();
+          localStorage.setItem('gh_sha', result.content.sha);
+          this.updateSyncIcon('idle');
+          this._pendingPush = false;
+          UI.toast('☁️ Sauvegardé sur GitHub');
+          return;
+        }
         throw new Error(err.message || `HTTP ${r.status}`);
       }
       const result = await r.json();
