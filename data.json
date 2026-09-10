@@ -8646,5 +8646,51 @@
       "status": "sown",
       "stockDeducted": true
     }
-  ]
+  ],
+  "potager": {
+    "v": 1,
+    "terrains": [
+      {
+        "id": "mtvnvaksy29jge",
+        "name": "Terrain du bas",
+        "parcelles": [
+          {
+            "n": 1,
+            "surface": 8
+          },
+          {
+            "n": 2,
+            "surface": 8
+          },
+          {
+            "n": 3,
+            "surface": 8
+          },
+          {
+            "n": 4,
+            "surface": 8
+          },
+          {
+            "n": 5,
+            "surface": 8
+          },
+          {
+            "n": 6,
+            "surface": 8
+          },
+          {
+            "n": 7,
+            "surface": 8
+          },
+          {
+            "n": 8,
+            "surface": 8
+          }
+        ]
+      }
+    ],
+    "placements": [],
+    "especes": {},
+    "annee": 2026
+  }
 }
