@@ -255,6 +255,56 @@
       .pot-print-leg .pot-legende { box-shadow: none; border: 0.5pt solid #999; }
     }
 
+    /* ===================== TOAST =====================
+       UI.toast() cible #toast, élément qui n'existait pas dans le
+       document : les messages partaient dans la console. On fournit
+       le conteneur et son style ; UI.toast() n'est pas modifié. */
+    :root { --nav-h: 88px; }
+    #toast {
+      position: fixed; left: 50%; bottom: calc(var(--nav-h) + 14px);
+      transform: translate(-50%, 16px);
+      z-index: 999; max-width: min(92vw, 460px);
+      background: var(--vert-fonce); color: #fff;
+      padding: 12px 18px; border-radius: var(--rayon-petit);
+      box-shadow: var(--ombre-flottante);
+      font-size: 0.9rem; font-weight: 600; line-height: 1.35; text-align: center;
+      white-space: pre-line; opacity: 0; pointer-events: none;
+      transition: opacity 0.25s ease, transform 0.25s ease;
+    }
+    #toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+    /* ===================== NAVIGATION SUR MOBILE =====================
+       8 onglets ne tiennent pas sur une seule rangée en dessous de
+       ~620 px : la barre passe en grille 4 x 2. Les hauteurs de
+       dégagement (corps de page, bouton flottant, toast) suivent via
+       --nav-h. */
+    @media (max-width: 620px) {
+      :root { --nav-h: 132px; }
+      .nav-bar {
+        display: grid; grid-template-columns: repeat(4, 1fr);
+        justify-content: stretch; row-gap: 2px;
+        padding: 8px 4px calc(8px + env(safe-area-inset-bottom, 0px)) 4px;
+      }
+      .nav-item { width: auto; font-size: 0.68rem; padding: 5px 2px; min-width: 0; }
+      .nav-item i { font-size: 1.15rem; margin-bottom: 4px; }
+      .nav-item span { display: block; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+      body { padding-bottom: calc(var(--nav-h) + 24px); }
+      .btn-float { bottom: calc(var(--nav-h) + 12px); right: 16px; width: 54px; height: 54px; font-size: 1.3rem; }
+      main { margin: 14px auto; padding: 0 12px; }
+
+      /* Sous-onglets du potager : plus compacts, défilement horizontal */
+      .pot-tab { padding: 8px 11px; font-size: 0.8rem; }
+      .pot-tabs { scrollbar-width: none; }
+      .pot-tabs::-webkit-scrollbar { display: none; }
+      .pot-filtres .form-group { min-width: 0 !important; }
+      .pot-rot-lab { flex: 0 0 100%; }
+    }
+
+    @media (max-width: 360px) {
+      .nav-item { font-size: 0.62rem; }
+      .nav-item i { font-size: 1.05rem; }
+    }
+
   </style>
 </head>
 <body>
@@ -779,6 +829,9 @@
     <button class="btn btn-primary" style="width:100%" onclick="Potager.saveEspece()"><i class="fas fa-check"></i> Valider</button>
   </div>
 </div>
+
+<!-- Conteneur des notifications : UI.toast() le cherchait sans le trouver -->
+<div id="toast" role="status" aria-live="polite"></div>
 
 
 <div id="modal-species" class="modal-overlay">
