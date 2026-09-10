@@ -145,6 +145,116 @@
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
     ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    /* ===================== MODULE POTAGER ===================== */
+    .pot-tabs { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 2px; }
+    .pot-tab { flex: 1 0 auto; padding: 10px 14px; border: 2px solid var(--bordure-douce); background: var(--blanc-pur);
+               border-radius: var(--rayon-petit); font-weight: 600; font-size: 0.9rem; color: var(--texte-gris);
+               cursor: pointer; white-space: nowrap; transition: var(--transition-rapide); }
+    .pot-tab.active { background: var(--vert-principal); border-color: var(--vert-principal); color: #fff; }
+    .pot-pane { display: none; }
+    .pot-pane.active { display: block; }
+
+    .pot-filtres { display: flex; flex-wrap: wrap; gap: 10px; align-items: flex-end; }
+    .pot-filtres .form-group { margin-bottom: 0; }
+    .pot-filtres .form-select, .pot-filtres .form-input { padding: 9px 10px; font-size: 0.9rem; }
+    .pot-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+    .pot-sub { font-size: 0.82rem; color: var(--texte-gris); }
+    .pot-vide { padding: 28px 16px; text-align: center; color: var(--texte-gris); }
+    .pot-ok { color: var(--vert-principal); font-weight: 700; }
+    .pot-ko { color: var(--rouge-alerte); font-weight: 700; }
+    .pot-warn { color: #b45309; font-weight: 600; }
+    .pot-note { font-size: 0.8rem; color: var(--texte-gris); background: #f9fafb; border-radius: var(--rayon-petit);
+                padding: 10px 12px; margin-top: 12px; line-height: 1.5; }
+
+    /* --- Tableau de plan (écran et papier : même moteur) --- */
+    .pot-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; border-radius: var(--rayon-petit); }
+    .pot-gantt { width: 100%; min-width: 760px; table-layout: fixed; border-collapse: separate; border-spacing: 0;
+                 border-top: 1px solid var(--bordure-douce); border-left: 1px solid var(--bordure-douce);
+                 background: var(--blanc-pur); font-size: 0.78rem; }
+    .pot-gantt col.c-parcelle { width: 120px; }
+    .pot-gantt th, .pot-gantt td { border: 0; border-right: 1px solid var(--bordure-douce);
+                 border-bottom: 1px solid var(--bordure-douce); padding: 5px 4px; text-align: center;
+                 white-space: nowrap; color: var(--texte-sombre); }
+    .pot-gantt tbody tr { height: 30px; }
+    .pot-gantt thead th { background: var(--vert-clair); font-weight: 700; font-size: 0.72rem;
+                 text-transform: uppercase; letter-spacing: 0.03em; color: var(--vert-fonce); }
+    .pot-gantt th.p-col, .pot-gantt td.p-col { text-align: left; font-weight: 700; background: #f6f8f6; padding-left: 8px; }
+    .pot-gantt tr.pot-terr td { background: var(--vert-fonce); color: #fff; text-align: left; font-weight: 800;
+                 font-size: 0.8rem; padding: 6px 10px; letter-spacing: 0.02em; }
+    .pot-gantt td.pot-crop { text-align: left; font-weight: 700; color: #111 !important; padding-left: 6px;
+                 white-space: normal; overflow-wrap: anywhere; border-right: 1px solid #333; border-bottom: 1px solid #333; }
+    .pot-gantt td.pot-crop i { font-weight: 500; }
+    .pot-surf { font-weight: 400; color: var(--texte-gris); font-size: 0.72rem; }
+
+    .pot-legende { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; font-size: 0.8rem;
+                 padding: 10px 12px; margin-top: 12px; background: var(--blanc-pur); border-radius: var(--rayon-petit);
+                 box-shadow: var(--ombre-douce); }
+    .pot-leg { display: inline-flex; align-items: center; gap: 5px; }
+    .pot-leg i { width: 12px; height: 12px; border-radius: 3px; display: inline-block; }
+    .pot-dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; }
+
+    /* --- Parcelles --- */
+    .pot-parcelles { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 8px; margin-top: 12px; }
+    .pot-parcelle { background: #f6f8f6; border-radius: var(--rayon-petit); padding: 8px 10px; font-size: 0.82rem;
+                 display: flex; flex-direction: column; gap: 2px; }
+
+    /* --- Besoins --- */
+    .pot-besoins { width: 100%; min-width: 720px; border-collapse: collapse; font-size: 0.85rem; background: var(--blanc-pur); }
+    .pot-besoins th { background: var(--vert-clair); color: var(--vert-fonce); font-size: 0.75rem; text-transform: uppercase;
+                 letter-spacing: 0.03em; padding: 8px 6px; text-align: left; }
+    .pot-besoins td { padding: 8px 6px; border-bottom: 1px solid var(--bordure-douce); vertical-align: top; }
+    .pot-besoins td.pot-nom { font-weight: 600; }
+
+    /* --- Rotation --- */
+    .pot-rot-row { display: flex; gap: 12px; align-items: flex-start; padding: 8px 0; border-bottom: 1px solid var(--bordure-douce); }
+    .pot-rot-lab { flex: 0 0 150px; font-weight: 700; font-size: 0.82rem; }
+    .pot-rot-line { display: flex; gap: 10px; flex-wrap: wrap; }
+    .pot-rot-cell { display: flex; flex-direction: column; gap: 3px; align-items: flex-start; }
+    .pot-rot-year { font-size: 0.7rem; color: var(--texte-gris); font-weight: 700; }
+    .pot-rot-tag { font-size: 0.7rem; font-weight: 700; color: #111; padding: 2px 7px; border-radius: 999px; }
+    .pot-alerte { font-size: 0.85rem; padding: 6px 0; border-top: 1px solid var(--bordure-douce); }
+
+    .pot-print-only { display: none; }
+
+    /* ===================== IMPRESSION DU PLAN =====================
+       Le plan est un tableau statique en <td colspan> : il se pagine
+       correctement sans aucune correction. Zone imprimable A4 paysage :
+       297 - 2 x 8 = 281 mm. */
+    @page { size: A4 landscape; margin: 8mm; }
+
+    @media print {
+      body > header, .nav-bar, .btn, .modal-overlay, #toast,
+      .view-section:not(#view-potager), #view-potager .pot-tabs,
+      #view-potager .pot-filtres, #view-potager .pot-pane, #pot-legende {
+        display: none !important;
+      }
+      body { background: #fff !important; padding: 0 !important; margin: 0 !important; }
+      main { padding: 0 !important; margin: 0 !important; max-width: none !important; }
+      #view-potager { display: block !important; }
+      .pot-print-only { display: block !important; }
+      *, *::before, *::after { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+
+      .pot-print-head { margin: 0 0 3mm; padding-bottom: 1.5mm; border-bottom: 1.5pt solid #000; }
+      .pot-print-title { font-size: 12pt; font-weight: 800; color: #000; }
+      .pot-print-meta { font-size: 8pt; color: #444; margin-top: 1mm; }
+
+      .pot-gantt-print { width: 100% !important; min-width: 0 !important; font-size: 6.5pt !important;
+                 border-top: 0.4pt solid #777; border-left: 0.4pt solid #777; }
+      .pot-gantt-print col.c-parcelle { width: 30mm; }
+      .pot-gantt-print th, .pot-gantt-print td { border-right: 0.4pt solid #777 !important;
+                 border-bottom: 0.4pt solid #777 !important; padding: 1.6pt 2pt !important; color: #000 !important; }
+      .pot-gantt-print tbody tr { height: 4.4mm; }
+      .pot-gantt-print thead th { background: #e9e9e9 !important; font-size: 6.5pt !important; }
+      .pot-gantt-print th.p-col, .pot-gantt-print td.p-col { background: #f4f4f4 !important; font-size: 6.5pt !important; }
+      .pot-gantt-print tr.pot-terr td { background: #d5d5d5 !important; color: #000 !important; font-size: 7.5pt !important; }
+      .pot-gantt-print td.pot-crop { border-right: 0.5pt solid #333 !important; border-bottom: 0.5pt solid #333 !important; }
+      .pot-gantt-print tr { break-inside: avoid; page-break-inside: avoid; }
+      .pot-gantt-print tr.pot-terr { break-after: avoid; page-break-after: avoid; }
+      .pot-gantt-print thead { display: table-header-group; }
+      .pot-print-leg { margin-top: 3mm; font-size: 7pt; }
+      .pot-print-leg .pot-legende { box-shadow: none; border: 0.5pt solid #999; }
+    }
+
   </style>
 </head>
 <body>
@@ -443,6 +553,82 @@
 
     <div id="alerts-dynamic-list" style="padding-bottom:20px;"></div>
   </div>
+  <!-- ===================== MODULE POTAGER ===================== -->
+  <div id="view-potager" class="view-section" style="padding-bottom:90px">
+
+    <div class="card" style="border-left-color:#6d4c41">
+      <div class="pot-tabs">
+        <button class="pot-tab active" data-tab="plan" onclick="Potager.tab('plan')"><i class="fas fa-table-columns"></i> Plan</button>
+        <button class="pot-tab" data-tab="terrains" onclick="Potager.tab('terrains')"><i class="fas fa-vector-square"></i> Terrains</button>
+        <button class="pot-tab" data-tab="semences" onclick="Potager.tab('semences')"><i class="fas fa-wheat-awn"></i> Semences</button>
+        <button class="pot-tab" data-tab="rotation" onclick="Potager.tab('rotation')"><i class="fas fa-rotate"></i> Rotation</button>
+      </div>
+    </div>
+
+    <!-- Onglet Plan -->
+    <div id="pot-pane-plan" class="pot-pane active">
+      <div class="card">
+        <div class="pot-filtres">
+          <div class="form-group" style="min-width:110px">
+            <label class="form-label">Saison</label>
+            <select id="pot-annee" class="form-select" onchange="Potager.changeAnnee(this.value)"></select>
+          </div>
+          <div class="form-group" style="min-width:150px;flex:1">
+            <label class="form-label">Terrain</label>
+            <select id="pot-terrain" class="form-select" onchange="Potager.renderPlan()"></select>
+          </div>
+          <div class="form-group" style="min-width:120px">
+            <label class="form-label">Résolution</label>
+            <select id="pot-pas" class="form-select" onchange="Potager.renderPlan()">
+              <option value="12">12 mois</option>
+              <option value="24">24 quinzaines</option>
+            </select>
+          </div>
+          <div class="form-group" style="min-width:140px;flex:1">
+            <label class="form-label">Recherche</label>
+            <input id="pot-search" class="form-input" placeholder="Variété…" oninput="Potager.renderPlan()">
+          </div>
+          <div style="display:flex;gap:8px">
+            <button class="btn btn-sm btn-secondary" onclick="Potager.dupliquerSaison()" title="Dupliquer la saison"><i class="fas fa-copy"></i></button>
+            <button class="btn btn-sm btn-secondary" onclick="Potager.imprimer()" title="Imprimer / PDF"><i class="fas fa-print"></i></button>
+          </div>
+        </div>
+        <div id="pot-plan-resume" class="pot-sub" style="margin-top:10px"></div>
+      </div>
+
+      <div class="pot-table-wrap" id="pot-gantt"></div>
+      <div class="pot-legende" id="pot-legende"></div>
+      <div class="pot-note"><i class="fas fa-hand-pointer"></i> Touchez une culture pour la modifier. Le bouton <i class="fas fa-plus"></i> ajoute une culture au plan de la saison affichée.</div>
+    </div>
+
+    <!-- Onglet Terrains -->
+    <div id="pot-pane-terrains" class="pot-pane">
+      <div class="card" style="border-left-color:#6d4c41">
+        <div class="pot-row">
+          <div><h3 style="margin:0">Terrains et parcelles</h3>
+            <div class="pot-sub">La surface des parcelles conditionne le calcul des besoins en semences.</div></div>
+          <button class="btn btn-sm btn-primary" onclick="Potager.openTerrain('')"><i class="fas fa-plus"></i> Terrain</button>
+        </div>
+      </div>
+      <div id="pot-terrains"></div>
+    </div>
+
+    <!-- Onglet Semences -->
+    <div id="pot-pane-semences" class="pot-pane">
+      <div id="pot-semences"></div>
+    </div>
+
+    <!-- Onglet Rotation -->
+    <div id="pot-pane-rotation" class="pot-pane">
+      <div id="pot-rotation"></div>
+    </div>
+
+    <button class="btn btn-primary btn-float" onclick="Potager.openPlacement('')" title="Ajouter une culture"><i class="fas fa-plus"></i></button>
+
+    <!-- Rendu d'impression (généré à la volée) -->
+    <div id="potager-print" class="pot-print-only"></div>
+  </div>
+
 </main>
 
 <nav class="nav-bar">
@@ -453,7 +639,147 @@
   <button id="nav-wishlist" class="nav-item" onclick="App.navigate('view-wishlist')"><i class="fas fa-heart"></i><span>Souhaits</span></button>
   <button id="nav-alerts" class="nav-item" onclick="App.navigate('view-alerts')"><i class="fas fa-bell"></i><span>Alertes</span></button>
   <button id="nav-planning" class="nav-item" onclick="App.navigate('view-planning')"><i class="fas fa-calendar-check"></i><span>Planning</span></button>
+  <button id="nav-potager" class="nav-item" onclick="App.navigate('view-potager'); Potager.onShow()"><i class="fas fa-seedling"></i><span>Potager</span></button>
 </nav>
+<!-- ===================== MODALES POTAGER ===================== -->
+<div id="modal-pot-placement" class="modal-overlay">
+  <div class="modal-content">
+    <div class="modal-header" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+      <h3 id="pot-p-titre">Nouvelle culture</h3>
+      <button class="btn btn-sm btn-secondary" style="border-radius:50%;width:32px;height:32px;padding:0;" onclick="UI.closeModals()"><i class="fas fa-times"></i></button>
+    </div>
+    <input type="hidden" id="pot-p-id">
+
+    <div class="form-group">
+      <label class="form-label">Variété <span class="pot-sub">(grainothèque)</span></label>
+      <select id="pot-p-var" class="form-select" onchange="Potager.apercuBesoin()"></select>
+    </div>
+
+    <div style="display:flex;gap:10px">
+      <div class="form-group" style="flex:2">
+        <label class="form-label">Terrain</label>
+        <select id="pot-p-terrain" class="form-select" onchange="Potager.majParcelles()"></select>
+      </div>
+      <div class="form-group" style="flex:1">
+        <label class="form-label">Parcelle</label>
+        <select id="pot-p-parcelle" class="form-select" onchange="Potager.apercuBesoin()"></select>
+      </div>
+      <div class="form-group" style="flex:1">
+        <label class="form-label">Piste</label>
+        <select id="pot-p-slot" class="form-select">
+          <option value="A">A</option><option value="B">B</option><option value="C">C</option>
+        </select>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:10px">
+      <div class="form-group" style="flex:1">
+        <label class="form-label">Du mois</label>
+        <select id="pot-p-m1" class="form-select">
+          <option value="1">Janvier</option><option value="2">Février</option><option value="3">Mars</option>
+          <option value="4">Avril</option><option value="5">Mai</option><option value="6">Juin</option>
+          <option value="7">Juillet</option><option value="8">Août</option><option value="9">Septembre</option>
+          <option value="10">Octobre</option><option value="11">Novembre</option><option value="12">Décembre</option>
+        </select>
+      </div>
+      <div class="form-group" style="flex:1">
+        <label class="form-label">Au mois</label>
+        <select id="pot-p-m2" class="form-select">
+          <option value="1">Janvier</option><option value="2">Février</option><option value="3">Mars</option>
+          <option value="4">Avril</option><option value="5">Mai</option><option value="6">Juin</option>
+          <option value="7">Juillet</option><option value="8">Août</option><option value="9">Septembre</option>
+          <option value="10">Octobre</option><option value="11">Novembre</option><option value="12">Décembre</option>
+        </select>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:10px">
+      <div class="form-group" style="flex:1">
+        <label class="form-label">Surface (m²)</label>
+        <input id="pot-p-surface" class="form-input" type="number" step="0.1" placeholder="parcelle" oninput="Potager.apercuBesoin()">
+      </div>
+      <div class="form-group" style="flex:1">
+        <label class="form-label">Densité (gr/m²)</label>
+        <input id="pot-p-densite" class="form-input" type="number" step="0.1" placeholder="espèce" oninput="Potager.apercuBesoin()">
+      </div>
+      <div class="form-group" style="flex:1">
+        <label class="form-label">Perte (%)</label>
+        <input id="pot-p-perte" class="form-input" type="number" step="1" oninput="Potager.apercuBesoin()">
+      </div>
+    </div>
+
+    <div id="pot-p-apercu" class="pot-note" style="margin-bottom:14px"></div>
+
+    <div class="form-group">
+      <label class="form-label">Notes</label>
+      <input id="pot-p-notes" class="form-input" placeholder="Association, paillage, remarque…">
+    </div>
+
+    <div style="display:flex;gap:10px">
+      <button class="btn btn-primary" style="flex:1" onclick="Potager.savePlacement()"><i class="fas fa-check"></i> Valider</button>
+      <button id="pot-p-suppr" class="btn btn-danger" style="display:none" onclick="Potager.deletePlacement()"><i class="fas fa-trash"></i></button>
+    </div>
+  </div>
+</div>
+
+<div id="modal-pot-terrain" class="modal-overlay">
+  <div class="modal-content">
+    <div class="modal-header" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+      <h3 id="pot-t-titre">Nouveau terrain</h3>
+      <button class="btn btn-sm btn-secondary" style="border-radius:50%;width:32px;height:32px;padding:0;" onclick="UI.closeModals()"><i class="fas fa-times"></i></button>
+    </div>
+    <input type="hidden" id="pot-t-id">
+    <div class="form-group">
+      <label class="form-label">Nom</label>
+      <input id="pot-t-nom" class="form-input" placeholder="Ex : Terrain du bas, Serre…">
+    </div>
+    <div style="display:flex;gap:10px">
+      <div class="form-group" style="flex:1">
+        <label class="form-label">Nombre de parcelles</label>
+        <input id="pot-t-nb" class="form-input" type="number" min="1" max="200" value="4">
+      </div>
+      <div class="form-group" style="flex:1">
+        <label class="form-label">Surface unitaire (m²)</label>
+        <input id="pot-t-surface" class="form-input" type="number" step="0.1" placeholder="Ex : 20">
+      </div>
+    </div>
+    <div class="pot-note" style="margin-bottom:14px">
+      La surface est appliquée aux parcelles qui n'en ont pas encore. Réduire le nombre de parcelles supprime les dernières.
+    </div>
+    <button class="btn btn-primary" style="width:100%" onclick="Potager.saveTerrain()"><i class="fas fa-check"></i> Valider</button>
+  </div>
+</div>
+
+<div id="modal-pot-espece" class="modal-overlay">
+  <div class="modal-content">
+    <div class="modal-header" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+      <h3>Paramètres de culture</h3>
+      <button class="btn btn-sm btn-secondary" style="border-radius:50%;width:32px;height:32px;padding:0;" onclick="UI.closeModals()"><i class="fas fa-times"></i></button>
+    </div>
+    <input type="hidden" id="pot-e-id">
+    <div class="form-group">
+      <label class="form-label">Espèce</label>
+      <div id="pot-e-nom" style="font-weight:700;font-size:1.05rem"></div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Famille botanique</label>
+      <select id="pot-e-famille" class="form-select"></select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Densité de semis (graines/m²)</label>
+      <input id="pot-e-densite" class="form-input" type="number" step="0.1">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Groupe de conversion graines ↔ grammes</label>
+      <select id="pot-e-conv" class="form-select"></select>
+    </div>
+    <div class="pot-note" style="margin-bottom:14px">
+      Ces réglages sont propres au module Potager : le schéma des espèces de la grainothèque n'est pas modifié.
+    </div>
+    <button class="btn btn-primary" style="width:100%" onclick="Potager.saveEspece()"><i class="fas fa-check"></i> Valider</button>
+  </div>
+</div>
+
 
 <div id="modal-species" class="modal-overlay">
   <div class="modal-content">
@@ -3483,6 +3809,903 @@ window.addEventListener('online', () => {
     UI.toast('📶 Connexion rétablie — sync en cours...');
     GitHub.push();
   }
+});
+
+
+/**
+ * ============================================================
+ * MODULE POTAGER — Plan de culture adossé à la grainothèque
+ * ------------------------------------------------------------
+ * Greffe STRICTEMENT ADDITIVE sur Le Gardien des Graines :
+ *   - aucune fonction existante n'est modifiée ni redéfinie ;
+ *   - les données vivent dans App.data.potager, clé nouvelle du
+ *     même objet, donc persistées par App.saveAll() et
+ *     synchronisées par GitHub.push() sans une ligne de plus ;
+ *   - la famille botanique et la densité de semis sont stockées
+ *     ici (App.data.potager.especes), pas dans data.species, pour
+ *     ne pas toucher au schéma des espèces ;
+ *   - les semis générés sont poussés dans App.data.plannings au
+ *     format exact attendu par le workflow existant (statut
+ *     'planned', déduction de stock au passage à 'sown').
+ * La variété (varId) est l'unique clé de jointure.
+ * ============================================================
+ */
+const Potager = {
+
+  // --- Référentiel botanique -------------------------------------------
+  FAMILLES: {
+    "Fabacées":       { couleur: "#60a5fa", conv: "legumineuses",          densite: 30 },
+    "Solanacées":     { couleur: "#facc15", conv: "tomates_et_solanacees", densite: 4 },
+    "Brassicacées":   { couleur: "#f87171", conv: "choux_et_cruciferes",   densite: 6 },
+    "Apiacées":       { couleur: "#fb923c", conv: "racines_fines",         densite: 80 },
+    "Cucurbitacées":  { couleur: "#34d399", conv: "cucurbitacees_lourdes", densite: 1.5 },
+    "Alliacées":      { couleur: "#c084fc", conv: "par_defaut",            densite: 60 },
+    "Astéracées":     { couleur: "#a3e635", conv: "laitues_et_feuilles",   densite: 9 },
+    "Chénopodiacées": { couleur: "#e879f9", conv: "blettes_betteraves",    densite: 25 },
+    "Poacées":        { couleur: "#22d3ee", conv: "par_defaut",            densite: 40 },
+    "Rosacées":       { couleur: "#f472b6", conv: "par_defaut",            densite: 4 },
+    "Divers":         { couleur: "#94a3b8", conv: "par_defaut",            densite: 20 }
+  },
+
+  // Intervalle minimal indicatif (années) avant retour de la même famille
+  // sur une même parcelle. Ordres de grandeur agronomiques usuels, pas des
+  // normes : hernie du chou et pathogènes telluriques des légumineuses
+  // imposent les écarts les plus longs.
+  ROTATION_MIN: {
+    "Brassicacées": 5, "Solanacées": 4, "Alliacées": 4, "Fabacées": 4,
+    "Apiacées": 3, "Cucurbitacées": 3, "Chénopodiacées": 3, "Astéracées": 3,
+    "Poacées": 2, "Rosacées": 3, "Divers": 2
+  },
+
+  MOIS: ["Jan","Fév","Mar","Avr","Mai","Juin","Juil","Août","Sep","Oct","Nov","Déc"],
+  PERTE_DEFAUT: 20,
+  _tab: 'plan',
+
+  // --- 1. AMORÇAGE ------------------------------------------------------
+  ensure() {
+    if (!App.data.potager) {
+      App.data.potager = { v: 1, terrains: [], placements: [], especes: {}, annee: this.anneeCourante() };
+    }
+    const p = App.data.potager;
+    if (!Array.isArray(p.terrains))   p.terrains = [];
+    if (!Array.isArray(p.placements)) p.placements = [];
+    if (!p.especes || typeof p.especes !== 'object') p.especes = {};
+    if (!p.annee) p.annee = this.anneeCourante();
+    return p;
+  },
+
+  anneeCourante() {
+    const n = new Date();
+    return n.getMonth() >= 9 ? n.getFullYear() + 1 : n.getFullYear();
+  },
+
+  esc(s) {
+    return String(s == null ? '' : s)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  },
+
+  norm(s) {
+    return String(s || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  },
+
+  // --- 2. JOINTURE AVEC LA GRAINOTHÈQUE ---------------------------------
+  // Paramètres d'une espèce (famille / densité / groupe de conversion).
+  // Rien n'est écrit dans data.species : tout est ici.
+  paramEspece(spId) {
+    const p = this.ensure();
+    let e = p.especes[spId];
+    if (!e) {
+      const sp = App.spById(spId);
+      e = { famille: this.devineFamille(sp ? sp.name : ''), densite: null, conv: null };
+      p.especes[spId] = e;
+    }
+    const f = this.FAMILLES[e.famille] || this.FAMILLES["Divers"];
+    return {
+      famille: e.famille || "Divers",
+      densite: (e.densite != null && e.densite !== '') ? Number(e.densite) : f.densite,
+      conv: e.conv || f.conv,
+      couleur: f.couleur
+    };
+  },
+
+  // Pré-remplissage de la famille au premier affichage, d'après le nom
+  // d'espèce. Purement indicatif : l'utilisateur corrige dans l'onglet
+  // Semences, et la correction est persistée.
+  devineFamille(nom) {
+    const n = this.norm(nom);
+    const table = [
+      ["Solanacées",     ["tomate","piment","poivron","aubergine","pomme de terre","physalis","tomatill"]],
+      ["Brassicacées",   ["chou","navet","radis","roquette","rutabaga","moutarde","cresson","colza"]],
+      ["Apiacées",       ["carotte","panais","persil","celeri","aneth","fenouil","cerfeuil","coriandre"]],
+      ["Cucurbitacées",  ["courge","potiron","concombre","melon","pasteque","courgette","cornichon","patisson"]],
+      ["Alliacées",      ["oignon","ail","echalote","poireau","ciboul"]],
+      ["Astéracées",     ["laitue","salade","mache","chicoree","scarole","artichaut","topinambour","souci","tournesol"]],
+      ["Chénopodiacées", ["betterave","blette","epinard","poiree","arroche","quinoa"]],
+      ["Fabacées",       ["haricot","pois","feve","lentille","luzerne","trefle","vesce","soja"]],
+      ["Poacées",        ["mais","ble","seigle","avoine","orge","sorgho","millet","sarrasin"]],
+      ["Rosacées",       ["fraise","framboise","pomm","poir","prun","ceris"]]
+    ];
+    for (const [fam, mots] of table) {
+      if (mots.some(m => n.includes(m))) return fam;
+    }
+    return "Divers";
+  },
+
+  grainesParGramme(spId) {
+    const conv = this.paramEspece(spId).conv;
+    const r = App.SEED_CONVERSION_RATES[conv] || App.SEED_CONVERSION_RATES['par_defaut'];
+    return r ? r.seedsPerGram : 0;
+  },
+
+  // Stock disponible d'une variété, converti en graines.
+  // Les sachets ne sont pas comptabilisés (contenu inconnu).
+  stockGraines(varId, spId) {
+    const gpg = this.grainesParGramme(spId);
+    return App.data.stocks.reduce((t, s) => {
+      if (s.varId !== varId) return t;
+      const q = parseFloat(s.qty) || 0;
+      if (s.unit === 'graines') return t + q;
+      if (s.unit === 'gr' && gpg) return t + q * gpg;
+      return t;
+    }, 0);
+  },
+
+  varInfo(varId) {
+    const v = App.varById(varId);
+    if (!v) return null;
+    const sp = App.spById(v.spId);
+    return { v, sp, spId: v.spId, nom: (sp ? sp.name : '?') + ' — ' + v.name };
+  },
+
+  // --- 3. BESOINS EN SEMENCES -------------------------------------------
+  // besoin net  = surface x densité            (plants visés)
+  // besoin brut = besoin net / (1 - perte)     (graines à semer)
+  // Cohérent avec expectedPlants = seedsQty x (1 - perte) du workflow existant.
+  surfaceParcelle(terrainId, n) {
+    const t = this.ensure().terrains.find(x => x.id === terrainId);
+    if (!t) return 0;
+    const pc = (t.parcelles || []).find(x => x.n === n);
+    return pc ? (parseFloat(pc.surface) || 0) : 0;
+  },
+
+  besoin(pl) {
+    const info = this.varInfo(pl.varId);
+    if (!info) return null;
+    const par = this.paramEspece(info.spId);
+    const surface = (pl.surface != null && pl.surface !== '')
+      ? parseFloat(pl.surface) || 0
+      : this.surfaceParcelle(pl.terrainId, pl.parcelle);
+    const densite = (pl.densite != null && pl.densite !== '') ? parseFloat(pl.densite) : par.densite;
+    const perte = (pl.perte != null && pl.perte !== '') ? parseFloat(pl.perte) : this.PERTE_DEFAUT;
+    const net = surface * densite;
+    const brut = perte >= 100 ? net : net / (1 - perte / 100);
+    const gpg = this.grainesParGramme(info.spId);
+    const dispo = this.stockGraines(pl.varId, info.spId);
+    return {
+      pl, info, par, surface, densite, perte,
+      net: Math.round(net),
+      brut: Math.round(brut),
+      poids: gpg ? brut / gpg : 0,
+      gpg,
+      dispo: Math.round(dispo),
+      manque: Math.max(0, Math.round(brut - dispo))
+    };
+  },
+
+  besoinsAnnee(annee) {
+    return this.ensure().placements
+      .filter(p => Number(p.year) === Number(annee) && p.varId)
+      .map(p => this.besoin(p))
+      .filter(Boolean);
+  }
+};
+
+/* ---------- Partie 2 : interface ---------- */
+Object.assign(Potager, {
+
+  // --- 4. NAVIGATION ----------------------------------------------------
+  onShow() {
+    this.ensure();
+    const t = document.getElementById('page-title');
+    if (t) t.innerText = 'Potager';
+    this.renderAll();
+  },
+
+  tab(name) {
+    this._tab = name;
+    document.querySelectorAll('#view-potager .pot-tab').forEach(b => {
+      b.classList.toggle('active', b.dataset.tab === name);
+    });
+    document.querySelectorAll('#view-potager .pot-pane').forEach(p => {
+      p.classList.toggle('active', p.id === 'pot-pane-' + name);
+    });
+    this.renderAll();
+  },
+
+  renderAll() {
+    this.remplirFiltres();
+    if (this._tab === 'plan') this.renderPlan();
+    if (this._tab === 'terrains') this.renderTerrains();
+    if (this._tab === 'semences') this.renderSemences();
+    if (this._tab === 'rotation') this.renderRotation();
+  },
+
+  save(rerender = true) {
+    App.saveAll();
+    if (rerender) this.renderAll();
+  },
+
+  remplirFiltres() {
+    const p = this.ensure();
+    const annees = [...new Set(p.placements.map(x => Number(x.year)).concat([p.annee, this.anneeCourante()]))]
+      .filter(Boolean).sort((a, b) => a - b);
+    const selA = document.getElementById('pot-annee');
+    if (selA) {
+      selA.innerHTML = annees.map(a => `<option value="${a}">${a}</option>`).join('') +
+                       `<option value="__new">+ Nouvelle saison…</option>`;
+      selA.value = p.annee;
+    }
+    const selT = document.getElementById('pot-terrain');
+    if (selT) {
+      const cur = selT.value || 'ALL';
+      selT.innerHTML = `<option value="ALL">Tous les terrains</option>` +
+        p.terrains.map(t => `<option value="${t.id}">${this.esc(t.name)}</option>`).join('');
+      selT.value = [...selT.options].some(o => o.value === cur) ? cur : 'ALL';
+    }
+  },
+
+  changeAnnee(val) {
+    if (val === '__new') {
+      const a = prompt('Année de la nouvelle saison :', String(this.anneeCourante() + 1));
+      const n = parseInt(a);
+      if (!n || n < 1900 || n > 2200) return this.renderAll();
+      this.ensure().annee = n;
+    } else {
+      this.ensure().annee = parseInt(val);
+    }
+    this.save();
+  },
+
+  // --- 5. TABLEAU DE PLAN ----------------------------------------------
+  // Un seul moteur de rendu pour l'écran et pour le papier. Chaque culture
+  // est une vraie cellule <td colspan="n"> : rien en position:absolue, pas
+  // de rowspan, donc une pagination correcte à l'impression par
+  // construction.
+  segments(pl, pas) {
+    const info = this.varInfo(pl.varId);
+    const par = info ? this.paramEspece(info.spId) : this.FAMILLES["Divers"];
+    let s, e;
+    if (pas === 24) { s = (pl.m1 - 1) * 2 + (pl.q1 === 2 ? 1 : 0); e = (pl.m2 - 1) * 2 + (pl.q2 === 1 ? 1 : 2); }
+    else { s = pl.m1 - 1; e = pl.m2; }
+    s = Math.max(0, Math.min(s, pas - 1));
+    e = Math.max(s + 1, Math.min(e, pas));
+    return {
+      s, e, id: pl.id,
+      couleur: par.couleur || '#94a3b8',
+      nom: info ? (info.sp ? info.sp.name : '') : (pl.libelle || 'Culture'),
+      variete: info ? info.v.name : ''
+    };
+  },
+
+  empile(segs) {
+    const lignes = [];
+    segs.slice().sort((a, b) => a.s - b.s || a.e - b.e).forEach(sg => {
+      let l = lignes.find(x => x.length === 0 || x[x.length - 1].e <= sg.s);
+      if (!l) { l = []; lignes.push(l); }
+      l.push(sg);
+    });
+    return lignes.length ? lignes : [[]];
+  },
+
+  cellules(segs, pas, cliquable) {
+    let cur = 0, h = '';
+    segs.forEach(sg => {
+      if (sg.s > cur) h += `<td colspan="${sg.s - cur}">&nbsp;</td>`;
+      const clic = cliquable ? ` onclick="Potager.openPlacement('${sg.id}')" style="cursor:pointer;background:${sg.couleur}"` :
+                               ` style="background:${sg.couleur}"`;
+      const va = sg.variete ? ` <i>(${this.esc(sg.variete)})</i>` : '';
+      h += `<td class="pot-crop" colspan="${sg.e - sg.s}"${clic}>${this.esc(sg.nom)}${va}</td>`;
+      cur = sg.e;
+    });
+    if (cur < pas) h += `<td colspan="${pas - cur}">&nbsp;</td>`;
+    return h;
+  },
+
+  buildTable(opts) {
+    const o = Object.assign({ cliquable: true, classe: 'pot-gantt' }, opts || {});
+    const p = this.ensure();
+    const annee = Number(p.annee);
+    const pas = parseInt((document.getElementById('pot-pas') || {}).value) === 24 ? 24 : 12;
+    const filtreT = (document.getElementById('pot-terrain') || {}).value || 'ALL';
+    const q = this.norm((document.getElementById('pot-search') || {}).value || '');
+
+    const terrains = filtreT === 'ALL' ? p.terrains : p.terrains.filter(t => t.id === filtreT);
+    if (!terrains.length) {
+      return `<p class="pot-vide">Aucun terrain. Créez-en un dans l'onglet <strong>Terrains</strong>.</p>`;
+    }
+
+    let h = `<table class="${o.classe}"><colgroup><col class="c-parcelle">` +
+            '<col>'.repeat(pas) + '</colgroup><thead><tr><th class="p-col">Parcelle</th>';
+    this.MOIS.forEach(m => { h += pas === 24 ? `<th colspan="2">${m}</th>` : `<th>${m}</th>`; });
+    h += '</tr>';
+    if (pas === 24) h += '<tr><th class="p-col"></th>' + '<th>1</th><th>2</th>'.repeat(12) + '</tr>';
+    h += '</thead><tbody>';
+
+    terrains.forEach(t => {
+      const parcelles = t.parcelles || [];
+      const surfTot = parcelles.reduce((a, x) => a + (parseFloat(x.surface) || 0), 0);
+      h += `<tr class="pot-terr"><td colspan="${pas + 1}">${this.esc(t.name.toUpperCase())} — ` +
+           `${parcelles.length} parcelle${parcelles.length > 1 ? 's' : ''}` +
+           (surfTot ? ` · ${surfTot.toLocaleString('fr-FR')} m²` : '') + `</td></tr>`;
+
+      parcelles.forEach(pc => {
+        const dansParcelle = p.placements.filter(x =>
+          x.terrainId === t.id && x.parcelle === pc.n && Number(x.year) === annee &&
+          (!q || this.norm(this.libelle(x)).includes(q))
+        );
+        let lignesEmises = 0;
+        ['A', 'B', 'C'].forEach(slot => {
+          const dansSlot = dansParcelle.filter(x => (x.slot || 'A') === slot);
+          if (slot !== 'A' && !dansSlot.length) return;
+          const lignes = this.empile(dansSlot.map(x => this.segments(x, pas)));
+          lignes.forEach((ln, i) => {
+            const suffixe = lignes.length > 1 ? '.' + (i + 1) : '';
+            const surf = pc.surface ? `<span class="pot-surf">${pc.surface} m²</span>` : '';
+            h += `<tr><td class="p-col">P${pc.n} · ${slot}${suffixe} ${surf}</td>` +
+                 this.cellules(ln, pas, o.cliquable) + `</tr>`;
+            lignesEmises++;
+          });
+        });
+        if (!lignesEmises) {
+          h += `<tr><td class="p-col">P${pc.n}${pc.surface ? ` <span class="pot-surf">${pc.surface} m²</span>` : ''}</td>` +
+               `<td colspan="${pas}">&nbsp;</td></tr>`;
+        }
+      });
+    });
+
+    h += '</tbody></table>';
+    return h;
+  },
+
+  libelle(pl) {
+    const info = this.varInfo(pl.varId);
+    return info ? info.nom : (pl.libelle || '');
+  },
+
+  renderPlan() {
+    const host = document.getElementById('pot-gantt');
+    if (!host) return;
+    host.innerHTML = this.buildTable({ cliquable: true });
+    this.renderLegende();
+    const p = this.ensure();
+    const nb = p.placements.filter(x => Number(x.year) === Number(p.annee)).length;
+    const el = document.getElementById('pot-plan-resume');
+    if (el) {
+      const bs = this.besoinsAnnee(p.annee);
+      const manques = bs.filter(b => b.manque > 0).length;
+      el.innerHTML = `${nb} culture${nb > 1 ? 's' : ''} planifiée${nb > 1 ? 's' : ''} en ${p.annee}` +
+        (manques ? ` · <span class="pot-ko">${manques} en stock insuffisant</span>` : (bs.length ? ` · <span class="pot-ok">stock suffisant</span>` : ''));
+    }
+  },
+
+  renderLegende() {
+    const el = document.getElementById('pot-legende');
+    if (!el) return;
+    const utilisees = new Set();
+    const p = this.ensure();
+    p.placements.filter(x => Number(x.year) === Number(p.annee)).forEach(x => {
+      const info = this.varInfo(x.varId);
+      if (info) utilisees.add(this.paramEspece(info.spId).famille);
+    });
+    const liste = utilisees.size ? [...utilisees] : Object.keys(this.FAMILLES);
+    el.innerHTML = `<strong>Familles :</strong> ` + liste.map(f =>
+      `<span class="pot-leg"><i style="background:${this.FAMILLES[f] ? this.FAMILLES[f].couleur : '#94a3b8'}"></i>${this.esc(f)}</span>`
+    ).join('');
+  }
+});
+
+/* ---------- Partie 3 : terrains, semences, rotation, modales ---------- */
+Object.assign(Potager, {
+
+  // --- 6. TERRAINS ET PARCELLES ----------------------------------------
+  renderTerrains() {
+    const host = document.getElementById('pot-terrains');
+    if (!host) return;
+    const p = this.ensure();
+    if (!p.terrains.length) {
+      host.innerHTML = `<p class="pot-vide">Aucun terrain. Ajoutez-en un pour commencer à planifier.</p>`;
+      return;
+    }
+    host.innerHTML = p.terrains.map(t => {
+      const pcs = t.parcelles || [];
+      const surf = pcs.reduce((a, x) => a + (parseFloat(x.surface) || 0), 0);
+      return `<div class="card" style="border-left-color:#6d4c41">
+        <div class="pot-row">
+          <div>
+            <h3 style="margin:0">${this.esc(t.name)}</h3>
+            <div class="pot-sub">${pcs.length} parcelle${pcs.length > 1 ? 's' : ''}${surf ? ` · ${surf.toLocaleString('fr-FR')} m² au total` : ''}</div>
+          </div>
+          <div style="display:flex;gap:8px">
+            <button class="btn btn-sm btn-secondary" onclick="Potager.openTerrain('${t.id}')"><i class="fas fa-pen"></i></button>
+            <button class="btn btn-sm btn-danger" onclick="Potager.deleteTerrain('${t.id}')"><i class="fas fa-trash"></i></button>
+          </div>
+        </div>
+        <div class="pot-parcelles">${pcs.map(pc => {
+          const n = p.placements.filter(x => x.terrainId === t.id && x.parcelle === pc.n && Number(x.year) === Number(p.annee)).length;
+          return `<div class="pot-parcelle"><strong>P${pc.n}</strong>
+            <span>${pc.surface ? pc.surface + ' m²' : '— m²'}</span>
+            <span class="pot-sub">${n} culture${n > 1 ? 's' : ''}</span></div>`;
+        }).join('')}</div>
+      </div>`;
+    }).join('');
+  },
+
+  openTerrain(id) {
+    this.ensure();
+    const t = id ? this.ensure().terrains.find(x => x.id === id) : null;
+    document.getElementById('pot-t-id').value = id || '';
+    document.getElementById('pot-t-nom').value = t ? t.name : '';
+    document.getElementById('pot-t-nb').value = t ? (t.parcelles || []).length : 4;
+    document.getElementById('pot-t-surface').value = t && t.parcelles && t.parcelles.length
+      ? (t.parcelles[0].surface || '') : '';
+    document.getElementById('pot-t-titre').innerText = t ? 'Modifier le terrain' : 'Nouveau terrain';
+    this.openModal('modal-pot-terrain');
+  },
+
+  saveTerrain() {
+    const p = this.ensure();
+    const id = document.getElementById('pot-t-id').value;
+    const nom = document.getElementById('pot-t-nom').value.trim();
+    const nb = Math.max(1, Math.min(200, parseInt(document.getElementById('pot-t-nb').value) || 1));
+    const surf = parseFloat(String(document.getElementById('pot-t-surface').value).replace(',', '.')) || 0;
+    if (!nom) return UI.toast('Nom du terrain requis.');
+
+    let t = id ? p.terrains.find(x => x.id === id) : null;
+    if (!t) { t = { id: App.generateId(), name: nom, parcelles: [] }; p.terrains.push(t); }
+    t.name = nom;
+    const anciennes = t.parcelles || [];
+    t.parcelles = [];
+    for (let i = 1; i <= nb; i++) {
+      const prec = anciennes.find(x => x.n === i);
+      t.parcelles.push({ n: i, surface: prec ? prec.surface : surf });
+    }
+    // Application de la surface saisie à toutes les parcelles vides
+    if (surf) t.parcelles.forEach(pc => { if (!pc.surface) pc.surface = surf; });
+
+    UI.closeModals();
+    this.save();
+    UI.toast('Terrain enregistré.');
+  },
+
+  deleteTerrain(id) {
+    const p = this.ensure();
+    const t = p.terrains.find(x => x.id === id);
+    if (!t) return;
+    const n = p.placements.filter(x => x.terrainId === id).length;
+    if (!confirm(`Supprimer « ${t.name} » ?` + (n ? `\n${n} culture(s) planifiée(s) seront également supprimées.` : ''))) return;
+    p.terrains = p.terrains.filter(x => x.id !== id);
+    p.placements = p.placements.filter(x => x.terrainId !== id);
+    this.save();
+    UI.toast('Terrain supprimé.');
+  },
+
+  ajusterSurfaceParcelle(terrainId, n, val) {
+    const t = this.ensure().terrains.find(x => x.id === terrainId);
+    if (!t) return;
+    const pc = (t.parcelles || []).find(x => x.n === n);
+    if (pc) { pc.surface = parseFloat(String(val).replace(',', '.')) || 0; this.save(false); }
+  },
+
+  // --- 7. PLACEMENTS ----------------------------------------------------
+  optionsVarietes(selected) {
+    const parEspece = {};
+    App.data.varieties.forEach(v => {
+      (parEspece[v.spId] = parEspece[v.spId] || []).push(v);
+    });
+    return App.data.species
+      .slice()
+      .sort((a, b) => a.name.localeCompare(b.name, 'fr'))
+      .map(sp => {
+        const vs = (parEspece[sp.id] || []).sort((a, b) => a.name.localeCompare(b.name, 'fr'));
+        if (!vs.length) return '';
+        return `<optgroup label="${this.esc(sp.name)}">` + vs.map(v =>
+          `<option value="${v.id}"${v.id === selected ? ' selected' : ''}>${this.esc(v.name)}</option>`
+        ).join('') + `</optgroup>`;
+      }).join('');
+  },
+
+  openPlacement(id) {
+    const p = this.ensure();
+    if (!p.terrains.length) return UI.toast("Créez d'abord un terrain.");
+    if (!App.data.varieties.length) return UI.toast("Aucune variété dans la grainothèque.");
+
+    const pl = id ? p.placements.find(x => x.id === id) : null;
+    document.getElementById('pot-p-id').value = id || '';
+    document.getElementById('pot-p-titre').innerText = pl ? 'Modifier la culture' : 'Nouvelle culture';
+    document.getElementById('pot-p-var').innerHTML = this.optionsVarietes(pl ? pl.varId : '');
+
+    const selT = document.getElementById('pot-p-terrain');
+    selT.innerHTML = p.terrains.map(t => `<option value="${t.id}">${this.esc(t.name)}</option>`).join('');
+    selT.value = pl ? pl.terrainId : p.terrains[0].id;
+    this.majParcelles(pl ? pl.parcelle : null);
+
+    document.getElementById('pot-p-slot').value = pl ? (pl.slot || 'A') : 'A';
+    document.getElementById('pot-p-m1').value = pl ? pl.m1 : 3;
+    document.getElementById('pot-p-m2').value = pl ? pl.m2 : 8;
+    document.getElementById('pot-p-surface').value = pl && pl.surface != null ? pl.surface : '';
+    document.getElementById('pot-p-densite').value = pl && pl.densite != null ? pl.densite : '';
+    document.getElementById('pot-p-perte').value = pl && pl.perte != null ? pl.perte : this.PERTE_DEFAUT;
+    document.getElementById('pot-p-notes').value = pl ? (pl.notes || '') : '';
+    document.getElementById('pot-p-suppr').style.display = pl ? 'inline-flex' : 'none';
+
+    this.openModal('modal-pot-placement');
+    this.apercuBesoin();
+  },
+
+  majParcelles(selected) {
+    const p = this.ensure();
+    const tid = document.getElementById('pot-p-terrain').value;
+    const t = p.terrains.find(x => x.id === tid);
+    const sel = document.getElementById('pot-p-parcelle');
+    const pcs = t ? (t.parcelles || []) : [];
+    sel.innerHTML = pcs.map(pc =>
+      `<option value="${pc.n}">P${pc.n}${pc.surface ? ` (${pc.surface} m²)` : ''}</option>`).join('');
+    if (selected != null && pcs.some(pc => pc.n === selected)) sel.value = selected;
+    this.apercuBesoin();
+  },
+
+  // Aperçu temps réel du besoin en graines et de la couverture par le stock
+  apercuBesoin() {
+    const el = document.getElementById('pot-p-apercu');
+    if (!el) return;
+    const brouillon = this.lirePlacementFormulaire();
+    if (!brouillon.varId) { el.innerHTML = ''; return; }
+    const b = this.besoin(brouillon);
+    if (!b) { el.innerHTML = ''; return; }
+    const surf = b.surface || 0;
+    if (!surf) {
+      el.innerHTML = `<span class="pot-warn"><i class="fas fa-exclamation-triangle"></i> Surface inconnue : renseignez la parcelle ou forcez une surface pour calculer le besoin.</span>`;
+      return;
+    }
+    const poids = b.poids ? ` ≈ <strong>${b.poids.toFixed(2)} g</strong>` : '';
+    const etat = b.manque > 0
+      ? `<span class="pot-ko">manque ${b.manque.toLocaleString('fr-FR')} graines</span>`
+      : `<span class="pot-ok">stock suffisant</span>`;
+    el.innerHTML = `${surf} m² × ${b.densite} gr/m² = ${b.net.toLocaleString('fr-FR')} plants visés · ` +
+      `perte ${b.perte} % → <strong>${b.brut.toLocaleString('fr-FR')} graines</strong>${poids}<br>` +
+      `Stock : ${b.dispo.toLocaleString('fr-FR')} graines — ${etat}`;
+  },
+
+  lirePlacementFormulaire() {
+    const g = id => document.getElementById(id);
+    const num = v => (v === '' || v == null) ? null : parseFloat(String(v).replace(',', '.'));
+    return {
+      id: g('pot-p-id').value || null,
+      terrainId: g('pot-p-terrain').value,
+      parcelle: parseInt(g('pot-p-parcelle').value) || 1,
+      slot: g('pot-p-slot').value,
+      varId: g('pot-p-var').value,
+      m1: parseInt(g('pot-p-m1').value) || 1,
+      m2: parseInt(g('pot-p-m2').value) || 12,
+      surface: num(g('pot-p-surface').value),
+      densite: num(g('pot-p-densite').value),
+      perte: num(g('pot-p-perte').value),
+      notes: g('pot-p-notes').value.trim(),
+      year: Number(this.ensure().annee)
+    };
+  },
+
+  savePlacement() {
+    const p = this.ensure();
+    const d = this.lirePlacementFormulaire();
+    if (!d.varId) return UI.toast('Sélectionnez une variété.');
+    if (d.m2 < d.m1) return UI.toast('Le mois de fin précède le mois de début.');
+
+    let pl = d.id ? p.placements.find(x => x.id === d.id) : null;
+    if (!pl) { pl = { id: App.generateId() }; p.placements.push(pl); }
+    Object.assign(pl, d, { id: pl.id });
+    delete pl.libelle;
+
+    UI.closeModals();
+    this.save();
+    UI.toast('Culture enregistrée.');
+  },
+
+  deletePlacement() {
+    const p = this.ensure();
+    const id = document.getElementById('pot-p-id').value;
+    if (!id) return;
+    if (!confirm('Supprimer cette culture du plan ?')) return;
+    p.placements = p.placements.filter(x => x.id !== id);
+    UI.closeModals();
+    this.save();
+    UI.toast('Culture supprimée.');
+  },
+
+  dupliquerSaison() {
+    const p = this.ensure();
+    const source = Number(p.annee);
+    const cible = parseInt(prompt('Dupliquer le plan ' + source + ' vers quelle année ?', String(source + 1)));
+    if (!cible || cible === source) return;
+    const aCopier = p.placements.filter(x => Number(x.year) === source);
+    if (!aCopier.length) return UI.toast('Rien à dupliquer.');
+    if (p.placements.some(x => Number(x.year) === cible) &&
+        !confirm(`La saison ${cible} contient déjà des cultures. Les nouvelles s'ajouteront.`)) return;
+    aCopier.forEach(x => {
+      p.placements.push(Object.assign({}, x, { id: App.generateId(), year: cible }));
+    });
+    p.annee = cible;
+    this.save();
+    UI.toast(`${aCopier.length} culture(s) dupliquée(s) vers ${cible}.`);
+  }
+});
+
+/* ---------- Partie 4 : semences, rotation, impression ---------- */
+Object.assign(Potager, {
+
+  // --- 8. BESOINS EN SEMENCES vs STOCK ----------------------------------
+  renderSemences() {
+    const host = document.getElementById('pot-semences');
+    if (!host) return;
+    const p = this.ensure();
+    const bs = this.besoinsAnnee(p.annee);
+
+    if (!bs.length) {
+      host.innerHTML = `<p class="pot-vide">Aucune culture planifiée en ${p.annee}.</p>`;
+      return;
+    }
+
+    // Agrégation par variété : deux parcelles de la même variété se cumulent
+    const parVar = {};
+    bs.forEach(b => {
+      const k = b.pl.varId;
+      if (!parVar[k]) parVar[k] = { info: b.info, par: b.par, brut: 0, net: 0, poids: 0, dispo: b.dispo, gpg: b.gpg, lignes: [] };
+      parVar[k].brut += b.brut;
+      parVar[k].net += b.net;
+      parVar[k].poids += b.poids;
+      parVar[k].lignes.push(b);
+    });
+
+    const totalManque = Object.values(parVar).filter(x => x.brut > x.dispo).length;
+    const sansSurface = bs.filter(b => !b.surface).length;
+
+    let h = `<div class="card" style="border-left-color:${totalManque ? 'var(--rouge-alerte)' : 'var(--vert-principal)'}">
+      <div class="pot-row">
+        <div><h3 style="margin:0">Besoins ${p.annee}</h3>
+        <div class="pot-sub">${Object.keys(parVar).length} variété(s) · ${bs.length} culture(s)` +
+        (totalManque ? ` · <span class="pot-ko">${totalManque} en manque</span>` : ` · <span class="pot-ok">couvertes par le stock</span>`) +
+        (sansSurface ? ` · <span class="pot-warn">${sansSurface} sans surface</span>` : '') + `</div></div>
+        <button class="btn btn-sm btn-primary" onclick="Potager.genererTousSemis()"><i class="fas fa-seedling"></i> Générer les semis</button>
+      </div></div>`;
+
+    h += `<div class="pot-table-wrap"><table class="pot-besoins">
+      <thead><tr>
+        <th>Variété</th><th>Famille</th><th>Surface</th><th>Densité</th>
+        <th>Besoin</th><th>Équiv.</th><th>Stock</th><th>Écart</th><th></th>
+      </tr></thead><tbody>`;
+
+    Object.entries(parVar).forEach(([varId, x]) => {
+      const surf = x.lignes.reduce((a, b) => a + b.surface, 0);
+      const ecart = x.dispo - x.brut;
+      const cls = ecart >= 0 ? 'pot-ok' : 'pot-ko';
+      h += `<tr>
+        <td class="pot-nom"><span class="pot-dot" style="background:${x.par.couleur}"></span>${this.esc(x.info.nom)}
+          <div class="pot-sub">${x.lignes.map(b => this.emplacement(b.pl)).join(' · ')}</div></td>
+        <td>${this.esc(x.par.famille)}</td>
+        <td>${surf ? surf.toLocaleString('fr-FR') + ' m²' : '<span class="pot-warn">—</span>'}</td>
+        <td>${x.par.densite} gr/m²</td>
+        <td><strong>${x.brut.toLocaleString('fr-FR')}</strong> gr</td>
+        <td>${x.gpg ? x.poids.toFixed(2) + ' g' : '—'}</td>
+        <td>${Math.round(x.dispo).toLocaleString('fr-FR')} gr</td>
+        <td class="${cls}">${ecart >= 0 ? '+' : ''}${Math.round(ecart).toLocaleString('fr-FR')}</td>
+        <td><button class="btn btn-sm btn-secondary" onclick="Potager.openEspece('${x.info.spId}')" title="Famille et densité de l'espèce"><i class="fas fa-sliders-h"></i></button></td>
+      </tr>`;
+    });
+    h += `</tbody></table></div>`;
+
+    h += `<div class="pot-note"><i class="fas fa-info-circle"></i> Besoin brut = surface × densité ÷ (1 − taux de perte).
+      L'équivalent en grammes utilise la table de conversion de la grainothèque
+      (${this.esc((App.SEED_CONVERSION_RATES['par_defaut'] || {}).name || 'par défaut')} et consorts).
+      Les stocks en sachets ne sont pas comptabilisés, leur contenu étant inconnu.</div>`;
+
+    host.innerHTML = h;
+  },
+
+  emplacement(pl) {
+    const t = this.ensure().terrains.find(x => x.id === pl.terrainId);
+    return `${t ? this.esc(t.name) : '?'} P${pl.parcelle}${pl.slot && pl.slot !== 'A' ? '·' + pl.slot : ''} (${this.MOIS[pl.m1 - 1]}→${this.MOIS[pl.m2 - 1]})`;
+  },
+
+  // --- 9. GÉNÉRATION DES SEMIS DANS LE WORKFLOW EXISTANT -----------------
+  // Écrit dans App.data.plannings au format exact du module Planning Semis :
+  // statut 'planned', stockDeducted:false. La déduction de stock reste
+  // gérée par App.deductSeedsFromStock au passage à 'semé'.
+  genererTousSemis() {
+    const p = this.ensure();
+    const bs = this.besoinsAnnee(p.annee).filter(b => b.surface > 0);
+    if (!bs.length) return UI.toast('Aucune culture chiffrable (surfaces manquantes).');
+
+    const parVar = {};
+    bs.forEach(b => {
+      const k = b.pl.varId;
+      if (!parVar[k]) parVar[k] = { b, brut: 0, net: 0, poids: 0, mois: b.pl.m1, lieux: [] };
+      parVar[k].brut += b.brut;
+      parVar[k].net += b.net;
+      parVar[k].poids += b.poids;
+      parVar[k].mois = Math.min(parVar[k].mois, b.pl.m1);
+      parVar[k].lieux.push(this.emplacement(b.pl).replace(/<[^>]+>/g, ''));
+    });
+
+    const dejaPlanifies = Object.keys(parVar).filter(varId =>
+      App.data.plannings.some(x => x.varId === varId && x.status === 'planned'));
+    if (dejaPlanifies.length) {
+      const noms = dejaPlanifies.map(id => { const i = this.varInfo(id); return i ? i.nom : id; });
+      if (!confirm(`${noms.length} variété(s) ont déjà un semis « À faire » :\n${noms.join('\n')}\n\nCréer quand même ?`)) return;
+    }
+
+    let n = 0;
+    Object.entries(parVar).forEach(([varId, x]) => {
+      const mm = String(x.mois).padStart(2, '0');
+      App.data.plannings.push({
+        id: App.generateId(),
+        varId,
+        sowingDate: `${p.annee}-${mm}-01`,
+        seedsQty: Math.round(x.brut),
+        weightQty: x.poids ? Number(x.poids.toFixed(2)) : 0,
+        lossRate: Math.round(x.b.perte),
+        expectedPlants: Math.round(x.net),
+        transplantDate: '',
+        comments: 'Plan potager ' + p.annee + ' — ' + x.lieux.join(' ; '),
+        status: 'planned',
+        stockDeducted: false
+      });
+      n++;
+    });
+
+    App.saveAll();
+    if (typeof App.renderPlanningList === 'function') App.renderPlanningList();
+    if (typeof App.renderPlanningStats === 'function') App.renderPlanningStats();
+    UI.toast(`${n} semis créé(s) dans Planning Semis.`);
+  },
+
+  // --- 10. PARAMÈTRES D'ESPÈCE (famille, densité, conversion) ------------
+  openEspece(spId) {
+    const par = this.paramEspece(spId);
+    const sp = App.spById(spId);
+    document.getElementById('pot-e-id').value = spId;
+    document.getElementById('pot-e-nom').innerText = sp ? sp.name : '—';
+    document.getElementById('pot-e-famille').innerHTML = Object.keys(this.FAMILLES).map(f =>
+      `<option value="${f}"${f === par.famille ? ' selected' : ''}>${f}</option>`).join('');
+    document.getElementById('pot-e-densite').value = par.densite;
+    document.getElementById('pot-e-conv').innerHTML = Object.entries(App.SEED_CONVERSION_RATES).map(([k, v]) =>
+      `<option value="${k}"${k === par.conv ? ' selected' : ''}>${this.esc(v.name)} (~${v.seedsPerGram} gr/g)</option>`).join('');
+    this.openModal('modal-pot-espece');
+  },
+
+  saveEspece() {
+    const p = this.ensure();
+    const spId = document.getElementById('pot-e-id').value;
+    if (!spId) return;
+    p.especes[spId] = {
+      famille: document.getElementById('pot-e-famille').value,
+      densite: parseFloat(String(document.getElementById('pot-e-densite').value).replace(',', '.')) || null,
+      conv: document.getElementById('pot-e-conv').value
+    };
+    UI.closeModals();
+    this.save();
+    UI.toast('Paramètres enregistrés.');
+  },
+
+  // --- 11. ROTATION -----------------------------------------------------
+  renderRotation() {
+    const host = document.getElementById('pot-rotation');
+    if (!host) return;
+    const p = this.ensure();
+    if (!p.terrains.length) { host.innerHTML = `<p class="pot-vide">Aucun terrain.</p>`; return; }
+
+    const alertes = [];
+    let h = '';
+
+    p.terrains.forEach(t => {
+      (t.parcelles || []).forEach(pc => {
+        const hist = p.placements
+          .filter(x => x.terrainId === t.id && x.parcelle === pc.n && x.varId)
+          .map(x => {
+            const info = this.varInfo(x.varId);
+            if (!info) return null;
+            const par = this.paramEspece(info.spId);
+            return { annee: Number(x.year), famille: par.famille, couleur: par.couleur, nom: info.nom };
+          })
+          .filter(Boolean)
+          .sort((a, b) => a.annee - b.annee);
+
+        if (!hist.length) return;
+
+        // Détection des retours trop rapprochés d'une même famille
+        const parFamille = {};
+        hist.forEach(e => { (parFamille[e.famille] = parFamille[e.famille] || []).push(e.annee); });
+        Object.entries(parFamille).forEach(([fam, annees]) => {
+          const uniq = [...new Set(annees)].sort((a, b) => a - b);
+          const mini = this.ROTATION_MIN[fam] || 3;
+          for (let i = 1; i < uniq.length; i++) {
+            const ecart = uniq[i] - uniq[i - 1];
+            if (ecart < mini) {
+              alertes.push({ terrain: t.name, parcelle: pc.n, famille: fam, ecart, mini, annees: [uniq[i - 1], uniq[i]] });
+            }
+          }
+        });
+
+        const annees = [...new Set(hist.map(e => e.annee))].sort((a, b) => a - b);
+        h += `<div class="pot-rot-row">
+          <div class="pot-rot-lab">${this.esc(t.name)} · P${pc.n}</div>
+          <div class="pot-rot-line">${annees.map(a => {
+            const e = hist.filter(x => x.annee === a);
+            return `<div class="pot-rot-cell"><div class="pot-rot-year">${a}</div>` +
+              e.map(x => `<span class="pot-rot-tag" style="background:${x.couleur}" title="${this.esc(x.nom)}">${this.esc(x.famille)}</span>`).join('') +
+              `</div>`;
+          }).join('')}</div>
+        </div>`;
+      });
+    });
+
+    const entete = alertes.length
+      ? `<div class="card" style="border-left-color:var(--rouge-alerte)">
+          <h3 style="margin:0 0 8px"><i class="fas fa-triangle-exclamation"></i> ${alertes.length} retour(s) trop rapproché(s)</h3>
+          ${alertes.map(a => `<div class="pot-alerte"><strong>${this.esc(a.terrain)} · P${a.parcelle}</strong> —
+            ${this.esc(a.famille)} en ${a.annees[0]} puis ${a.annees[1]} : ${a.ecart} an${a.ecart > 1 ? 's' : ''} d'écart,
+            <strong>${a.mini} minimum</strong> recommandé.</div>`).join('')}
+        </div>`
+      : `<div class="card" style="border-left-color:var(--vert-principal)">
+          <h3 style="margin:0"><i class="fas fa-circle-check"></i> Aucun retour trop rapproché détecté</h3>
+          <div class="pot-sub">Sur l'ensemble des saisons enregistrées.</div>
+        </div>`;
+
+    host.innerHTML = entete + (h ? `<div class="card">${h}</div>` : `<p class="pot-vide">Pas encore d'historique.</p>`) +
+      `<div class="pot-note"><i class="fas fa-info-circle"></i> Intervalles indicatifs (années) :
+       ${Object.entries(this.ROTATION_MIN).map(([f, n]) => `${this.esc(f)} ${n}`).join(' · ')}.
+       Ordres de grandeur agronomiques usuels, à ajuster selon votre sol et votre expérience.</div>`;
+  },
+
+  // --- 12. MODALES ET IMPRESSION ----------------------------------------
+  // Ouverture sans passer par UI.openModal, dont le corps enchaîne des
+  // branchements propres aux modales existantes : on n'y touche pas.
+  openModal(id) {
+    UI.closeModals();
+    const m = document.getElementById(id);
+    if (m) m.classList.add('open');
+  },
+
+  imprimer() {
+    this.preparerImpression();
+    window.print();
+  },
+
+  preparerImpression() {
+    const host = document.getElementById('potager-print');
+    if (!host) return;
+    const p = this.ensure();
+    const selT = document.getElementById('pot-terrain');
+    const terrainTxt = selT && selT.selectedIndex >= 0 ? selT.options[selT.selectedIndex].text : '';
+    const pas = parseInt((document.getElementById('pot-pas') || {}).value) === 24 ? '24 quinzaines' : '12 mois';
+    host.innerHTML =
+      `<div class="pot-print-head">
+         <div class="pot-print-title">Plan de culture — saison ${this.esc(String(p.annee))}</div>
+         <div class="pot-print-meta">${this.esc(terrainTxt)} · ${pas} · édité le ${new Date().toLocaleDateString('fr-FR')}</div>
+       </div>` +
+      this.buildTable({ cliquable: false, classe: 'pot-gantt pot-gantt-print' }) +
+      `<div class="pot-print-leg">${(document.getElementById('pot-legende') || {}).innerHTML || ''}</div>`;
+  }
+});
+
+// L'impression déclenchée par Ctrl+P doit produire la même chose que le bouton.
+window.addEventListener('beforeprint', () => {
+  try {
+    if (document.getElementById('view-potager') &&
+        document.getElementById('view-potager').classList.contains('active')) {
+      Potager.preparerImpression();
+    }
+  } catch (e) { console.warn('[Potager] préparation impression', e); }
 });
 
 </script>
