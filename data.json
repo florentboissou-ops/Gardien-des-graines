@@ -8646,12 +8646,5 @@
       "status": "sown",
       "stockDeducted": true
     }
-  ],
-  "potager": {
-    "v": 1,
-    "terrains": [],
-    "placements": [],
-    "especes": {},
-    "annee": 2026
-  }
+  ]
 }
